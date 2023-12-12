@@ -1,12 +1,16 @@
 # ChatGSE Next
 
-This repository contains an adaptation of 
+## Installation
+
+### Front-end: ChatGSE-Next
+
+This repository contains an adaptation of
 https://github.com/Yidadaa/ChatGPT-Next-Web. To install and run locally, you
 need to have [Node.js](https://nodejs.org/en/) and [yarn](https://yarnpkg.com/)
 installed. Then, you can run the following code in the root directory of this
 repository:
 
-```
+```console
 yarn install
 yarn --cwd chatgse/ dev
 ```
@@ -16,14 +20,69 @@ Note that for this current version, you need to have present the `.env` and
 the ending `.template`). For using the regular OpenAI API (the easiest case),
 you have to supply a valid API key in `.bioserver.env`.
 
-## BioChatter Server
+### Back-end: BioChatter Server
 
 The client requires a server that runs BioChatter, which is found in
 `chatgse/biochatter-server`.  To run the server, you need to have
 [Docker](https://www.docker.com/) installed.  Then, you can run the following
 code in the `chatgse/biochatter-server` subdirectory:
 
-```
+```console
 docker build -t biochatter-server .
 docker run -p 5000:5000 biochatter-server
 ```
+
+Or from the root directory of the project:
+
+```console
+docker build -t biochatter-server -f chatgse/biochatter-server/Dockerfile ./chatgse/biochatter-server
+docker run -p 5000:5000 biochatter-server
+```
+
+## Development
+
+The front-end has been built as a [Vercel Next.js](https://nextjs.org/docs) application:
+
+> Next.js is a React framework for building full-stack web applications. You use React Components to build user interfaces, and Next.js for additional features and optimizations.
+
+The provided project structure is:
+
+- chatgse/app: App router
+- chatgse/public: Static assets to be served
+- chatgse/app/page.tsx: Main Page router
+- chatgse/app/components: Code for visual components
+
+
+### Components
+
+The main component is `Home` (chatgse/app/components/home.tsx), while the sidebar is defined inside `Sidebar` (chatgse/app/components/sidebar.tsx).
+
+For the Masks, the code is inside `mask.tsx` (chatgse/app/components/mask.tsx).
+
+### Internationalization
+
+When you have to add a new visual component, please follow [these indications](https://nextjs.org/docs/app/building-your-application/routing/internationalization) provided by Next.JS:
+
+> Next.js enables you to configure the routing and rendering of content to support multiple languages. Making your site adaptive to different locales includes translated content (localization) and internationalized routes.
+
+Add first your text inside [cn.ts](chatgse/app/locales/cn.ts) file. Then you can add the same key(s) inside the English file ([en.ts](chatgse/app/locales/en.ts)).
+
+You are ready to use the new key(s) inside your components, for instance:
+
+```tsx
+<div className={styles["sidebar-header"]} data-tauri-drag-region>
+    <div className={styles["sidebar-title"]} data-tauri-drag-region>
+        {Locale.Sidebar.AppTitle}
+    </div>
+    <div className={styles["sidebar-sub-title"]}>
+        {Locale.Sidebar.AppSubtitle}
+    </div>
+    <div className={styles["sidebar-logo"] + " no-dark"}>
+        <ChatGptIcon />
+    </div>
+</div>
+```
+
+### Layout metadata
+
+The fields such as the page title are defined inside [layout.tsx](chatgse/app/layout.tsx).
