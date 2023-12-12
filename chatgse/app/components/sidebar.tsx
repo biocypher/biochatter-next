@@ -5,7 +5,9 @@ import styles from "./home.module.scss";
 import { IconButton } from "./button";
 import SettingsIcon from "../icons/settings.svg";
 import GithubIcon from "../icons/github.svg";
-import ChatGptIcon from "../icons/chatgpt.svg";
+import ReadTheDocsIcon from "../icons/read-the-docs.svg";
+// import ChatGptIcon from "../icons/chatgpt.svg";
+import BioChatterIcon from "../icons/biochatter.svg";
 import AddIcon from "../icons/add.svg";
 import CloseIcon from "../icons/close.svg";
 import DeleteIcon from "../icons/delete.svg";
@@ -24,6 +26,7 @@ import {
   NARROW_SIDEBAR_WIDTH,
   Path,
   REPO_URL,
+  DOCS_URL
 } from "../constant";
 
 import { Link, useNavigate } from "react-router-dom";
@@ -154,17 +157,23 @@ export function SideBar(props: { className?: string }) {
       }}
     >
       <div className={styles["sidebar-header"]} data-tauri-drag-region>
-        <div className={styles["sidebar-title"]} data-tauri-drag-region>
-          ChatGSE Next
-        </div>
-        <div className={styles["sidebar-sub-title"]}>
-          Build your own AI assistant.
-        </div>
         <div className={styles["sidebar-logo"] + " no-dark"}>
-          <ChatGptIcon />
+          <BioChatterIcon />
+        </div>
+        <div>
+          <div className={styles["sidebar-title"]} data-tauri-drag-region>
+            {Locale.Sidebar.AppTitle}
+          </div>
+          <div className={styles["sidebar-sub-title"]}>
+            {Locale.Sidebar.AppSubtitle}
+          </div>
         </div>
       </div>
-
+      <div className={styles["sidebar-sub-header"]} data-tauri-drag-region>
+        <div className={styles["sidebar-sub-title"]}>
+          {Locale.Sidebar.AppDescription}
+        </div>
+      </div>
       <div className={styles["sidebar-header-bar"]}>
         <IconButton
           icon={<MaskIcon />}
@@ -219,6 +228,11 @@ export function SideBar(props: { className?: string }) {
           <div className={styles["sidebar-action"]}>
             <a href={REPO_URL} target="_blank" rel="noopener noreferrer">
               <IconButton icon={<GithubIcon />} shadow />
+            </a>
+          </div>
+          <div className={styles["sidebar-action"]}>
+            <a href={DOCS_URL} target="_blank" rel="noopener noreferrer">
+              <IconButton icon={<ReadTheDocsIcon width={16} height={16} />} shadow />
             </a>
           </div>
         </div>

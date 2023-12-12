@@ -186,7 +186,7 @@ const es: PartialLocaleType = {
     Sysmessage: "Eres un asistente que",
   },
   Mask: {
-    Name: "Mask",
+    Name: "Persona",
     Page: {
       Title: "Prompt Template",
       SubTitle: (count: number) => `${count} prompt templates`,
@@ -215,8 +215,8 @@ const es: PartialLocaleType = {
   NewChat: {
     Return: "Return",
     Skip: "Skip",
-    Title: "Pick a Mask",
-    SubTitle: "Chat with the Soul behind the Mask",
+    Title: "Pick a Persona",
+    SubTitle: "Choose the right Persona to chat with BioChatter",
     More: "Find More",
     NotShow: "Not Show Again",
     ConfirmNoShow: "Confirm to disable？You can enable it in settings later.",

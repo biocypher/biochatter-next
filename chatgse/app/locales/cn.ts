@@ -449,6 +449,15 @@ const cn = {
     Topic: "主题",
     Time: "时间",
   },
+  Sidebar: {
+    AppTitle: "BioChatter",
+    AppSubtitle: "Conversational AI in biomedicine",
+    AppDescription: "BioChatter is part of the BioCypher ecosystem, connecting natively to BioCypher knowledge graphs."
+  },
+  LayoutMetadata: {
+    AppTitle: "BioChatter",
+    AppDescription: "Conversational AI in biomedicine"
+  }
 };
 
 type DeepPartial<T> = T extends object

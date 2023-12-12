@@ -6,8 +6,8 @@ import { getClientConfig } from "./config/client";
 import { type Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "ChatGSE Next",
-  description: "Your personal ChatGPT Chat Bot.",
+  title: "BioChatter",
+  description: "Conversational AI in biomedicine",
   viewport: {
     width: "device-width",
     initialScale: 1,
@@ -18,7 +18,7 @@ export const metadata: Metadata = {
     { media: "(prefers-color-scheme: dark)", color: "#151515" },
   ],
   appleWebApp: {
-    title: "ChatGSE Next",
+    title: "BioChatter",
     statusBarStyle: "default",
   },
 };

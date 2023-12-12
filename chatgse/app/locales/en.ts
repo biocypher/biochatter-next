@@ -380,7 +380,7 @@ const en: LocaleType = {
     Sysmessage: "You are an assistant that",
   },
   Mask: {
-    Name: "Mask",
+    Name: "Persona",
     Page: {
       Title: "Prompt Template",
       SubTitle: (count: number) => `${count} prompt templates`,
@@ -423,8 +423,8 @@ const en: LocaleType = {
   NewChat: {
     Return: "Return",
     Skip: "Just Start",
-    Title: "Pick a Mask",
-    SubTitle: "Chat with the Soul behind the Mask",
+    Title: "Pick a Persona",
+    SubTitle: "Choose the right Persona to chat with BioChatter",
     More: "Find More",
     NotShow: "Never Show Again",
     ConfirmNoShow: "Confirm to disable？You can enable it in settings later.",
@@ -455,6 +455,15 @@ const en: LocaleType = {
     Code: "Detected access code from url, confirm to apply? ",
     Settings: "Detected settings from url, confirm to apply?",
   },
+  Sidebar: {
+    AppTitle: "BioChatter",
+    AppSubtitle: "Conversational AI in biomedicine",
+    AppDescription: "BioChatter is part of the BioCypher ecosystem, connecting natively to BioCypher knowledge graphs."
+  },
+  LayoutMetadata: {
+    AppTitle: "BioChatter",
+    AppDescription: "Conversational AI in biomedicine"
+  }
 };
 
 export default en;

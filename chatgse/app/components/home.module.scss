@@ -134,17 +134,27 @@
 }
 
 .sidebar-header {
+  display: flex;
   position: relative;
   padding-top: 20px;
+  padding-bottom: 15px;
+}
+
+.sidebar-sub-header {
+  font-style: italic;
   padding-bottom: 20px;
 }
 
+
 .sidebar-logo {
-  position: absolute;
-  right: 0;
-  bottom: 18px;
+  flex: 0 0 15%;
+  align-self: center;
 }
 
+.sidebar-logo > svg {
+  width: 32px;
+  height: 32px;
+}
 .sidebar-title {
   font-size: 20px;
   font-weight: bold;
