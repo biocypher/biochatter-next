@@ -264,6 +264,15 @@ export function SideBar(props: { className?: string }) {
             }}
             shadow
           />
+          <IconButton
+            icon={<AddIcon />}
+            text={shouldNarrow ? undefined : Locale.Home.NewKGChat}
+            onClick={() => {
+              chatStore.newSession();
+              navigate(Path.Chat);
+            }}
+            shadow
+          />
         </div>
       </div>
 

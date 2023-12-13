@@ -123,6 +123,7 @@ const en: LocaleType = {
   },
   Home: {
     NewChat: "New Chat",
+    NewKGChat: "New KG Chat",
     DeleteChat: "Confirm to delete the selected conversation?",
     DeleteToast: "Chat Deleted",
     Revert: "Revert",
