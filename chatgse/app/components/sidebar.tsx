@@ -9,6 +9,7 @@ import ReadTheDocsIcon from "../icons/read-the-docs.svg";
 // import ChatGptIcon from "../icons/chatgpt.svg";
 import BioChatterIcon from "../icons/biochatter.svg";
 import AddIcon from "../icons/add.svg";
+import AboutIcon from "../icons/about.svg";
 import CloseIcon from "../icons/close.svg";
 import DeleteIcon from "../icons/delete.svg";
 import MaskIcon from "../icons/mask.svg";
@@ -160,7 +161,7 @@ export function SideBar(props: { className?: string }) {
         <div className={styles["sidebar-logo"] + " no-dark"}>
           <BioChatterIcon />
         </div>
-        <div>
+        <div className={styles['sidebar-header-text']}>
           <div className={styles["sidebar-title"]} data-tauri-drag-region>
             {Locale.Sidebar.AppTitle}
           </div>
@@ -175,6 +176,19 @@ export function SideBar(props: { className?: string }) {
         </div>
       </div>
       <div className={styles["sidebar-header-bar"]}>
+        <IconButton
+          icon={<AboutIcon width={16} height={16} />}
+          text={shouldNarrow ? undefined : Locale.About.Name}
+          className={styles["sidebar-bar-button"]}
+          onClick={() => {
+            if (config.dontShowMaskSplashScreen !== true) {
+              navigate(Path.About, { state: { fromHome: true } });
+            } else {
+              navigate(Path.About, { state: { fromHome: true } });
+            }
+          }}
+          shadow
+        />
         <IconButton
           icon={<MaskIcon />}
           text={shouldNarrow ? undefined : Locale.Mask.Name}

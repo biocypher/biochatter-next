@@ -156,7 +156,6 @@ const cs: PartialLocaleType = {
   },
   Store: {
     DefaultTopic: "Nová konverzace",
-    BotHello: "Ahoj! Jak mohu dnes pomoci?",
     Error: "Něco se pokazilo, zkuste to prosím později.",
     Prompt: {
       History: (content: string) =>

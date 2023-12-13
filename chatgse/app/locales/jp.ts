@@ -179,7 +179,6 @@ const jp: PartialLocaleType = {
   },
   Store: {
     DefaultTopic: "新しいチャット",
-    BotHello: "何かお手伝いできることはありますか",
     Error: "エラーが発生しました。しばらくしてからやり直してください。",
     Prompt: {
       History: (content: string) =>

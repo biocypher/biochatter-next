@@ -159,7 +159,6 @@ const tr: PartialLocaleType = {
   },
   Store: {
     DefaultTopic: "Yeni Konuşma",
-    BotHello: "Merhaba! Size bugün nasıl yardımcı olabilirim?",
     Error: "Bir şeyler yanlış gitti. Lütfen daha sonra tekrar deneyiniz.",
     Prompt: {
       History: (content: string) =>
