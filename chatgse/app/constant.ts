@@ -17,6 +17,7 @@ export const OPENAI_BASE_URL = "https://api.openai.com";
 export enum Path {
   Home = "/",
   Chat = "/chat",
+  KnowledgeGraphChat = "/knowledge-graph-chat",
   Settings = "/settings",
   NewChat = "/new-chat",
   About = "/about",

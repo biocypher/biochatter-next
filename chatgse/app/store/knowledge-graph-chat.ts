@@ -21,7 +21,7 @@ import { createPersistStore } from "../utils/store";
 
 const generateUniqId = () => uuidv4();
 
-export type ChatMessage = RequestMessage & {
+export type KGChatMessage = RequestMessage & {
   date: string;
   streaming?: boolean;
   isError?: boolean;
@@ -29,7 +29,7 @@ export type ChatMessage = RequestMessage & {
   model?: ModelType;
 };
 
-export function createMessage(override: Partial<ChatMessage>): ChatMessage {
+export function createKGMessage(override: Partial<KGChatMessage>): KGChatMessage {
   return {
     id: nanoid(),
     date: new Date().toLocaleString(),
@@ -39,37 +39,39 @@ export function createMessage(override: Partial<ChatMessage>): ChatMessage {
   };
 }
 
-export interface ChatStat {
+export interface KGChatStat {
   tokenCount: number;
   wordCount: number;
   charCount: number;
 }
 
-export interface ChatSession {
+export interface KGChatSession {
   id: string;
   topic: string;
 
   memoryPrompt: string;
-  messages: ChatMessage[];
-  stat: ChatStat;
+  messages: KGChatMessage[];
+  stat: KGChatStat;
   lastUpdate: number;
   lastSummarizeIndex: number;
   clearContextIndex?: number;
 
   mask: Mask;
+
   type: string;
 }
 
-export const DEFAULT_TOPIC = Locale.Store.DefaultTopic;
-export const BOT_HELLO: ChatMessage = createMessage({
+export const DEFAULT_KG_TOPIC = Locale.Store.DefaultKnowledgeGraphTopic;
+export const KG_BOT_HELLO: KGChatMessage = createKGMessage({
   role: "assistant",
-  content: Locale.Store.BotHello,
+  content: Locale.Store.BotKGHello,
 });
+export const DEFAULT_KG_MASK_AVATAR = "gpt-bot";
 
-function createEmptySession(): ChatSession {
-  return {
+function createEmptyKGSession(): KGChatSession {
+  const emptyKGSession = {
     id: generateUniqId(),
-    topic: DEFAULT_TOPIC,
+    topic: DEFAULT_KG_TOPIC,
     memoryPrompt: "",
     messages: [],
     stat: {
@@ -80,9 +82,13 @@ function createEmptySession(): ChatSession {
     lastUpdate: Date.now(),
     lastSummarizeIndex: 0,
 
-    mask: createEmptyMask(),
-    type: "RC"
+    mask: createEmptyMask(DEFAULT_KG_MASK_AVATAR, DEFAULT_KG_TOPIC),
+    type: "KG",
   };
+
+  console.log("emptyKGSession", emptyKGSession);
+
+  return emptyKGSession
 }
 
 function getSummarizeModel(currentModel: string) {
@@ -90,7 +96,7 @@ function getSummarizeModel(currentModel: string) {
   return currentModel.startsWith("gpt") ? SUMMARIZE_MODEL : currentModel;
 }
 
-function countMessages(msgs: ChatMessage[]) {
+function countMessages(msgs: KGChatMessage[]) {
   return msgs.reduce((pre, cur) => pre + estimateTokenLength(cur.content), 0);
 }
 
@@ -121,13 +127,13 @@ function fillTemplateWith(input: string, modelConfig: ModelConfig) {
   return output;
 }
 
-const DEFAULT_CHAT_STATE = {
-  sessions: [createEmptySession()],
+const KG_DEFAULT_CHAT_STATE = {
+  sessions: [createEmptyKGSession()],
   currentSessionIndex: 0,
 };
 
-export const useChatStore = createPersistStore(
-  DEFAULT_CHAT_STATE,
+export const useKGChatStore = createPersistStore(
+  KG_DEFAULT_CHAT_STATE,
   (set, _get) => {
     function get() {
       return {
@@ -139,7 +145,7 @@ export const useChatStore = createPersistStore(
     const methods = {
       clearSessions() {
         set(() => ({
-          sessions: [createEmptySession()],
+          sessions: [createEmptyKGSession()],
           currentSessionIndex: 0,
         }));
       },
@@ -176,7 +182,7 @@ export const useChatStore = createPersistStore(
       },
 
       newSession(mask?: Mask) {
-        const session = createEmptySession();
+        const session = createEmptyKGSession();
 
         if (mask) {
           const config = useAppConfig.getState();
@@ -222,7 +228,7 @@ export const useChatStore = createPersistStore(
 
         if (deletingLastSession) {
           nextIndex = 0;
-          sessions.push(createEmptySession());
+          sessions.push(createEmptyKGSession());
         }
 
         // for undo delete action
@@ -262,7 +268,7 @@ export const useChatStore = createPersistStore(
         return session;
       },
 
-      onNewMessage(message: ChatMessage) {
+      onNewMessage(message: KGChatMessage) {
         get().updateCurrentSession((session) => {
           session.messages = session.messages.concat();
           session.lastUpdate = Date.now();
@@ -278,12 +284,12 @@ export const useChatStore = createPersistStore(
         const userContent = fillTemplateWith(content, modelConfig);
         console.log("[User Input] after template: ", userContent);
 
-        const userMessage: ChatMessage = createMessage({
+        const userMessage: KGChatMessage = createKGMessage({
           role: "user",
           content: userContent,
         });
 
-        const botMessage: ChatMessage = createMessage({
+        const botMessage: KGChatMessage = createKGMessage({
           role: "assistant",
           streaming: true,
           model: modelConfig.model,
@@ -369,7 +375,7 @@ export const useChatStore = createPersistStore(
               ? Locale.Store.Prompt.History(session.memoryPrompt)
               : "",
           date: "",
-        } as ChatMessage;
+        } as KGChatMessage;
       },
 
       getMessagesWithMemory() {
@@ -386,7 +392,7 @@ export const useChatStore = createPersistStore(
         const shouldInjectSystemPrompts = modelConfig.enableInjectSystemPrompts;
         const systemPrompts = shouldInjectSystemPrompts
           ? [
-              createMessage({
+              createKGMessage({
                 role: "system",
                 content: fillTemplateWith("", {
                   ...modelConfig,
@@ -462,7 +468,7 @@ export const useChatStore = createPersistStore(
       updateMessage(
         sessionIndex: number,
         messageIndex: number,
-        updater: (message?: ChatMessage) => void,
+        updater: (message?: KGChatMessage) => void,
       ) {
         const sessions = get().sessions;
         const session = sessions.at(sessionIndex);
@@ -489,11 +495,11 @@ export const useChatStore = createPersistStore(
         const SUMMARIZE_MIN_LEN = 50;
         if (
           config.enableAutoGenerateTitle &&
-          session.topic === DEFAULT_TOPIC &&
+          session.topic === DEFAULT_KG_TOPIC &&
           countMessages(messages) >= SUMMARIZE_MIN_LEN
         ) {
           const topicMessages = messages.concat(
-            createMessage({
+            createKGMessage({
               role: "user",
               content: Locale.Store.Prompt.Topic,
             }),
@@ -507,7 +513,7 @@ export const useChatStore = createPersistStore(
               get().updateCurrentSession(
                 (session) =>
                   (session.topic =
-                    message.length > 0 ? trimTopic(message) : DEFAULT_TOPIC),
+                    message.length > 0 ? trimTopic(message) : DEFAULT_KG_TOPIC),
               );
             },
           });
@@ -549,7 +555,7 @@ export const useChatStore = createPersistStore(
         ) {
           api.llm.chat({
             messages: toBeSummarizedMsgs.concat(
-              createMessage({
+              createKGMessage({
                 role: "system",
                 content: Locale.Store.Prompt.Summarize,
                 date: "",
@@ -577,14 +583,14 @@ export const useChatStore = createPersistStore(
         }
       },
 
-      updateStat(message: ChatMessage) {
+      updateStat(message: KGChatMessage) {
         get().updateCurrentSession((session) => {
           session.stat.charCount += message.content.length;
           // TODO: should update chat count and word count
         });
       },
 
-      updateCurrentSession(updater: (session: ChatSession) => void) {
+      updateCurrentSession(updater: (session: KGChatSession) => void) {
         const sessions = get().sessions;
         const index = get().currentSessionIndex;
         updater(sessions[index]);
@@ -606,14 +612,14 @@ export const useChatStore = createPersistStore(
       const state = persistedState as any;
       const newState = JSON.parse(
         JSON.stringify(state),
-      ) as typeof DEFAULT_CHAT_STATE;
+      ) as typeof KG_DEFAULT_CHAT_STATE;
 
       if (version < 2) {
         newState.sessions = [];
 
         const oldSessions = state.sessions;
         for (const oldSession of oldSessions) {
-          const newSession = createEmptySession();
+          const newSession = createEmptyKGSession();
           newSession.topic = oldSession.topic;
           newSession.messages = [...oldSession.messages];
           newSession.mask.modelConfig.sendMemory = true;

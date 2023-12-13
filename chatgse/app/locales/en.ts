@@ -348,7 +348,9 @@ const en: LocaleType = {
   },
   Store: {
     DefaultTopic: "New Conversation",
+    DefaultKnowledgeGraphTopic: "New Knowledge Graph Conversation",
     BotHello: "Hello! I am the model's assistant. For more explanation, please see the About text in the sidebar. We will now be going through some initial setup steps together. To get started, could you please tell me your name?",
+    BotKGHello: "Hello! I am the model's assistant. This is the Knowledge Graph conversation room. To get started, could you please tell me your name?",
     Error: "Something went wrong, please try again later.",
     Prompt: {
       History: (content: string) =>

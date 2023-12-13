@@ -19,7 +19,8 @@ import DragIcon from "../icons/drag.svg";
 
 import Locale from "../locales";
 
-import { useAppConfig, useChatStore } from "../store";
+import { useAppConfig, useChatStore, useKGChatStore } from "../store";
+
 
 import {
   DEFAULT_SIDEBAR_WIDTH,
@@ -42,6 +43,7 @@ const ChatList = dynamic(async () => (await import("./chat-list")).ChatList, {
 
 function useHotKey() {
   const chatStore = useChatStore();
+  const kgChatStore = useKGChatStore();
 
   useEffect(() => {
     const onKeyDown = (e: KeyboardEvent) => {
@@ -135,6 +137,7 @@ function useDragSideBar() {
 
 export function SideBar(props: { className?: string }) {
   const chatStore = useChatStore();
+  const kgChatStore = useKGChatStore();
 
   // drag side bar
   const { onDragStart, shouldNarrow } = useDragSideBar();
@@ -271,8 +274,8 @@ export function SideBar(props: { className?: string }) {
             icon={<KnowledgeGraphIcon />}
             text={shouldNarrow ? undefined : Locale.Home.NewKGChat}
             onClick={() => {
-              chatStore.newSession();
-              navigate(Path.Chat);
+              kgChatStore.newSession();
+              navigate(Path.KnowledgeGraphChat);
             }}
             shadow
           />

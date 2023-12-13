@@ -47,6 +47,10 @@ const Chat = dynamic(async () => (await import("./chat")).Chat, {
   loading: () => <Loading noLogo />,
 });
 
+const KnowledgeGraphChat = dynamic(async () => (await import("./knowledge-graph-chat")).KnowledgeGraphChat, {
+  loading: () => <Loading noLogo />,
+});
+
 const NewChat = dynamic(async () => (await import("./new-chat")).NewChat, {
   loading: () => <Loading noLogo />,
 });
@@ -163,6 +167,7 @@ function Screen() {
               <Route path={Path.About} element={<About />} />
               <Route path={Path.Masks} element={<MaskPage />} />
               <Route path={Path.Chat} element={<Chat />} />
+              <Route path={Path.KnowledgeGraphChat} element={<KnowledgeGraphChat />} />
               <Route path={Path.Settings} element={<Settings />} />
             </Routes>
           </div>

@@ -343,7 +343,9 @@ const cn = {
   },
   Store: {
     DefaultTopic: "新的聊天",
+    DefaultKnowledgeGraphTopic: "New Knowledge Graph Conversation",
     BotHello: "Hello! I am the model's assistant. For more explanation, please see the About text in the sidebar. We will now be going through some initial setup steps together. To get started, could you please tell me your name?",
+    BotKGHello: "Hello! I am the model's assistant. This is the Knowledge Graph conversation room. To get started, could you please tell me your name?",
     Error: "出错了，稍后重试吧",
     Prompt: {
       History: (content: string) => "这是历史聊天总结作为前情提要：" + content,
