@@ -158,7 +158,7 @@ function Screen() {
 
           <div className={styles["window-content"]} id={SlotID.AppBody}>
             <Routes>
-              <Route path={Path.Home} element={config.dontShowWelcomeSplashScreen ? <Chat /> : <Welcome />} />
+              <Route path={Path.Home} element={config.dontShowWelcomeSplashScreen ? <NewChat /> : <Welcome />} />
               <Route path={Path.NewChat} element={<NewChat />} />
               <Route path={Path.Welcome} element={<Welcome />} />
               <Route path={Path.Masks} element={<MaskPage />} />
