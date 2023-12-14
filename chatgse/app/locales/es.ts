@@ -33,7 +33,7 @@ const es: PartialLocaleType = {
     Send: "Enviar",
     Config: {
       Reset: "Reset to Default",
-      SaveAs: "Save as Mask",
+      SaveAs: "Save as Persona",
     },
   },
   Export: {

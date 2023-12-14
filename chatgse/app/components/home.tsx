@@ -47,6 +47,10 @@ const Chat = dynamic(async () => (await import("./chat")).Chat, {
   loading: () => <Loading noLogo />,
 });
 
+const Welcome = dynamic(async () => (await import("./welcome")).Welcome, {
+  loading: () => <Loading noLogo />,
+});
+
 const NewChat = dynamic(async () => (await import("./new-chat")).NewChat, {
   loading: () => <Loading noLogo />,
 });
@@ -158,7 +162,7 @@ function Screen() {
 
           <div className={styles["window-content"]} id={SlotID.AppBody}>
             <Routes>
-              <Route path={Path.Home} element={<Chat />} />
+              <Route path={Path.Home} element={<Welcome />} />
               <Route path={Path.NewChat} element={<NewChat />} />
               <Route path={Path.About} element={<About />} />
               <Route path={Path.Masks} element={<MaskPage />} />
