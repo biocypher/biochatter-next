@@ -14,6 +14,7 @@ import RenameIcon from "../icons/rename.svg";
 import ExportIcon from "../icons/share.svg";
 import ReturnIcon from "../icons/return.svg";
 import CopyIcon from "../icons/copy.svg";
+import KnowledgeGraphIcon from "../icons/knowledge-graph.svg";
 import LoadingIcon from "../icons/three-dots.svg";
 import PromptIcon from "../icons/prompt.svg";
 import MaskIcon from "../icons/mask.svg";
@@ -36,6 +37,9 @@ import BottomIcon from "../icons/bottom.svg";
 import StopIcon from "../icons/pause.svg";
 import RobotIcon from "../icons/robot.svg";
 
+import ConnectedIcon from "../icons/green-circle.svg";
+import DisconnectedIcon from "../icons/red-circle.svg";
+
 import {
   ChatMessage,
   SubmitKey,
@@ -47,6 +51,9 @@ import {
   useAppConfig,
   DEFAULT_KG_TOPIC,
   ModelType,
+  ModelConfig,
+  KnowledgeGraphConfig,
+  DEFAULT_CONFIG,
 } from "../store";
 
 import {
@@ -90,16 +97,66 @@ import { prettyObject } from "../utils/format";
 import { ExportMessageModal } from "./exporter";
 import { getClientConfig } from "../config/client";
 import { useAllModels } from "../utils/hooks";
+import { Updater } from "../typing";
 
 const Markdown = dynamic(async () => (await import("./markdown")).Markdown, {
   loading: () => <LoadingIcon />,
 });
+
+
+export function KnowledgeGraphConfigList(props: {
+  readonly?: boolean;
+  knowledgeGraphConfig: KnowledgeGraphConfig
+  shouldSyncFromGlobal?: boolean;
+}) {
+  const globalConfig = useAppConfig();
+  const updateConfig = globalConfig.update;
+
+  return (
+    <List>
+      <ListItem title={Locale.KnowledgeGraph.Config.ConnectionStatus}>
+        <div className={styles['knowledge-graph-config-connection-status']}>
+          { props.knowledgeGraphConfig.connected ?
+            <span>{Locale.KnowledgeGraph.Config.Connected}</span> :
+            <span>{Locale.KnowledgeGraph.Config.Disconnected}</span>
+          }
+          { props.knowledgeGraphConfig.connected ?
+            <ConnectedIcon /> :
+            <DisconnectedIcon />
+          }
+        </div>
+      </ListItem>
+      <ListItem title={Locale.KnowledgeGraph.Config.Url}>
+        <input
+            type="text"
+            value={props.knowledgeGraphConfig.url}
+            onChange={(e) => {
+              updateConfig(
+                (config) =>
+                  (config.knowledgeGraph.url = e.target.value as any as string),
+              );
+            }}
+        ></input>
+      </ListItem>
+      <ListItem title={Locale.KnowledgeGraph.Config.Connect}>
+        <IconButton
+          key="save-knowledge-graph-settings"
+          icon={<KnowledgeGraphIcon />}
+          bordered
+          text={Locale.KnowledgeGraph.Config.Connect}
+          onClick={() => {}}
+        />
+      </ListItem>
+    </List>
+  );
+}
 
 export function SessionConfigModel(props: { onClose: () => void }) {
   const chatStore = useChatStore();
   const session = chatStore.currentSession();
   const maskStore = useMaskStore();
   const navigate = useNavigate();
+  const globalConfig = useAppConfig();
 
   return (
     <div className="modal-mask">
@@ -116,6 +173,9 @@ export function SessionConfigModel(props: { onClose: () => void }) {
               if (await showConfirm(Locale.Memory.ResetConfirm)) {
                 chatStore.updateCurrentSession(
                   (session) => (session.memoryPrompt = ""),
+                );
+                globalConfig.update(
+                  (config) =>  (config.knowledgeGraph = DEFAULT_CONFIG.knowledgeGraph)
                 );
               }
             }}
@@ -134,6 +194,10 @@ export function SessionConfigModel(props: { onClose: () => void }) {
           />,
         ]}
       >
+        <KnowledgeGraphConfigList
+          shouldSyncFromGlobal
+          knowledgeGraphConfig={globalConfig.knowledgeGraph}
+        />
         <MaskConfig
           mask={session.mask}
           updateMask={(updater) => {
@@ -614,6 +678,8 @@ export function EditMessageModal(props: { onClose: () => void }) {
 function _Chat() {
   type RenderMessage = ChatMessage & { preview?: boolean };
 
+  const globalConfig = useAppConfig();
+
   const chatStore = useChatStore();
   const session = chatStore.currentSession();
   console.log("[KG Chat] Current Session (session obj)", session);
@@ -1084,7 +1150,17 @@ function _Chat() {
             {Locale.Chat.SubTitle(session.messages.length)}
           </div>
           <div className="window-header-sub-title">
-            <GreenIcon/> URL: http://example.org:1234
+            <span>{Locale.KnowledgeGraph.Config.Url}: {globalConfig.knowledgeGraph.url}</span>
+            <div className={styles['knowledge-graph-config-connection-status']}>
+              { globalConfig.knowledgeGraph.connected ?
+                <span>{Locale.KnowledgeGraph.Config.Connected}</span> :
+                <span>{Locale.KnowledgeGraph.Config.Disconnected}</span>
+              }
+              { globalConfig.knowledgeGraph.connected ?
+                <ConnectedIcon /> :
+                <DisconnectedIcon />
+              }
+            </div>
           </div>
         </div>
         <div className="window-actions">

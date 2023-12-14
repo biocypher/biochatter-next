@@ -58,11 +58,18 @@ export const DEFAULT_CONFIG = {
     enableInjectSystemPrompts: true,
     template: DEFAULT_INPUT_TEMPLATE,
   },
+
+  knowledgeGraph: {
+    url: "http://localhost:1234",
+    connected: false
+  }
 };
 
 export type ChatConfig = typeof DEFAULT_CONFIG;
 
 export type ModelConfig = ChatConfig["modelConfig"];
+
+export type KnowledgeGraphConfig = ChatConfig["knowledgeGraph"]
 
 export function limitNumber(
   x: number,

@@ -516,3 +516,12 @@
     bottom: 30px;
   }
 }
+
+.knowledge-graph-config-connection-status {
+  display: flex;
+  align-items: center;
+
+  svg: {
+    margin-left: 5px;
+  }
+}
