@@ -271,6 +271,12 @@ const en: LocaleType = {
       },
       ImportFailed: "Failed to import from file",
     },
+    Welcome: {
+      Splash: {
+        Title: "Welcome Splash Screen",
+        SubTitle: "Show a welcome splash screen after loading the app",
+      },
+    },
     Mask: {
       Splash: {
         Title: "Mask Splash Screen",

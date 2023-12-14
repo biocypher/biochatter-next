@@ -268,6 +268,12 @@ const cn = {
       },
       ImportFailed: "导入失败",
     },
+    Welcome: {
+      Splash: {
+        Title: "Welcome Splash Screen",
+        SubTitle: "Show a welcome splash screen after loading the app",
+      },
+    },
     Mask: {
       Splash: {
         Title: "面具启动页",
