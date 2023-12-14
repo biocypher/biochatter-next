@@ -178,14 +178,15 @@ export function SideBar(props: { className?: string }) {
       <div className={styles["sidebar-header-bar"]}>
         <IconButton
           icon={<AboutIcon width={16} height={16} />}
-          text={shouldNarrow ? undefined : Locale.About.Name}
+          text={shouldNarrow ? undefined : Locale.Welcome.Name}
           className={styles["sidebar-bar-button"]}
           onClick={() => {
-            if (config.dontShowMaskSplashScreen !== true) {
-              navigate(Path.About, { state: { fromHome: true } });
-            } else {
-              navigate(Path.About, { state: { fromHome: true } });
-            }
+            navigate(Path.Welcome, { state: { fromHome: true } });
+            // if (config.dontShowMaskSplashScreen !== true) {
+
+            // } else {
+            //   navigate(Path.Welcome, { state: { fromHome: true } });
+            // }
           }}
           shadow
         />
