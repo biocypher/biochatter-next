@@ -162,7 +162,7 @@ function Screen() {
 
           <div className={styles["window-content"]} id={SlotID.AppBody}>
             <Routes>
-              <Route path={Path.Home} element={<Chat />} />
+              <Route path={Path.Home} element={<NewChat />} />
               <Route path={Path.NewChat} element={<NewChat />} />
               <Route path={Path.About} element={<About />} />
               <Route path={Path.Masks} element={<MaskPage />} />

@@ -33,7 +33,7 @@ const tr: PartialLocaleType = {
     Send: "Gönder",
     Config: {
       Reset: "Reset to Default",
-      SaveAs: "Save as Mask",
+      SaveAs: "Save as Persona",
     },
   },
   Export: {

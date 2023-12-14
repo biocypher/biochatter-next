@@ -344,7 +344,7 @@ const cn = {
   Store: {
     DefaultTopic: "新的聊天",
     DefaultKnowledgeGraphTopic: "New Knowledge Graph Conversation",
-    BotHello: "Hello! I am the model's assistant. For more explanation, please see the About text in the sidebar. We will now be going through some initial setup steps together. To get started, could you please tell me your name?",
+    BotHello: "有什么可以帮你的吗",
     BotKGHello: "Hello! I am the model's assistant. This is the Knowledge Graph conversation room. To get started, could you please tell me your name?",
     Error: "出错了，稍后重试吧",
     Prompt: {
@@ -377,19 +377,19 @@ const cn = {
     Sysmessage: "你是一个助手",
   },
   About: {
-    Name: "About",
+    Name: "关于",
     Page: {
-      Title: "About",
-      Heading1: "BioChatter is developed by Sebastian Lobentanzer; you can find the source code on GitHub.",
-      ListTitle: "BioChatter is a tool to rapidly contextualise common end results of biomedical analyses. It works by setting up a topic-constrained conversation with a pre-trained language model. The main benefits of this approach are:",
+      Title: "关于",
+      Heading1: "BioChatter 由 Sebastian Lobentanzer 开发； 你可以在 GitHub 上找到源代码",
+      ListTitle: "BioChatter 是一种快速将生物医学分析的常见结果置于背景中的工具。 它的工作原理是使用预先训练的语言模型建立主题受限的对话。 这种方法的主要好处是:",
       ListItems: [
-        "Integration with the low-dimensional outputs of popular bioinformatics tools (e.g. gsea, progeny, decoupler)",
-        "Prompts tuned to biomedical research and your specific queries",
-        "Integrated safeguards to prevent false information and comparison to curated prior knowledge",
-        "Confidentiality of the shared data (as opposed to the ChatGPT interface, which allows storage and reuse of the user's prompts by OpenAI)"
+        "与流行生物信息学工具（例如 gsea、progeny、de Coupler) 的低维输出集成",
+        "针对生物医学研究和您的具体问题进行提示",
+        "综合保障措施，防止虚假信息并与策划的先验知识进行比较",
+        "共享数据的保密性（与 ChatGPT 界面相反, ChatGPT 界面允许 OpenAI 存储和重用用户的提示）"
       ],
-      Heading2: "About the models",
-      Models: "The default model loaded is OpenAIs gpt-3.5-turbo model, which in the standard version has a token limit of 4000 per conversation. This model currently comes in two versions, 0301 and 0613. The latter is the more recent one with improved interpretation of system messages and capabilities to handle functions (returning attribute values of a given function as JSON). Additionally, OpenAI provide a gpt-3.5-turbo-16k model with increased token limit of 16000 per conversation. This model is slightly more expensive, but can be useful for longer conversations, particularly when including the document summarisation / prompt injection feature."
+      Heading2: "关于型号",
+      Models: "加载的默认模型是 OpenAIs gpt-3.5-turbo 模型，在标准版本中，每个会话的令牌限制为 4000。 该模型目前有两个版本：0301 和 0613。后者是更新的版本，改进了系统消息的解释和处理函数的功能（以 JSON 形式返回给定函数的属性值）。 此外，OpenAI 还提供了 gpt-3.5-turbo-16k 模型，每个对话的代币限制增加到 16000 个。 该模型稍微昂贵，但对于较长的对话非常有用，特别是在包含文档摘要/提示注入功能时"
     }
   },
   KnowledgeGraph: {
