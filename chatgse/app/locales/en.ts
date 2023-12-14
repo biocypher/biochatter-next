@@ -347,7 +347,7 @@ const en: LocaleType = {
   },
   Store: {
     DefaultTopic: "New Conversation",
-    BotHello: "Hello! I am the model's assistant. For more explanation, please see the About text in the sidebar. We will now be going through some initial setup steps together. To get started, could you please tell me your name?",
+    BotHello: "Hello! How can I assist you today?",
     Error: "Something went wrong, please try again later.",
     Prompt: {
       History: (content: string) =>
