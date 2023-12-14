@@ -50,7 +50,7 @@ const id: PartialLocaleType = {
         dark: "Tema Gelap",
       },
       Prompt: "Prompts",
-      Masks: "Masks",
+      Masks: "Persona",
       Clear: "Bersihkan Percakapan",
       Settings: "Pengaturan",
     },
@@ -274,7 +274,6 @@ const id: PartialLocaleType = {
   },
   Store: {
     DefaultTopic: "Percakapan Baru",
-    BotHello: "Halo! Bagaimana saya bisa membantu Anda hari ini?",
     Error: "Terjadi kesalahan, silakan coba lagi nanti.",
     Prompt: {
       History: (content: string) =>

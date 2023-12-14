@@ -62,7 +62,7 @@ const en: LocaleType = {
         dark: "Dark Theme",
       },
       Prompt: "Prompts",
-      Masks: "Masks",
+      Masks: "Persona",
       Clear: "Clear Context",
       Settings: "Settings",
     },
@@ -78,7 +78,7 @@ const en: LocaleType = {
     Send: "Send",
     Config: {
       Reset: "Reset to Default",
-      SaveAs: "Save as Mask",
+      SaveAs: "Save as Persona",
     },
     IsContext: "Contextual Prompt",
   },
@@ -379,8 +379,24 @@ const en: LocaleType = {
   FineTuned: {
     Sysmessage: "You are an assistant that",
   },
+  About: {
+    Name: "About",
+    Page: {
+      Title: "About",
+      Heading1: "BioChatter is developed by Sebastian Lobentanzer; you can find the source code on GitHub.",
+      ListTitle: "BioChatter is a tool to rapidly contextualise common end results of biomedical analyses. It works by setting up a topic-constrained conversation with a pre-trained language model. The main benefits of this approach are:",
+      ListItems: [
+        "Integration with the low-dimensional outputs of popular bioinformatics tools (e.g. gsea, progeny, decoupler)",
+        "Prompts tuned to biomedical research and your specific queries",
+        "Integrated safeguards to prevent false information and comparison to curated prior knowledge",
+        "Confidentiality of the shared data (as opposed to the ChatGPT interface, which allows storage and reuse of the user's prompts by OpenAI)"
+      ],
+      Heading2: "About the models",
+      Models: "The default model loaded is OpenAIs gpt-3.5-turbo model, which in the standard version has a token limit of 4000 per conversation. This model currently comes in two versions, 0301 and 0613. The latter is the more recent one with improved interpretation of system messages and capabilities to handle functions (returning attribute values of a given function as JSON). Additionally, OpenAI provide a gpt-3.5-turbo-16k model with increased token limit of 16000 per conversation. This model is slightly more expensive, but can be useful for longer conversations, particularly when including the document summarisation / prompt injection feature."
+    }
+  },
   Mask: {
-    Name: "Mask",
+    Name: "Persona",
     Page: {
       Title: "Prompt Template",
       SubTitle: (count: number) => `${count} prompt templates`,
@@ -423,8 +439,8 @@ const en: LocaleType = {
   NewChat: {
     Return: "Return",
     Skip: "Just Start",
-    Title: "Pick a Mask",
-    SubTitle: "Chat with the Soul behind the Mask",
+    Title: "Pick a Persona",
+    SubTitle: "Choose the right Persona to chat with BioChatter",
     More: "Find More",
     NotShow: "Never Show Again",
     ConfirmNoShow: "Confirm to disable？You can enable it in settings later.",
@@ -455,6 +471,15 @@ const en: LocaleType = {
     Code: "Detected access code from url, confirm to apply? ",
     Settings: "Detected settings from url, confirm to apply?",
   },
+  Sidebar: {
+    AppTitle: "BioChatter",
+    AppSubtitle: "Conversational AI in biomedicine",
+    AppDescription: "BioChatter is part of the BioCypher ecosystem, connecting natively to BioCypher knowledge graphs."
+  },
+  LayoutMetadata: {
+    AppTitle: "BioChatter",
+    AppDescription: "Conversational AI in biomedicine"
+  }
 };
 
 export default en;

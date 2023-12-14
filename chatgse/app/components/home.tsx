@@ -6,7 +6,7 @@ import { useState, useEffect } from "react";
 
 import styles from "./home.module.scss";
 
-import BotIcon from "../icons/bot.svg";
+import BotIcon from "../icons/biochatter.svg";
 import LoadingIcon from "../icons/three-dots.svg";
 
 import { getCSSVar, useMobileScreen } from "../utils";
@@ -33,7 +33,7 @@ import { useAccessStore } from "../store";
 export function Loading(props: { noLogo?: boolean }) {
   return (
     <div className={styles["loading-content"] + " no-dark"}>
-      {!props.noLogo && <BotIcon />}
+      {!props.noLogo && <BotIcon width={32} height={32}/>}
       <LoadingIcon />
     </div>
   );
@@ -47,7 +47,15 @@ const Chat = dynamic(async () => (await import("./chat")).Chat, {
   loading: () => <Loading noLogo />,
 });
 
+const Welcome = dynamic(async () => (await import("./welcome")).Welcome, {
+  loading: () => <Loading noLogo />,
+});
+
 const NewChat = dynamic(async () => (await import("./new-chat")).NewChat, {
+  loading: () => <Loading noLogo />,
+});
+
+const About = dynamic(async () => (await import("./about")).AboutPage, {
   loading: () => <Loading noLogo />,
 });
 
@@ -154,8 +162,9 @@ function Screen() {
 
           <div className={styles["window-content"]} id={SlotID.AppBody}>
             <Routes>
-              <Route path={Path.Home} element={<Chat />} />
+              <Route path={Path.Home} element={<Welcome />} />
               <Route path={Path.NewChat} element={<NewChat />} />
+              <Route path={Path.About} element={<About />} />
               <Route path={Path.Masks} element={<MaskPage />} />
               <Route path={Path.Chat} element={<Chat />} />
               <Route path={Path.Settings} element={<Settings />} />
