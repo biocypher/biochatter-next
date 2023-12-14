@@ -19,7 +19,7 @@ import DragIcon from "../icons/drag.svg";
 
 import Locale from "../locales";
 
-import { useAppConfig, useChatStore, useKGChatStore } from "../store";
+import { useAppConfig, useChatStore } from "../store";
 
 
 import {
@@ -29,7 +29,8 @@ import {
   NARROW_SIDEBAR_WIDTH,
   Path,
   REPO_URL,
-  DOCS_URL
+  DOCS_URL,
+  ChatType
 } from "../constant";
 
 import { Link, useNavigate } from "react-router-dom";
@@ -43,7 +44,6 @@ const ChatList = dynamic(async () => (await import("./chat-list")).ChatList, {
 
 function useHotKey() {
   const chatStore = useChatStore();
-  const kgChatStore = useKGChatStore();
 
   useEffect(() => {
     const onKeyDown = (e: KeyboardEvent) => {
@@ -137,7 +137,6 @@ function useDragSideBar() {
 
 export function SideBar(props: { className?: string }) {
   const chatStore = useChatStore();
-  const kgChatStore = useKGChatStore();
 
   // drag side bar
   const { onDragStart, shouldNarrow } = useDragSideBar();
@@ -274,7 +273,7 @@ export function SideBar(props: { className?: string }) {
             icon={<KnowledgeGraphIcon />}
             text={shouldNarrow ? undefined : Locale.Home.NewKGChat}
             onClick={() => {
-              kgChatStore.newSession();
+              chatStore.newSession(undefined, ChatType.KnowledgeGraphChat);
               navigate(Path.KnowledgeGraphChat);
             }}
             shadow

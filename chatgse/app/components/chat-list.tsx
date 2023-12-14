@@ -12,12 +12,16 @@ import { useChatStore } from "../store";
 
 import Locale from "../locales";
 import { Link, useNavigate } from "react-router-dom";
-import { Path } from "../constant";
+import { Path, ChatType } from "../constant";
 import { MaskAvatar } from "./mask";
 import { Mask } from "../store/mask";
 import { useRef, useEffect } from "react";
 import { showConfirm } from "./ui-lib";
 import { useMobileScreen } from "../utils";
+
+import ChatBotIcon from "../icons/hubot.svg";
+import KnowledgeGraphChatIcon from "../icons/knowledge-graph.svg";
+
 
 export function ChatItem(props: {
   onClick?: () => void;
@@ -30,6 +34,7 @@ export function ChatItem(props: {
   index: number;
   narrow?: boolean;
   mask: Mask;
+  type: ChatType;
 }) {
   const draggableRef = useRef<HTMLDivElement | null>(null);
   useEffect(() => {
@@ -71,7 +76,15 @@ export function ChatItem(props: {
             </div>
           ) : (
             <>
-              <div className={styles["chat-item-title"]}>{props.title}</div>
+              <div className={styles["chat-item-title"]}>
+                <div className={styles["chat-item-title-logo"]}>
+                  {props.type === ChatType.RegularChat && <ChatBotIcon />}
+                  {props.type === ChatType.KnowledgeGraphChat && <KnowledgeGraphChatIcon />}
+                </div>
+                <div className={styles["chat-item-title-text"]}>
+                  <span>{props.title}</span>
+                </div>
+              </div>
               <div className={styles["chat-item-info"]}>
                 <div className={styles["chat-item-count"]}>
                   {Locale.ChatItem.ChatItemCount(props.count)}
@@ -106,6 +119,7 @@ export function ChatList(props: { narrow?: boolean }) {
       state.moveSession,
     ],
   );
+
   const chatStore = useChatStore();
   const navigate = useNavigate();
   const isMobileScreen = useMobileScreen();
@@ -145,8 +159,13 @@ export function ChatList(props: { narrow?: boolean }) {
                 index={i}
                 selected={i === selectedIndex}
                 onClick={() => {
-                  navigate(Path.Chat);
-                  selectSession(i);
+                  if (item.type === ChatType.RegularChat) {
+                    navigate(Path.Chat);
+                    selectSession(i);
+                  } else if (item.type === ChatType.KnowledgeGraphChat) {
+                    selectSession(i);
+                    navigate(Path.KnowledgeGraphChat);
+                  }
                 }}
                 onDelete={async () => {
                   if (
@@ -158,6 +177,7 @@ export function ChatList(props: { narrow?: boolean }) {
                 }}
                 narrow={props.narrow}
                 mask={item.mask}
+                type={item.type}
               />
             ))}
             {provided.placeholder}

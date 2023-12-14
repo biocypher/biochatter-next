@@ -50,6 +50,11 @@ export enum StoreKey {
   Sync = "sync",
 }
 
+export enum ChatType {
+  RegularChat = "regular-chat",
+  KnowledgeGraphChat = "knowledge-graph-chat",
+}
+
 export const DEFAULT_SIDEBAR_WIDTH = 300;
 export const MAX_SIDEBAR_WIDTH = 500;
 export const MIN_SIDEBAR_WIDTH = 230;

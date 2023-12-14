@@ -217,12 +217,26 @@
 .chat-item-title {
   font-size: 14px;
   font-weight: bolder;
-  display: block;
+  display: inline-flex;
+  justify-content: flex-start;
+  align-items: center;
   width: calc(100% - 15px);
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
   animation: slide-in ease 0.3s;
+
+  .chat-item-title-logo {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin-right: 5px;
+  }
+
+  .chat-item-title-text {
+    margin-left: 5px;
+  }
 }
 
 .chat-item-delete {

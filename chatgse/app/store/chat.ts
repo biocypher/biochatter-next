@@ -11,6 +11,7 @@ import {
   KnowledgeCutOffDate,
   StoreKey,
   SUMMARIZE_MODEL,
+  ChatType
 } from "../constant";
 import { api, RequestMessage } from "../client/api";
 import { ChatControllerPool } from "../client/controller";
@@ -57,14 +58,21 @@ export interface ChatSession {
   clearContextIndex?: number;
 
   mask: Mask;
-  type: string;
+  type: ChatType;
 }
 
 export const DEFAULT_TOPIC = Locale.Store.DefaultTopic;
+export const DEFAULT_KG_TOPIC = Locale.Store.DefaultKnowledgeGraphTopic;
+
 export const BOT_HELLO: ChatMessage = createMessage({
   role: "assistant",
   content: Locale.Store.BotHello,
 });
+export const KG_BOT_HELLO: ChatMessage = createMessage({
+  role: "assistant",
+  content: Locale.Store.BotKGHello,
+});
+export const DEFAULT_KG_MASK_AVATAR = "gpt-bot";
 
 function createEmptySession(): ChatSession {
   return {
@@ -81,8 +89,31 @@ function createEmptySession(): ChatSession {
     lastSummarizeIndex: 0,
 
     mask: createEmptyMask(),
-    type: "RC"
+    type: ChatType.RegularChat
   };
+}
+
+function createEmptyKGSession(): ChatSession {
+  const emptyKGSession = {
+    id: generateUniqId(),
+    topic: DEFAULT_KG_TOPIC,
+    memoryPrompt: "",
+    messages: [],
+    stat: {
+      tokenCount: 0,
+      wordCount: 0,
+      charCount: 0,
+    },
+    lastUpdate: Date.now(),
+    lastSummarizeIndex: 0,
+
+    mask: createEmptyMask(DEFAULT_KG_MASK_AVATAR, DEFAULT_KG_TOPIC),
+    type: ChatType.KnowledgeGraphChat,
+  };
+
+  console.log("emptyKGSession", emptyKGSession);
+
+  return emptyKGSession
 }
 
 function getSummarizeModel(currentModel: string) {
@@ -175,8 +206,8 @@ export const useChatStore = createPersistStore(
         });
       },
 
-      newSession(mask?: Mask) {
-        const session = createEmptySession();
+      newSession(mask?: Mask, type: ChatType = ChatType.RegularChat) {
+        const session = type === ChatType.KnowledgeGraphChat ? createEmptyKGSession() : createEmptySession();
 
         if (mask) {
           const config = useAppConfig.getState();
@@ -481,6 +512,7 @@ export const useChatStore = createPersistStore(
       summarizeSession() {
         const config = useAppConfig.getState();
         const session = get().currentSession();
+        const defaultTopic = session.type === ChatType.KnowledgeGraphChat ? DEFAULT_KG_TOPIC : DEFAULT_TOPIC
 
         // remove error messages if any
         const messages = session.messages;
@@ -489,7 +521,7 @@ export const useChatStore = createPersistStore(
         const SUMMARIZE_MIN_LEN = 50;
         if (
           config.enableAutoGenerateTitle &&
-          session.topic === DEFAULT_TOPIC &&
+          session.topic === defaultTopic &&
           countMessages(messages) >= SUMMARIZE_MIN_LEN
         ) {
           const topicMessages = messages.concat(
@@ -504,10 +536,12 @@ export const useChatStore = createPersistStore(
               model: getSummarizeModel(session.mask.modelConfig.model),
             },
             onFinish(message) {
+              console.log("[summarizeSession] Summary message arrived", { message, currentSessionTopic: session.topic, defaultTopic });
+
               get().updateCurrentSession(
                 (session) =>
                   (session.topic =
-                    message.length > 0 ? trimTopic(message) : DEFAULT_TOPIC),
+                    message.length > 0 ? trimTopic(message) : defaultTopic),
               );
             },
           });

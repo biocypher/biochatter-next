@@ -37,11 +37,11 @@ import StopIcon from "../icons/pause.svg";
 import RobotIcon from "../icons/robot.svg";
 
 import {
-  KGChatMessage,
+  ChatMessage,
   SubmitKey,
-  useKGChatStore,
+  useChatStore,
   KG_BOT_HELLO,
-  createKGMessage,
+  createMessage,
   useAccessStore,
   Theme,
   useAppConfig,
@@ -96,7 +96,7 @@ const Markdown = dynamic(async () => (await import("./markdown")).Markdown, {
 });
 
 export function SessionConfigModel(props: { onClose: () => void }) {
-  const chatStore = useKGChatStore();
+  const chatStore = useChatStore();
   const session = chatStore.currentSession();
   const maskStore = useMaskStore();
   const navigate = useNavigate();
@@ -164,7 +164,7 @@ function PromptToast(props: {
   showModal?: boolean;
   setShowModal: (_: boolean) => void;
 }) {
-  const chatStore = useKGChatStore();
+  const chatStore = useChatStore();
   const session = chatStore.currentSession();
   const context = session.mask.context;
 
@@ -308,7 +308,7 @@ export function PromptHints(props: {
 }
 
 function ClearContextDivider() {
-  const chatStore = useKGChatStore();
+  const chatStore = useChatStore();
 
   return (
     <div
@@ -414,7 +414,7 @@ export function ChatActions(props: {
 }) {
   const config = useAppConfig();
   const navigate = useNavigate();
-  const chatStore = useKGChatStore();
+  const chatStore = useChatStore();
 
   // switch themes
   const theme = config.theme;
@@ -550,7 +550,7 @@ export function ChatActions(props: {
 }
 
 export function EditMessageModal(props: { onClose: () => void }) {
-  const chatStore = useKGChatStore();
+  const chatStore = useChatStore();
   const session = chatStore.currentSession();
   const [messages, setMessages] = useState(session.messages.slice());
 
@@ -612,10 +612,12 @@ export function EditMessageModal(props: { onClose: () => void }) {
 }
 
 function _Chat() {
-  type RenderMessage = KGChatMessage & { preview?: boolean };
+  type RenderMessage = ChatMessage & { preview?: boolean };
 
-  const chatStore = useKGChatStore();
+  const chatStore = useChatStore();
   const session = chatStore.currentSession();
+  console.log("[KG Chat] Current Session (session obj)", session);
+
   const config = useAppConfig();
   const fontSize = config.fontSize;
 
@@ -782,7 +784,7 @@ function _Chat() {
       e.preventDefault();
     }
   };
-  const onRightClick = (e: any, message: KGChatMessage) => {
+  const onRightClick = (e: any, message: ChatMessage) => {
     // copy to clipboard
     if (selectOrCopy(e.currentTarget, message.content)) {
       if (userInput.length === 0) {
@@ -804,7 +806,7 @@ function _Chat() {
     deleteMessage(msgId);
   };
 
-  const onResend = (message: KGChatMessage) => {
+  const onResend = (message: ChatMessage) => {
     // when it is resending a message
     // 1. for a user's message, find the next bot response
     // 2. for a bot's message, find the last user's input
@@ -820,8 +822,8 @@ function _Chat() {
       return;
     }
 
-    let userMessage: KGChatMessage | undefined;
-    let botMessage: KGChatMessage | undefined;
+    let userMessage: ChatMessage | undefined;
+    let botMessage: ChatMessage | undefined;
 
     if (message.role === "assistant") {
       // if it is resending a bot's message, find the user input for it
@@ -858,7 +860,7 @@ function _Chat() {
     inputRef.current?.focus();
   };
 
-  const onPinMessage = (message: KGChatMessage) => {
+  const onPinMessage = (message: ChatMessage) => {
     chatStore.updateCurrentSession((session) =>
       session.mask.context.push(message),
     );
@@ -875,6 +877,12 @@ function _Chat() {
     return session.mask.hideContext ? [] : session.mask.context.slice();
   }, [session.mask.context, session.mask.hideContext]);
   const accessStore = useAccessStore();
+
+  console.log("MESSAGE MANAGEMENT", {
+    contextLength: context.length,
+    sessionMessages: session.messages,
+    kgBotHelloContent: KG_BOT_HELLO.content,
+  })
 
   if (
     context.length === 0 &&
@@ -895,7 +903,7 @@ function _Chat() {
         isLoading
           ? [
               {
-                ...createKGMessage({
+                ...createMessage({
                   role: "assistant",
                   content: "……",
                 }),
@@ -908,7 +916,7 @@ function _Chat() {
         userInput.length > 0 && config.sendPreviewBubble
           ? [
               {
-                ...createKGMessage({
+                ...createMessage({
                   role: "user",
                   content: userInput,
                 }),
@@ -1327,7 +1335,9 @@ function _Chat() {
 }
 
 export function KnowledgeGraphChat() {
-  const chatStore = useKGChatStore();
+  const chatStore = useChatStore();
   const sessionIndex = chatStore.currentSessionIndex;
+
+  console.log(`[KnowledgeGraphChat] returning new _Chat for sessionIndex: ${sessionIndex}`)
   return <_Chat key={sessionIndex}></_Chat>;
 }
