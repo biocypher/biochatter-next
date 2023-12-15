@@ -127,6 +127,52 @@ const en: LocaleType = {
     DeleteToast: "Chat Deleted",
     Revert: "Revert",
   },
+  Welcome: {
+    Name: "Help",
+    Page: {
+      Title: "Welcome to BioChatter!",
+      NotShow: "Never Show Again",
+      What: "What?",
+      WhatMessages: [
+        "A platform for the application of Large Language Models (LLMs) in biomedical research.",
+        "A way to make LLMs more __useful__ and __trustworthy__.",
+        "A means to make biomedical research more reproducible.",
+        "A platform for contextualisation of biomedical results.",
+        "An interface for the intuitive interaction with current cutting-edge AI.",
+        "An __open-source__ project.",
+        "A way to make biomedical research more efficient.",
+        "A time-saver.",
+      ],
+      How: "How?",
+      HowMessages: [
+        "Building wrappers around LLMs to tune their responses and ameliorate their shortcomings.",
+        "Connecting to complementary technology, such as (vector) databases and model chaining.",
+        "Being playful and experimental, and having fun!",
+        "Coming together as a community and being communicative.",
+        "Collaborating on the future of biomedical research.",
+        "Engineering prompts to make LLMs more useful.",
+        "Following open science principles.",
+        "Being transparent about the limitations of the technology.",
+        "Being modular and extensible.",
+        "Injecting prior knowledge into LLM queries.",
+      ],
+      Disclaimer: "This app is still in development; you are seeing a preview with limited functionality.\nFor more information on our vision of the platform, please see our [preprint](https://arxiv.org/abs/2305.06488)!\nIf you'd like to contribute to the project, please find us on [GitHub](https://github.com/biocypher/ChatGSE) or [Zulip](https://biocypher.zulipchat.com/). We'd love to hear from you!",
+      About: {
+        Name: "About",
+        Title: "About",
+        Heading1: "BioChatter is developed by [Sebastian Lobentanzer](https://slobentanzer.github.io/); you can find the source code on [GitHub](https://github.com/biocypher/chatgse).",
+        ListTitle: "BioChatter is a tool to rapidly contextualise common end results of biomedical analyses. It works by setting up a topic-constrained conversation with a pre-trained language model. The main benefits of this approach are:",
+        ListItems: [
+          "Integration with the low-dimensional outputs of popular bioinformatics tools (e.g. gsea, progeny, decoupler)",
+          "Prompts tuned to biomedical research and your specific queries",
+          "Integrated safeguards to prevent false information and comparison to curated prior knowledge",
+          "Confidentiality of the shared data (as opposed to the ChatGPT interface, which allows storage and reuse of the user's prompts by OpenAI)"
+        ],
+        Heading2: "About the models",
+        Models: "The default model loaded is `OpenAIs gpt-3.5-turbo` model, which in the standard version has a token limit of 4000 per conversation. This model currently comes in two versions, `0301` and `0613`. The latter is the more recent one with improved interpretation of system messages and capabilities to handle functions (returning attribute values of a given function as JSON). Additionally, OpenAI provide a `gpt-3.5-turbo-16k` model with increased token limit of 16000 per conversation. This model is slightly more expensive, but can be useful for longer conversations, particularly when including the document summarisation `/prompt` injection feature."
+      },
+    }
+  },
   Settings: {
     Title: "Settings",
     SubTitle: "All Settings",
@@ -224,6 +270,12 @@ const en: LocaleType = {
         return `${overview.chat} chats，${overview.message} messages，${overview.prompt} prompts，${overview.mask} masks`;
       },
       ImportFailed: "Failed to import from file",
+    },
+    Welcome: {
+      Splash: {
+        Title: "Welcome Splash Screen",
+        SubTitle: "Show a welcome splash screen after loading the app",
+      },
     },
     Mask: {
       Splash: {
@@ -378,22 +430,6 @@ const en: LocaleType = {
   },
   FineTuned: {
     Sysmessage: "You are an assistant that",
-  },
-  About: {
-    Name: "About",
-    Page: {
-      Title: "About",
-      Heading1: "BioChatter is developed by Sebastian Lobentanzer; you can find the source code on GitHub.",
-      ListTitle: "BioChatter is a tool to rapidly contextualise common end results of biomedical analyses. It works by setting up a topic-constrained conversation with a pre-trained language model. The main benefits of this approach are:",
-      ListItems: [
-        "Integration with the low-dimensional outputs of popular bioinformatics tools (e.g. gsea, progeny, decoupler)",
-        "Prompts tuned to biomedical research and your specific queries",
-        "Integrated safeguards to prevent false information and comparison to curated prior knowledge",
-        "Confidentiality of the shared data (as opposed to the ChatGPT interface, which allows storage and reuse of the user's prompts by OpenAI)"
-      ],
-      Heading2: "About the models",
-      Models: "The default model loaded is OpenAIs gpt-3.5-turbo model, which in the standard version has a token limit of 4000 per conversation. This model currently comes in two versions, 0301 and 0613. The latter is the more recent one with improved interpretation of system messages and capabilities to handle functions (returning attribute values of a given function as JSON). Additionally, OpenAI provide a gpt-3.5-turbo-16k model with increased token limit of 16000 per conversation. This model is slightly more expensive, but can be useful for longer conversations, particularly when including the document summarisation / prompt injection feature."
-    }
   },
   Mask: {
     Name: "Persona",

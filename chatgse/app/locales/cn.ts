@@ -124,6 +124,52 @@ const cn = {
     DeleteToast: "已删除会话",
     Revert: "撤销",
   },
+  Welcome: {
+    Name: "Help",
+    Page: {
+      Title: "Welcome to BioChatter!",
+      NotShow: "不再展示",
+      What: "What?",
+      WhatMessages: [
+        "A platform for the application of Large Language Models (LLMs) in biomedical research.",
+        "A way to make LLMs more __useful__ and __trustworthy__.",
+        "A means to make biomedical research more reproducible.",
+        "A platform for contextualisation of biomedical results.",
+        "An interface for the intuitive interaction with current cutting-edge AI.",
+        "An __open-source__ project.",
+        "A way to make biomedical research more efficient.",
+        "A time-saver.",
+      ],
+      How: "How?",
+      HowMessages: [
+        "Building wrappers around LLMs to tune their responses and ameliorate their shortcomings.",
+        "Connecting to complementary technology, such as (vector) databases and model chaining.",
+        "Being playful and experimental, and having fun!",
+        "Coming together as a community and being communicative.",
+        "Collaborating on the future of biomedical research.",
+        "Engineering prompts to make LLMs more useful.",
+        "Following open science principles.",
+        "Being transparent about the limitations of the technology.",
+        "Being modular and extensible.",
+        "Injecting prior knowledge into LLM queries.",
+      ],
+      Disclaimer: "This app is still in development; you are seeing a preview with limited functionality.\nFor more information on our vision of the platform, please see our [preprint](https://arxiv.org/abs/2305.06488)!\nIf you'd like to contribute to the project, please find us on [GitHub](https://github.com/biocypher/ChatGSE) or [Zulip](https://biocypher.zulipchat.com/). We'd love to hear from you!",
+      About: {
+        Name: "关于",
+        Title: "关于",
+        Heading1: "BioChatter 由 [Sebastian Lobentanzer](https://slobentanzer.github.io/) 开发； 你可以在 [GitHub](https://github.com/biocypher/chatgse) 上找到源代码",
+        ListTitle: "BioChatter 是一种快速将生物医学分析的常见结果置于背景中的工具。 它的工作原理是使用预先训练的语言模型建立主题受限的对话。 这种方法的主要好处是:",
+        ListItems: [
+          "与流行生物信息学工具（例如 gsea、progeny、de Coupler) 的低维输出集成",
+          "针对生物医学研究和您的具体问题进行提示",
+          "综合保障措施，防止虚假信息并与策划的先验知识进行比较",
+          "共享数据的保密性（与 ChatGPT 界面相反, ChatGPT 界面允许 OpenAI 存储和重用用户的提示）"
+        ],
+        Heading2: "关于型号",
+        Models: "加载的默认模型是 OpenAIs gpt-3.5-turbo 模型，在标准版本中，每个会话的令牌限制为 4000。 该模型目前有两个版本：0301 和 0613。后者是更新的版本，改进了系统消息的解释和处理函数的功能（以 JSON 形式返回给定函数的属性值）。 此外，OpenAI 还提供了 gpt-3.5-turbo-16k 模型，每个对话的代币限制增加到 16000 个。 该模型稍微昂贵，但对于较长的对话非常有用，特别是在包含文档摘要/提示注入功能时"
+      },
+    }
+  },
   Settings: {
     Title: "设置",
     SubTitle: "所有设置选项",
@@ -221,6 +267,12 @@ const cn = {
         return `${overview.chat} 次对话，${overview.message} 条消息，${overview.prompt} 条提示词，${overview.mask} 个面具`;
       },
       ImportFailed: "导入失败",
+    },
+    Welcome: {
+      Splash: {
+        Title: "Welcome Splash Screen",
+        SubTitle: "Show a welcome splash screen after loading the app",
+      },
     },
     Mask: {
       Splash: {
@@ -372,22 +424,6 @@ const cn = {
   },
   FineTuned: {
     Sysmessage: "你是一个助手",
-  },
-  About: {
-    Name: "关于",
-    Page: {
-      Title: "关于",
-      Heading1: "BioChatter 由 Sebastian Lobentanzer 开发； 你可以在 GitHub 上找到源代码",
-      ListTitle: "BioChatter 是一种快速将生物医学分析的常见结果置于背景中的工具。 它的工作原理是使用预先训练的语言模型建立主题受限的对话。 这种方法的主要好处是:",
-      ListItems: [
-        "与流行生物信息学工具（例如 gsea、progeny、de Coupler) 的低维输出集成",
-        "针对生物医学研究和您的具体问题进行提示",
-        "综合保障措施，防止虚假信息并与策划的先验知识进行比较",
-        "共享数据的保密性（与 ChatGPT 界面相反, ChatGPT 界面允许 OpenAI 存储和重用用户的提示）"
-      ],
-      Heading2: "关于型号",
-      Models: "加载的默认模型是 OpenAIs gpt-3.5-turbo 模型，在标准版本中，每个会话的令牌限制为 4000。 该模型目前有两个版本：0301 和 0613。后者是更新的版本，改进了系统消息的解释和处理函数的功能（以 JSON 形式返回给定函数的属性值）。 此外，OpenAI 还提供了 gpt-3.5-turbo-16k 模型，每个对话的代币限制增加到 16000 个。 该模型稍微昂贵，但对于较长的对话非常有用，特别是在包含文档摘要/提示注入功能时"
-    }
   },
   Mask: {
     Name: "面具",

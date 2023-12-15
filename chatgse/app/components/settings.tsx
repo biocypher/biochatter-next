@@ -829,6 +829,22 @@ export function Settings() {
 
         <List>
           <ListItem
+            title={Locale.Settings.Welcome.Splash.Title}
+            subTitle={Locale.Settings.Welcome.Splash.SubTitle}
+          >
+            <input
+              type="checkbox"
+              checked={!config.dontShowWelcomeSplashScreen}
+              onChange={(e) =>
+                updateConfig(
+                  (config) =>
+                    (config.dontShowWelcomeSplashScreen =
+                      !e.currentTarget.checked),
+                )
+              }
+            ></input>
+          </ListItem>
+          <ListItem
             title={Locale.Settings.Mask.Splash.Title}
             subTitle={Locale.Settings.Mask.Splash.SubTitle}
           >
