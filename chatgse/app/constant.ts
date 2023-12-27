@@ -22,6 +22,7 @@ export enum Path {
   Welcome = "/welcome",
   Masks = "/masks",
   Auth = "/auth",
+  RAG = "/rag"
 }
 
 export enum ApiPath {
@@ -47,6 +48,7 @@ export enum StoreKey {
   Prompt = "prompt-store",
   Update = "chat-update",
   Sync = "sync",
+  RAG = "rag-store",
 }
 
 export const DEFAULT_SIDEBAR_WIDTH = 300;

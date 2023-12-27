@@ -34,6 +34,7 @@ import AutoIcon from "../icons/auto.svg";
 import BottomIcon from "../icons/bottom.svg";
 import StopIcon from "../icons/pause.svg";
 import RobotIcon from "../icons/robot.svg";
+import RagIcon from "../icons/rag.svg";
 
 import {
   ChatMessage,
@@ -437,6 +438,7 @@ export function ChatActions(props: {
     [allModels],
   );
   const [showModelSelector, setShowModelSelector] = useState(false);
+  const [showRAGConfiguration, setShowRAGConfiguration] = useState(false);
 
   useEffect(() => {
     // if current model is not available
@@ -525,6 +527,14 @@ export function ChatActions(props: {
         text={currentModel}
         icon={<RobotIcon />}
       />
+      <ChatAction
+        onClick={() => {
+          navigate(Path.RAG)
+        }}
+        text="RAG"
+        icon={<RagIcon />}
+      />
+
 
       {showModelSelector && (
         <Selector

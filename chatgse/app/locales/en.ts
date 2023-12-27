@@ -431,6 +431,11 @@ const en: LocaleType = {
   FineTuned: {
     Sysmessage: "You are an assistant that",
   },
+  RAG: {
+    Page: {
+      Title: "RAG Settings"
+    }
+  },
   Mask: {
     Name: "Persona",
     Page: {

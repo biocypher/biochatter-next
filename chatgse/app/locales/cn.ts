@@ -425,6 +425,12 @@ const cn = {
   FineTuned: {
     Sysmessage: "你是一个助手",
   },
+  RAG: {
+    Page: {
+      Title: "",
+      
+    }
+  },
   Mask: {
     Name: "面具",
     Page: {
