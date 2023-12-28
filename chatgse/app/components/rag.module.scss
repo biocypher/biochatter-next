@@ -4,4 +4,25 @@
   height: 100%;
   display: flex;
   flex-direction: column;
+
+  .rag-page-body {
+    padding: 20px;
+    overflow-y: auto;
+
+    .rag-content {
+      height: 100%;
+      width: 100%;
+      columns: 2;
+
+      .rag-documents {
+        padding-top: 10px;
+        padding-bottom: 10px;
+      }
+      .rag-settings {
+        padding-top: 10px;
+        padding-bottom: 10px;
+      }
+    }
+
+  }
 }

@@ -4,9 +4,10 @@ import { useChatStore } from "../store";
 import { ErrorBoundary } from "./error";
 import Locale from "../locales";
 
-import styles from "./mask.module.scss";
+import styles from "./rag.module.scss";
 
 import CloseIcon from "../icons/close.svg";
+import SettingsIcon from "../icons/rag-settings.svg";
 
 import { IconButton } from "./button";
 
@@ -34,6 +35,22 @@ export function RAGPage() {
                 bordered
                 onClick={() => navigate(-1)}
               />
+            </div>
+          </div>
+        </div>
+
+        <div className={styles["rag-page-body"]}>
+          <div>
+            {Locale.RAG.Page.Description}
+          </div>
+
+          <div className={styles["rag-content"]}>
+            <div className={styles["rag-documents"]}>
+                <SettingsIcon />
+                <div>Documents</div>
+            </div>
+            <div className={styles["rag-settings"]}>
+                settings
             </div>
           </div>
         </div>

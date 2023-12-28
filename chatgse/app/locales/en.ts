@@ -433,7 +433,8 @@ const en: LocaleType = {
   },
   RAG: {
     Page: {
-      Title: "RAG Settings"
+      Title: "RAG Settings",
+      Description: "While Large Language Models have access to vast amounts of knowledge, this knowledge only includes what was present in their training set, and thus excludes very current research as well as research articles that are not open access. To fill in the gaps of the model's knowledge, we include a document summarisation approach that stores knowledge from user-provided documents in a vector database, which can be used to supplement the model prompt by retrieving the most relevant contents of the provided documents. This process builds on the unique functionality of vector databases to perform similarity search on the embeddings of the documents' contents."
     }
   },
   Mask: {

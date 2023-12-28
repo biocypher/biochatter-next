@@ -428,7 +428,7 @@ const cn = {
   RAG: {
     Page: {
       Title: "",
-      
+      Description: "",
     }
   },
   Mask: {
