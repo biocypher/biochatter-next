@@ -6,21 +6,66 @@
   flex-direction: column;
 
   .rag-page-body {
-    padding: 20px;
-    overflow-y: auto;
+    padding: 5px;
+    flex-grow: 10;
+    display: flex;
+    flex-direction: column;
 
-    .rag-content {
-      height: 100%;
+    --description-height: 72px;
+    .rag-description {
+      flex-grow: 0;
+      font-size: 0.8rem;
+      max-height: var(--description-height)
+    }
+    .rag-page-content {
+      flex-grow: 10;
+      min-height: calc(60vh - var(--modal-padding) - var(--description-height));
       width: 100%;
-      columns: 2;
+      display: flex;
+      flex-direction: row;
 
-      .rag-documents {
-        padding-top: 10px;
-        padding-bottom: 10px;
-      }
-      .rag-settings {
-        padding-top: 10px;
-        padding-bottom: 10px;
+      .rag-column {
+        flex-grow: 10;
+        position: relative;
+
+        .column-container {
+          position: absolute;
+          top: 0;
+          bottom: 0;
+          left: 0;
+          right: 0;
+          display: flex;
+          flex-direction: column;
+        }
+
+        .column-title {
+          padding-top: 10px;
+          justify-content: center;
+          flex-grow: 0;
+          display: flex;
+          flex-direction: row;
+          .column-icon {
+            flex-grow: 0;
+          }
+          .column-label {
+            padding-left: 10px;
+            flex-grow: 0;
+            font-size: 24px;
+          }
+        }
+        .column-body {
+          padding:10px;
+          flex-grow: 10;
+          overflow-y: auto;
+          display: flex;
+          flex-direction: column;
+
+          .feature-hints {
+            flex-grow: 0;
+            margin-bottom: 5px;
+            padding: 5px 0;
+          }
+        }
       }
     }
 

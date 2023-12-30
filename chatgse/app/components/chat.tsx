@@ -84,6 +84,7 @@ import {
 } from "../constant";
 import { Avatar } from "./emoji";
 import { ContextPrompts, MaskAvatar, MaskConfig } from "./mask";
+import { RAGConfigModal } from "./rag-config-modal";
 import { useMaskStore } from "../store/mask";
 import { ChatCommandPrefix, useChatCommand, useCommand } from "../command";
 import { prettyObject } from "../utils/format";
@@ -187,6 +188,19 @@ function PromptToast(props: {
       )}
     </div>
   );
+}
+
+function RAGSettings(props: {
+  showModal?: boolean;
+  setShowModal: (_: boolean) => void;
+}) {
+  return (
+    <div className={styles["prompt-toast"]} key="rag-toast">
+      {props.showModal && (
+        <RAGConfigModal onClose={() => props.setShowModal(false)} />
+      )}
+    </div>
+  )
 }
 
 function useSubmitHandler() {
@@ -408,6 +422,7 @@ function useScrollToBottom() {
 
 export function ChatActions(props: {
   showPromptModal: () => void;
+  showRAGModal: () => void;
   scrollToBottom: () => void;
   showPromptHints: () => void;
   hitBottom: boolean;
@@ -528,9 +543,7 @@ export function ChatActions(props: {
         icon={<RobotIcon />}
       />
       <ChatAction
-        onClick={() => {
-          navigate(Path.RAG)
-        }}
+        onClick={props.showRAGModal}
         text="RAG"
         icon={<RagIcon />}
       />
@@ -985,6 +998,7 @@ function _Chat() {
       : -1;
 
   const [showPromptModal, setShowPromptModal] = useState(false);
+  const [showRAGModal, setShowRAGModal] = useState(false);
 
   const clientConfig = useMemo(() => getClientConfig(), []);
 
@@ -1126,6 +1140,10 @@ function _Chat() {
           setShowModal={setShowPromptModal}
         />
       </div>
+      <RAGSettings
+        showModal={showRAGModal}
+        setShowModal={setShowRAGModal}
+      ></RAGSettings>
 
       <div
         className={styles["chat-body"]}
@@ -1277,6 +1295,7 @@ function _Chat() {
 
         <ChatActions
           showPromptModal={() => setShowPromptModal(true)}
+          showRAGModal={() => setShowRAGModal(true)}
           scrollToBottom={scrollToBottom}
           hitBottom={hitBottom}
           showPromptHints={() => {

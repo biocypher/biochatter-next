@@ -74,7 +74,7 @@
   background-color: var(--white);
   border-radius: 12px;
   width: 80vw;
-  max-width: 900px;
+  max-width: 1200px;
   min-width: 300px;
   animation: slide-in ease 0.3s;
 
@@ -123,7 +123,7 @@
   }
 
   .modal-content {
-    max-height: 40vh;
+    max-height: 60vh;
     padding: var(--modal-padding);
     overflow: auto;
   }
