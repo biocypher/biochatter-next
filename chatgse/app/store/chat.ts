@@ -21,6 +21,16 @@ import { createPersistStore } from "../utils/store";
 
 const generateUniqId = () => uuidv4();
 
+export interface RAGConfig {
+  useRAG: boolean;
+  splitByChar: boolean;
+  chunkSize: number;
+  overlapSize: number,
+  resultNum: number;
+
+  selectedDocIds: Array<string>;
+}
+
 export type ChatMessage = RequestMessage & {
   date: string;
   streaming?: boolean;
@@ -57,6 +67,17 @@ export interface ChatSession {
   clearContextIndex?: number;
 
   mask: Mask;
+  ragConfig: RAGConfig;
+}
+export function createEmptyRAGConfig(): RAGConfig {
+  return {
+    useRAG: false,
+    splitByChar: true,
+    chunkSize: 1000,
+    overlapSize: 0,
+    resultNum: 3,
+    selectedDocIds: []
+  };
 }
 
 export const DEFAULT_TOPIC = Locale.Store.DefaultTopic;
@@ -80,6 +101,7 @@ function createEmptySession(): ChatSession {
     lastSummarizeIndex: 0,
 
     mask: createEmptyMask(),
+    ragConfig: createEmptyRAGConfig(),
   };
 }
 
@@ -599,7 +621,7 @@ export const useChatStore = createPersistStore(
   },
   {
     name: StoreKey.Chat,
-    version: 3.1,
+    version: 3.2,
     migrate(persistedState, version) {
       const state = persistedState as any;
       const newState = JSON.parse(

@@ -15,7 +15,8 @@
     .rag-description {
       flex-grow: 0;
       font-size: 0.8rem;
-      max-height: var(--description-height)
+      max-height: var(--description-height);
+      overflow: auto;
     }
     .rag-page-content {
       flex-grow: 10;

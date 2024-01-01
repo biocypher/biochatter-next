@@ -1,5 +1,4 @@
-import { useChatStore } from "../store";
-import { useRAGStore } from "../store/rag";
+import { createEmptyRAGConfig, useChatStore } from "../store";
 
 import ResetIcon from "../icons/reload.svg";
 import OKIcon from "../icons/config.svg";
@@ -8,35 +7,67 @@ import RAGDocumentsIcon from "../icons/rag-documents.svg";
 
 import Locale from "../locales";
 import { IconButton } from "./button";
-import { List, ListItem, Modal } from "./ui-lib";
+import { List, ListItem, Modal, ReactDropZone, showConfirm } from "./ui-lib";
 
 import styles from "./rag.module.scss";
 import { InputRange } from "./input-range";
+import { ApiPath } from "../constant";
 
 export function RAGConfigModal(props: {onClose: () => void}) {
   const chatStore = useChatStore();
   const session = chatStore.currentSession();
-  const ragStore = useRAGStore();
+
+  async function onUpload(file: File) {
+    const RAG_URL = ApiPath.RAG;
+    const path = "newdocument";
+    let uploadPath = RAG_URL as string;
+    if (!uploadPath.endsWith('/')) {
+      uploadPath += '/';
+    }
+    uploadPath += path;
+    const data = new FormData();
+    data.set('file', file);
+    try {
+      const res = await fetch(uploadPath, {
+        method: "POST",
+        body: data
+      });
+      if (!res.ok) {
+        throw new Error(await res.text())
+      }
+    } catch (e: any) {
+      console.log(e);
+    }
+  }
 
   return (
     <div className="modal-mask">
       <Modal
         title="Current RAG Settings"
         onClose={props.onClose}
+        defaultMax={true}
         actions={[
           <IconButton
             key="reset"
             icon={<ResetIcon />}
             bordered
             text="reset"
-            onClick={async () => {}}
+            onClick={async () => {
+              if (await showConfirm("Resetting will clear all settings. Are you sure?")) {
+                chatStore.updateCurrentSession(
+                  (session) => {
+                    session.ragConfig = createEmptyRAGConfig();
+                  }
+                )
+              }
+            }}
           ></IconButton>,
           <IconButton
             key="ok"
             icon={<OKIcon />}
             bordered
             text="OK"
-            onClick={async () => {}}
+            onClick={props.onClose}
           ></IconButton>
         ]}
       >
@@ -56,11 +87,18 @@ export function RAGConfigModal(props: {onClose: () => void}) {
                     <div className={styles["column-label"]}>Documents</div>
                   </div>
                   <div className={styles["column-body"]}>
-                    <div className={styles["feature-hints"]}>
+                    {!session.ragConfig.useRAG ? (<div className={styles["feature-hints"]}>
                       To use the feature, please enable it in the settings panel. →                  
-                    </div>
+                    </div>) : (<div />)}
                     <div className={styles["feature-hints"]}>
                       Upload documents one at a time. Upon upload, the document is split according to the settings and the embeddings are stored in the connected vector database.
+                    </div>
+                    <div className={styles["feature-hints"]}>
+                      <ReactDropZone
+                        disabled={!session.ragConfig.useRAG}
+                        accept={{"application/pdf": ["application/pdf"], "text/plain": ["text/plain"]}}
+                        onUpload={onUpload}
+                      />
                     </div>
                   </div>
                 </div>
@@ -80,6 +118,12 @@ export function RAGConfigModal(props: {onClose: () => void}) {
                       >
                         <input
                           type="checkbox"
+                          checked={session.ragConfig.useRAG}
+                          onChange={(e) => {
+                            chatStore.updateCurrentSession(
+                              (sess) => (sess.ragConfig.useRAG = e.currentTarget.checked)
+                            )
+                          }}
                         ></input>
                       </ListItem>
                       <ListItem
@@ -87,6 +131,12 @@ export function RAGConfigModal(props: {onClose: () => void}) {
                       >
                         <input
                           type="checkbox"
+                          checked={session.ragConfig.splitByChar}
+                          onChange={(e) => {
+                            chatStore.updateCurrentSession(
+                              (sess) => (sess.ragConfig.splitByChar = e.currentTarget.checked)
+                            )
+                          }}
                         ></input>
                       </ListItem>
                       <ListItem
@@ -94,12 +144,15 @@ export function RAGConfigModal(props: {onClose: () => void}) {
                         subTitle="How large should the embedded text fragments be?"
                       >
                         <InputRange
-                          title="1000"
-                          value={1000}
+                          value={session.ragConfig.chunkSize}
                           min="0"
                           max="5000"
                           step="10"
-                          onChange={() => {}}
+                          onChange={(e) => {
+                            chatStore.updateCurrentSession(
+                              (sess) =>(sess.ragConfig.chunkSize = parseInt(e.currentTarget.value))
+                            )
+                          }}
                         ></InputRange>
                       </ListItem>
                       <ListItem
@@ -107,12 +160,15 @@ export function RAGConfigModal(props: {onClose: () => void}) {
                         subTitle="Should the chunks overlap, and by how much?"
                       >
                         <InputRange
-                          title="0"
-                          value={0}
+                          value={session.ragConfig.overlapSize}
                           min="0"
                           max="1000"
                           step="1"
-                          onChange={() => {}}
+                          onChange={(e) => {
+                            chatStore.updateCurrentSession(
+                              (sess) => (sess.ragConfig.overlapSize = Number(e.currentTarget.value))
+                            )
+                          }}
                         ></InputRange>
                       </ListItem>
                       <ListItem
@@ -120,12 +176,15 @@ export function RAGConfigModal(props: {onClose: () => void}) {
                         subTitle="How many chunks should be used to supplement the prompts"
                       >
                         <InputRange
-                          title="0"
-                          value={0}
+                          value={session.ragConfig.resultNum}
                           min="0"
                           max="1000"
                           step="1"
-                          onChange={() => {}}
+                          onChange={(e) => {
+                            chatStore.updateCurrentSession(
+                              (sess) => (sess.ragConfig.resultNum = Number(e.currentTarget.value))
+                            )
+                          }}
                         ></InputRange>
                       </ListItem>
                     </List>

@@ -74,7 +74,7 @@
   background-color: var(--white);
   border-radius: 12px;
   width: 80vw;
-  max-width: 1200px;
+  max-width: 900px;
   min-width: 300px;
   animation: slide-in ease 0.3s;
 
@@ -303,5 +303,121 @@
         }
       }
     }
+  }
+}
+
+.dropzone-container {
+  padding: 20px;
+  border: 1px #d6d6d9 solid;
+  border-radius: 10px;
+  margin: auto;
+  
+  .dropzone {
+    background-color: #f0f2f6;
+    padding: 10px;
+    display: flex;
+    justify-content: center;
+    margin-bottom: 10px;
+    
+    .text-area {
+      width: 100%;
+      display: flex;
+      flex-direction: row;
+  
+      .upload-icon {
+        vertical-align: middle;
+        flex-grow: 0;
+      }
+      .upload-prompts {
+        padding-left: 5px;
+        flex-grow: 0;
+        display: flex;
+        flex-direction: column;
+  
+        .upload-hints {
+          font-size: 0.7rem;
+        }      
+        &[aria-disabled="true"] {
+          opacity: 0.5;
+        }
+      }
+      .stretch-area {
+        flex-grow: 10;
+      }
+      .browse-btn {
+        flex-grow: 0;
+        border: none;
+        text-align: center;
+        background-color: rgb(218, 216, 216);
+        height: 40px;
+        border-radius: 12px;
+        color: black;
+        font-weight: bold;
+        transition-duration: 0.6s;
+    
+        &:hover {
+          background-color: blue;
+          color: aliceblue;
+        }
+        &:disabled {
+          cursor: not-allowed;
+          opacity: 0.5;
+        }
+        &:disabled:hover {
+          background-color: rgb(218, 216, 216);
+          color:black;
+        }
+      }
+    }
+  }
+  .upload-btn {
+    width: 100%;
+    border: 1px solid #d6d6d9;
+    border-radius: 10px;
+    text-align: center;
+    height: 50px;
+    font-weight: bold;
+    transition-duration: 0.6s;
+    background-color: inherit;
+  
+    &:hover {
+      border-color: red;
+      color: red;
+    }
+    &:disabled {
+      cursor: not-allowed;
+      opacity: 0.5;
+    }
+    &:disabled:hover {
+      border-color: #d6d6d9;
+      color: inherit;
+      opacity: 0.5;
+    }
+  }
+}
+
+.file-item {
+  display: flex;
+  flex-direction: row;
+
+  .file-info {
+    flex-grow: 0;
+    margin-right: 0.5rem;
+  }
+  .file-warning {
+    flex-grow: 10;
+    display: flex;
+    flex-direction: row;
+    color: rgb(125, 53, 59);
+    font-size: 0.8rem;
+    align-items: center;
+
+    .warning-icon {
+      margin-left: 0.3rem;
+    }
+  }
+  .file-remove-icon {
+    flex-grow: 0;
+    margin-right: 10px;
   }
 }
