@@ -27,7 +27,7 @@ yarn-error.log*
 
 # local env files
 .env*.local
-*.env
+.bioserver.env
 
 # vercel
 .vercel
@@ -41,8 +41,6 @@ dev
 .idea
 
 # docker-compose env files
-.env
-
 *.key
 *.key.pub
 
