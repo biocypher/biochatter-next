@@ -8,9 +8,8 @@ readme = "README.md"
 
 [tool.poetry.dependencies]
 python = "^3.10,<3.12"
-biochatter = "^0.1.8"
+biochatter = {version = "^0.3.9", extras = ["podcast", "xinference"]}
 Flask = "^3.0.0"
-openai = "0.27.8"
 python-dotenv = "^1.0.0"
 schedule = "^1.2.1"
 gunicorn = "^21.2.0"
