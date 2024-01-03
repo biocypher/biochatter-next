@@ -494,7 +494,7 @@ export function ReactDropZone({accept, open, disabled, onUpload}: {
   accept: Record<string,Array<string>>;
   open?: () => void;
   disabled?: boolean
-  onUpload: (_: File) => Promise<void>;
+  onUpload: (_: File, done: ()=>void) => Promise<void>;
 }) {
   const [fileToUpload, setFileToUpload] = useState< File | undefined >();
   function onFileDrop(acceptedFiles: Array<File>) {
@@ -511,7 +511,9 @@ export function ReactDropZone({accept, open, disabled, onUpload}: {
     if (fileToUpload === undefined) {
       return;
     }
-    await onUpload(fileToUpload);
+    await onUpload(fileToUpload, () => {
+      setFileToUpload(undefined);
+    });
   }
   
   const { getRootProps, getInputProps, isDragActive, acceptedFiles } =

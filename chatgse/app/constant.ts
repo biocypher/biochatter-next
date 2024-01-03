@@ -83,6 +83,8 @@ export const OpenaiPath = {
 export const BiochatterPath = {
   ChatPath: "v1/chat/completions",
   NewDocument: "v1/rag/newdocument",
+  AllDocuments: "v1/rag/alldocuments",
+  Document: "v1/rag/document",
 }
 
 export const Azure = {

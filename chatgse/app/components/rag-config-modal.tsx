@@ -12,12 +12,69 @@ import { List, ListItem, Modal, ReactDropZone, showConfirm } from "./ui-lib";
 import styles from "./rag.module.scss";
 import { InputRange } from "./input-range";
 import { ApiPath } from "../constant";
+import { getHeaders } from "../client/api";
+import { useEffect, useState } from "react";
+
+const AUTHORIZATION = "Authorization";
+const APIKEY = "api-key";
+function getAuthHeader(): Record<string, string> {
+  const jsonHeaders = getHeaders();
+  if (jsonHeaders[AUTHORIZATION]) {
+    return {[AUTHORIZATION]: jsonHeaders[AUTHORIZATION]};
+  }
+  return {[APIKEY]: jsonHeaders[APIKEY]};
+}
+
+function getDocumentName(doc: any) {
+  if (!doc) {
+    return "";
+  }
+  if (doc.name && doc.name !== 'unknown') {
+    return doc.name;
+  }
+  if (doc.title && doc.title !== 'unknown') {
+    return doc.title;
+  }
+  if (doc.source && doc.source !== 'unknown') {
+    return doc.source;
+  }
+  return "unknown";
+}
 
 export function RAGConfigModal(props: {onClose: () => void}) {
   const chatStore = useChatStore();
   const session = chatStore.currentSession();
+  const [documents, setDocuments] = useState<Array<any>>([]);
 
-  async function onUpload(file: File) {
+  async function updateDocuments() {
+    const RAG_URL = ApiPath.RAG;
+    let fetchUrl = RAG_URL as string;
+    if (!fetchUrl.endsWith('/')) {
+      fetchUrl += '/';
+    }
+    fetchUrl += 'alldocuments';
+    try {
+      const res = await fetch(fetchUrl, {
+        method: 'GET',
+        headers: {
+          ...getAuthHeader(),
+        }
+      });
+      const value = await res.json();
+      if (value.documents) {
+        console.log(`[fengsh] documents size: ${value.documents.length}`);
+        setDocuments(value.documents);
+      }
+    } catch (e: any) {
+      console.error(e);
+    }
+  }
+
+  useEffect(() => {
+    updateDocuments();
+  }, []);
+
+  async function onUpload(file: File, done: ()=>void) {
     const RAG_URL = ApiPath.RAG;
     const path = "newdocument";
     let uploadPath = RAG_URL as string;
@@ -27,16 +84,24 @@ export function RAGConfigModal(props: {onClose: () => void}) {
     uploadPath += path;
     const data = new FormData();
     data.set('file', file);
+    data.set('ragConfig', JSON.stringify(session.ragConfig));
+    
     try {
       const res = await fetch(uploadPath, {
         method: "POST",
-        body: data
+        body: data,
+        headers: { 
+          ...getAuthHeader(),
+        },
       });
       if (!res.ok) {
         throw new Error(await res.text())
       }
     } catch (e: any) {
       console.log(e);
+    } finally {
+      done();
+      updateDocuments();
     }
   }
 
@@ -99,6 +164,13 @@ export function RAGConfigModal(props: {onClose: () => void}) {
                         accept={{"application/pdf": ["application/pdf"], "text/plain": ["text/plain"]}}
                         onUpload={onUpload}
                       />
+                    </div>
+                    <div className={styles["documents"]}>
+                      <ul>
+                        {documents.map((doc) => (
+                          <li key={doc.id??""}>{getDocumentName(doc)}</li>
+                        ))}
+                      </ul>
                     </div>
                   </div>
                 </div>

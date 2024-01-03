@@ -12,7 +12,7 @@
     "app:dev": "yarn tauri dev",
     "app:build": "yarn tauri build",
     "prompts": "node ./scripts/fetch-prompts.mjs",
-    "prepare": "husky install",
+    "prepare": "cd .. && husky install chatgse/.husky",
     "proxy-dev": "sh ./scripts/init-proxy.sh && proxychains -f ./scripts/proxychains.conf yarn dev"
   },
   "dependencies": {
@@ -29,6 +29,7 @@
     "node-fetch": "^3.3.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "react-dropzone": "^14.2.3",
     "react-markdown": "^8.0.7",
     "react-router-dom": "^6.15.0",
     "rehype-highlight": "^6.0.0",

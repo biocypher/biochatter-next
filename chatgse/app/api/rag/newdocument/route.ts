@@ -1,9 +1,11 @@
 
 import { unlink, writeFile } from "fs/promises";
+import * as path from "path";
 import { NextRequest, NextResponse } from "next/server";
 import { nanoid } from "nanoid";
 import { getServerSideConfig } from "@/app/config/server";
 import { BiochatterPath, LOCAL_BASE_URL } from "@/app/constant";
+import { prettyObject } from "@/app/utils/format";
 
 const serverConfig = getServerSideConfig();
 
@@ -12,14 +14,15 @@ async function writeToTempFile(f: File): Promise<string> {
   const bytes = await f.arrayBuffer()
   const buffer = Buffer.from(bytes)
   const filename = nanoid();
-  const path = `/tmp/${filename}`
-  await writeFile(path, buffer)
-  console.log(`open ${path} to see the uploaded file`);
-  return path;
+  const extname = path.extname(f.name);
+  const tmpPath = `/tmp/${filename}${extname}`;
+  await writeFile(tmpPath, buffer)
+  return tmpPath;
 }
 
-async function requestNewDocument(tmpFile: string, filename: string) {
+async function requestNewDocument(tmpFile: string, filename: string, ragConfig: string, authValue: string) {
   let baseUrl = serverConfig.baseUrl ?? LOCAL_BASE_URL;
+  const authHeaderName = "Authorization";
 
   if (!baseUrl.startsWith("http")) {
     baseUrl = `http://${baseUrl}`;
@@ -38,9 +41,10 @@ async function requestNewDocument(tmpFile: string, filename: string) {
     headers: {
       "Content-Type": "application/json",
       "Cache-Control": "no-store",
+      [authHeaderName]: authValue,
     },
     method: "POST",
-    body: JSON.stringify({filename, tmpFile}),
+    body: JSON.stringify({filename, tmpFile, ragConfig}),
     signal: controller.signal
   };
   try {
@@ -56,8 +60,10 @@ async function requestNewDocument(tmpFile: string, filename: string) {
 }
 
 async function handle(request: NextRequest) {
+  const authValue = request.headers.get("Authorization") ?? "";
   const data = request.formData();
   const file: File | null = (await data).get('file') as unknown as File;
+  const ragConfig: string | null = (await data).get('ragConfig') as unknown as string;
 
   if (!file) {
     return NextResponse.json({ success: false })
@@ -65,13 +71,12 @@ async function handle(request: NextRequest) {
 
   try {
     const tmpFile = await writeToTempFile(file);
-    const res = await requestNewDocument(tmpFile, file.name);
+    const res = await requestNewDocument(tmpFile, file.name, ragConfig??"", authValue);
     return res;
   } catch (e: any) {
-    console.error(await e.text());
+    console.error(e);
+    return NextResponse.json(prettyObject(e));
   }
-
-  return NextResponse.json({ success: true })
 }
 
 export const POST = handle;
