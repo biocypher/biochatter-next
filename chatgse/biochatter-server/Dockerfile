@@ -4,6 +4,11 @@ FROM python:3.11-slim
 # Set the working directory in the container
 WORKDIR /app
 
+# Install gcc and python3-dev
+RUN apt-get update && apt-get install -y \
+    gcc \
+    python3-dev
+
 # Copy the poetry.lock and pyproject.toml files to the container
 COPY poetry.lock pyproject.toml ./
 
