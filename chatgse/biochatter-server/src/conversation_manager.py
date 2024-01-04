@@ -3,6 +3,7 @@ from datetime import datetime
 import logging
 from typing import Optional, Dict, List, Any
 from biochatter.llm_connect import (
+    WasmConversation, 
     AzureGptConversation, 
     GptConversation, 
     Conversation
@@ -101,6 +102,14 @@ def initialize_conversation(session: str, modelConfig: dict):
             )
             chatter.set_api_key(os.environ[OPENAI_API_KEY])
             conversationsDict[session] = SessionData( session, modelConfig, chatter)
+        elif OPENAI_API_TYPE in os.environ and os.environ[OPENAI_API_TYPE] == "wasm" or modelConfig["model"]== "mistral-wasm":
+            logger.info(f"create WasmConversation session data for {session} and initialize")
+            chatter = WasmConversation("mistral-wasm", prompts={})
+            conversationsDict[session] = SessionData(
+                session=session,
+                modelConfig=modelConfig,
+                chatter=chatter
+            )
         else:
             logger.info(f"create GptConversation session data for {session} and initialize")
             chatter = GptConversation("gpt-3.5-turbo", prompts={})

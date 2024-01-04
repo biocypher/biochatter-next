@@ -35,9 +35,15 @@ export function Loading(props: { noLogo?: boolean }) {
     <div className={styles["loading-content"] + " no-dark"}>
       {!props.noLogo && <BotIcon width={32} height={32}/>}
       <LoadingIcon />
+      
+
     </div>
+    
   );
 }
+const Webllm = dynamic(async () => (await import("./webllm")).Webllm, {
+  loading: () => <Loading noLogo />,
+});
 
 const Settings = dynamic(async () => (await import("./settings")).Settings, {
   loading: () => <Loading noLogo />,
@@ -59,9 +65,7 @@ const MaskPage = dynamic(async () => (await import("./mask")).MaskPage, {
   loading: () => <Loading noLogo />,
 });
 
-const Webllm = dynamic(async () => (await import("./webllm")).Webllm, {
-  loading: () => <Loading noLogo />,
-});
+
 
 export function useSwitchTheme() {
   const config = useAppConfig();
@@ -136,6 +140,7 @@ function Screen() {
   const isHome = location.pathname === Path.Home;
   const isAuth = location.pathname === Path.Auth;
   const isMobileScreen = useMobileScreen();
+
   const shouldTightBorder =
     getClientConfig()?.isApp || (config.tightBorder && !isMobileScreen);
 
@@ -151,7 +156,37 @@ function Screen() {
           getLang() === "ar" ? styles["rtl-screen"] : ""
         }`
       }
-    >
+    > 
+    <div className={styles['chatui-hide']}
+      id={`chatui-chat`} >
+    </div>
+    <textarea className={styles['chatui-hide']}
+      
+      id={`chatui-input`} >
+    </textarea>
+    <div className={styles['chatui-hide']}
+      id={"chatui-info-label"} 
+      >
+      send
+      </div>  
+    
+    <select id="chatui-select" className={styles['chatui-hide']}>
+    </select>
+
+    <button
+    className={styles['chatui-hide']}
+      id={"chatui-send-btn"} 
+      
+      >
+      send
+    </button>
+
+    <button
+      id={"chatui-reset-btn"} 
+      className={styles['chatui-hide']}>
+      reset
+    </button>
+
       {isAuth ? (
         <>
           <AuthPage />

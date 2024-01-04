@@ -7,7 +7,6 @@ import {
   ServiceProvider,
 } from "@/app/constant";
 import { useAccessStore, useAppConfig, useChatStore } from "@/app/store";
-
 import { ChatOptions, getHeaders, LLMApi, LLMModel, LLMUsage } from "../api";
 import Locale from "../../locales";
 import {
@@ -17,6 +16,7 @@ import {
 import { prettyObject } from "@/app/utils/format";
 import { getClientConfig } from "@/app/config/client";
 import { makeAzurePath } from "@/app/azure";
+import { EnvironmentPlugin } from "webpack";
 
 export interface OpenAIListModelResponse {
   object: string;
@@ -223,11 +223,79 @@ export class ChatGPTApi implements LLMApi {
         });
       } else {
         const res = await fetch(chatPath, chatPayload);
-        clearTimeout(requestTimeoutId);
+        
 
-        const resJson = await res.json();
-        const message = this.extractMessage(resJson);
-        options.onFinish(message);
+        
+        if (options.config.model=="mistral-wasm"){
+          
+          const resJson = await res.json();
+          let message = this.extractMessage(resJson);
+          const question = message.split("\n").slice(-1);
+          let input1 = document.getElementById("chatui-input");
+          input1.value = question;
+          let sendbutton = document.getElementById("chatui-send-btn");
+          sendbutton.click();
+          
+          let label = document.getElementById("chatui-info-label");
+          const observerOptions = {
+            childList: true,
+            subtree: true,
+            characterData: true
+          };
+          const updatemsgs = ( mutationList,observer) =>{
+            for (const mutation of mutationList){
+              if (mutation.type === "childList"){
+                let output = document.getElementById("chatui-chat");
+                const outputText = Array.from(output.childNodes).slice(-2)[0].innerText;
+                const reformedtext = outputText.replaceAll("\n", "").replaceAll("  ", "")
+                const message = reformedtext;
+                
+                options.onFinish(message);
+                clearTimeout(requestTimeoutId);
+                console.log("mutation type is subtree")
+                observer.disconnect();
+              }else{
+
+                let output = document.getElementById("chatui-chat");
+                const outputText =  document.getElementById("chatui-status").innerText;
+                const reformedtext = outputText.replaceAll("\n", "").replaceAll("  ", "")
+                const message = reformedtext;
+                
+                options.onFinish("\'"+message+"\'");
+                clearTimeout(requestTimeoutId);
+                console.log("mutation type is not subtree but "+ mutation.type)
+                observer.disconnect();
+              }
+
+            }
+            
+          }
+          
+          
+          const observer = new MutationObserver(updatemsgs);
+
+          observer.observe(label, observerOptions);
+          //observer.disconnect();
+          
+          
+
+          
+
+        }else{
+          
+          clearTimeout(requestTimeoutId);
+          const resJson = await res.json();
+          const message = this.extractMessage(resJson);
+          options.onFinish(message);
+
+        }
+        
+
+
+        
+
+
+        
       }
     } catch (e) {
       console.log("[Request] failed to make a chat request", e);

@@ -11,7 +11,10 @@ export default async function App() {
     <>
       <Home />
       {serverConfig?.isVercel && <Analytics />}
-      <Script src="./llm_chat.5e8e8dcb.js"  strategy="lazyOnload" />
+      <Script
+        src="./llm_chat.5e8e8dcb.js"
+        strategy="lazyOnload"
+      />
 
     </>
   );
