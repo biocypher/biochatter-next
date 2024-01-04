@@ -12,7 +12,7 @@ RUN pip install --no-cache-dir poetry
 
 # Install the project dependencies
 RUN poetry config virtualenvs.create false \
-    && poetry install --no-interaction --no-ansi
+    && poetry install --no-interaction --no-ansi -E xinference
 
 # Copy the Flask app code to the container
 COPY . .

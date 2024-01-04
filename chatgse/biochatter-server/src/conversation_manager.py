@@ -19,7 +19,7 @@ from src.constants import (
     OPENAI_DEPLOYMENT_NAME,
     OPENAI_MODEL
 )
-from src.utils import parse_api_key
+from src.utils import get_connection_args, get_rag_agent_prompts, parse_api_key
 
 logger = logging.getLogger(__name__)
 
@@ -53,30 +53,35 @@ class SessionData:
             return
         if not messages or len(messages) == 0:
             return
+        api_key = parse_api_key(authKey)
         if not isinstance(self.chatter, AzureGptConversation): # chatter is instance of GptConversation
             import openai
             if not openai.api_key or not hasattr(self.chatter, "chat"):
                 if not authKey:
                     return False
-                self.chatter.set_api_key(parse_api_key(authKey), self.sessionId)
-        if ragConfig["useRAG"]:
-            # update rag_agent
-            if not self.chatter.rag_agent:
-                self.chatter.rag_agent = DocumentEmbedder(
-                    use_prompt=ragConfig["useRAG"],
-                    chunk_size=ragConfig["chunkSize"],
-                    chunk_overlap=ragConfig["overlapSize"],
-                    split_by_characters=ragConfig["splitByChar"],
-                    n_results=ragConfig["resultNum"],
-                    api_key=authKey
-                )
-                self.chatter.rag_agent.connect()
-            else:
-                self.chatter.rag_agent.use_prompt = ragConfig["useRAG"]
-                self.chatter.rag_agent.chunk_size = ragConfig["chunkSize"]
-                self.chatter.rag_agent.chunk_overlap = ragConfig["overlapSize"]
-                self.chatter.rag_agent.n_results = ragConfig["resultNum"]
-                self.chatter.rag_agent.split_by_characters = ragConfig["splitByChar"]
+                self.chatter.set_api_key(api_key, self.sessionId)
+        
+        # update rag_agent
+        if not self.chatter.rag_agent:
+            connection_args = get_connection_args()
+            self.chatter.rag_agent = DocumentEmbedder(
+                used=True,
+                use_prompt=ragConfig["useRAG"],
+                chunk_size=ragConfig["chunkSize"],
+                chunk_overlap=ragConfig["overlapSize"],
+                split_by_characters=ragConfig["splitByChar"],
+                n_results=ragConfig["resultNum"],
+                api_key=api_key,
+                connection_args=connection_args
+            )
+            self.chatter.rag_agent.connect()
+        else:
+            self.chatter.rag_agent.use_prompt = ragConfig["useRAG"]
+            self.chatter.rag_agent.chunk_size = ragConfig["chunkSize"]
+            self.chatter.rag_agent.chunk_overlap = ragConfig["overlapSize"]
+            self.chatter.rag_agent.n_results = ragConfig["resultNum"]
+            self.chatter.rag_agent.split_by_characters = ragConfig["splitByChar"]
+        
         text = messages[-1]["content"]
         messages = messages[:-1]
         # pprint(messages)
@@ -110,7 +115,7 @@ def initialize_conversation(sessionId: str, modelConfig: dict):
             chatter = AzureGptConversation(
                 deployment_name=os.environ[OPENAI_DEPLOYMENT_NAME],
                 model_name=os.environ[OPENAI_MODEL],
-                prompts={},
+                prompts={"rag_agent_prompts": get_rag_agent_prompts()},
                 version=os.environ[OPENAI_API_VERSION],
                 base=os.environ[OPENAI_API_BASE],
             )
@@ -118,7 +123,7 @@ def initialize_conversation(sessionId: str, modelConfig: dict):
             conversationsDict[sessionId] = SessionData( sessionId, modelConfig, chatter)
         else:
             logger.info(f"create GptConversation session data for {sessionId} and initialize")
-            chatter = GptConversation("gpt-3.5-turbo", prompts={})
+            chatter = GptConversation("gpt-3.5-turbo", prompts={"rag_agent_prompts": get_rag_agent_prompts()})
             conversationsDict[sessionId] = SessionData(
                 sessionId=sessionId,
                 modelConfig=modelConfig,

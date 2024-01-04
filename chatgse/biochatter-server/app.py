@@ -64,6 +64,10 @@ def get_auth(request):
     auth = auth if auth is not None and len(auth) > 0 else ""
     return auth
 
+@app.route('/v1/apis', methods=['GET'])
+def getAPIs():
+    return {"apis": ["/v1/chat/completions", "/v1/rag/newdocument", "/v1/rag/alldocuments"]}
+
 @app.route('/v1/chat/completions', methods=['POST'])
 def handle():
     print("[post] completions")

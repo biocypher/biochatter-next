@@ -62,7 +62,6 @@ export function RAGConfigModal(props: {onClose: () => void}) {
       });
       const value = await res.json();
       if (value.documents) {
-        console.log(`[fengsh] documents size: ${value.documents.length}`);
         setDocuments(value.documents);
       }
     } catch (e: any) {
