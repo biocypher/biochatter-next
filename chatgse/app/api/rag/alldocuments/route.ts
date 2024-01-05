@@ -16,7 +16,7 @@ async function handle(request: NextRequest) {
         method: "GET",
         headers: {
           [AUTHORIZATION]: authValue,
-          "Cache-Control": "no-store",
+          "Cache-Control": "no-cache",
         }
       }
     );
@@ -28,5 +28,5 @@ async function handle(request: NextRequest) {
   }
 }
 
-export const GET = handle;
+export const POST = handle;
 

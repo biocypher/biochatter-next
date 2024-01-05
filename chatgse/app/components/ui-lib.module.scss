@@ -356,8 +356,7 @@
         transition-duration: 0.6s;
     
         &:hover {
-          background-color: blue;
-          color: aliceblue;
+          background-color: rgb(235, 235, 235);
         }
         &:disabled {
           cursor: not-allowed;
@@ -420,4 +419,13 @@
     flex-grow: 0;
     margin-right: 10px;
   }
+}
+
+.loading-content {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  width: 100%;
 }

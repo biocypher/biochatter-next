@@ -4,10 +4,11 @@ import ResetIcon from "../icons/reload.svg";
 import OKIcon from "../icons/config.svg";
 import SettingsIcon from "../icons/rag-settings.svg";
 import RAGDocumentsIcon from "../icons/rag-documents.svg";
+import CloseIcon from "../icons/close.svg";
 
 import Locale from "../locales";
 import { IconButton } from "./button";
-import { List, ListItem, Modal, ReactDropZone, showConfirm } from "./ui-lib";
+import { List, ListItem, LoadingComponent, Modal, ReactDropZone, showConfirm } from "./ui-lib";
 
 import styles from "./rag.module.scss";
 import { InputRange } from "./input-range";
@@ -29,14 +30,14 @@ function getDocumentName(doc: any) {
   if (!doc) {
     return "";
   }
-  if (doc.name && doc.name !== 'unknown') {
-    return doc.name;
+  if (doc.source && doc.source !== 'unknown') {
+    return doc.source;
   }
   if (doc.title && doc.title !== 'unknown') {
     return doc.title;
   }
-  if (doc.source && doc.source !== 'unknown') {
-    return doc.source;
+  if (doc.name && doc.name !== 'unknown') {
+    return doc.name;
   }
   return "unknown";
 }
@@ -45,6 +46,7 @@ export function RAGConfigModal(props: {onClose: () => void}) {
   const chatStore = useChatStore();
   const session = chatStore.currentSession();
   const [documents, setDocuments] = useState<Array<any>>([]);
+  const [uploading, setUploading] = useState(false);
 
   async function updateDocuments() {
     const RAG_URL = ApiPath.RAG;
@@ -55,10 +57,10 @@ export function RAGConfigModal(props: {onClose: () => void}) {
     fetchUrl += 'alldocuments';
     try {
       const res = await fetch(fetchUrl, {
-        method: 'GET',
+        method: 'POST',
         headers: {
           ...getAuthHeader(),
-        }
+        },
       });
       const value = await res.json();
       if (value.documents) {
@@ -86,6 +88,7 @@ export function RAGConfigModal(props: {onClose: () => void}) {
     data.set('ragConfig', JSON.stringify(session.ragConfig));
     
     try {
+      setUploading(true);
       const res = await fetch(uploadPath, {
         method: "POST",
         body: data,
@@ -99,9 +102,54 @@ export function RAGConfigModal(props: {onClose: () => void}) {
     } catch (e: any) {
       console.log(e);
     } finally {
+      setUploading(false);
       done();
       updateDocuments();
     }
+  }
+  async function onRemoveDocument(docId: string) {
+    if (docId.length === 0) {
+      return;
+    }
+    if (!await showConfirm(`Are you sure to remove the document?`)) {
+      return;
+    }
+    const RAG_URL = ApiPath.RAG;
+    const path = "document";
+    let delPath = RAG_URL as string;
+    if (!delPath.endsWith('/')) {
+      delPath += '/';
+    }
+    delPath += path;
+    try {
+      const res = await fetch(delPath, {
+        method: "DELETE",
+        body: JSON.stringify({docId}),
+        headers: {
+          ...getAuthHeader()
+        }
+      });
+      if (!res.ok) {
+        throw new Error(await res.text());
+      }
+    } catch (e: any) {
+      console.error(e);
+    }
+    updateDocuments();
+  }
+  const make_remove_function = (docId: string) => {
+    return () => {
+      onRemoveDocument(docId);
+    }
+  }
+  function DocumentComponent({doc}: {doc: any}) {
+    return (
+      <div className={styles["document-item"]}>
+        <div className={styles["document-label"]}>{getDocumentName(doc)}</div>
+        <div className={styles["document-stretch-area"]}></div>
+        <div className={styles["document-remove-icon"]} onClick={make_remove_function(doc.id)}><CloseIcon /></div>
+      </div>
+    )
   }
 
   return (
@@ -164,10 +212,17 @@ export function RAGConfigModal(props: {onClose: () => void}) {
                         onUpload={onUpload}
                       />
                     </div>
+                    {(uploading) ? (
+                      <div className={styles["uploading-prompts"]}>
+                        <div style={{marginLeft: 5, marginRight: 5}}><p>Embedding and Saving   </p></div><div><LoadingComponent noLogo /></div>
+                    </div>
+                    ) : (<></>)}
                     <div className={styles["documents"]}>
                       <ul>
                         {documents.map((doc) => (
-                          <li key={doc.id??""}>{getDocumentName(doc)}</li>
+                          <li key={doc.id??""}>
+                            <DocumentComponent doc={doc} />
+                          </li>
                         ))}
                       </ul>
                     </div>

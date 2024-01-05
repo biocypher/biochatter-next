@@ -97,6 +97,15 @@ export function Loading() {
   );
 }
 
+export function LoadingComponent(props: { noLogo?: boolean, width?: number, height?: 32 }) {
+  return (
+    <div className={styles["loading-content"] + " no-dark"}>
+      {!props.noLogo && <LoadingIcon width={props.width??32} height={props.height??32}/>}
+      <LoadingIcon />
+    </div>
+  );
+}
+
 interface ModalProps {
   title: string;
   children?: any;

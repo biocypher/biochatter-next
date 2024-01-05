@@ -66,12 +66,32 @@
             margin-bottom: 5px;
             padding: 5px 0;
           }
+          .uploading-prompts {
+            flex-grow: 0;
+            display: flex;
+            flex-direction: row;
+          }
           .documents {
             flex-grow: 0;
+
+            .document-item {
+              display: flex;
+              flex-direction: row;
+              .document-label {
+                flex-grow: 0;                
+              }
+              .document-stretch-area {
+                flex-grow: 10;
+              }
+              .document-remove-icon {
+                flex-grow: 0;
+                padding-right: 20px;
+              }
+            }
           }
         }
       }
     }
-
   }
 }
+

@@ -10,14 +10,17 @@ async function handle(request: NextRequest) {
   const path = BiochatterPath.Document;
   const url = `${baseUrl}/${path}`;
   try {
+    const data = await request.json();
+    const docId = data.docId;
     const res = await fetch(
       url,
       {
         method: "DELETE",
         headers: {
           [AUTHORIZATION]: authValue,
+          "Content-Type": "application/json",
         },
-        body: request.body
+        body: JSON.stringify({docId})
       }
     );
     return res;
@@ -27,5 +30,5 @@ async function handle(request: NextRequest) {
   }
 }
 
-export const GET = handle;
+export const DELETE = handle;
 
