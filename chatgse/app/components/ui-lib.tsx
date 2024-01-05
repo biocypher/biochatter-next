@@ -545,7 +545,7 @@ export function ReactDropZone({accept, open, disabled, onUpload}: {
         ) : (<div />)}
       </div>
       <div 
-        className={styles["file-remove-icon"]}
+        className={`${styles["file-remove-icon"]}`}
         onClick={onRemoveFile}
       ><CloseIcon /></div>
     </li>

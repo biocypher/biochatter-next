@@ -84,8 +84,14 @@
                 flex-grow: 10;
               }
               .document-remove-icon {
+                background-color: var(--white);
                 flex-grow: 0;
-                padding-right: 20px;
+                margin-right: 20px;
+                width: 24px;
+                height: 24px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
               }
             }
           }

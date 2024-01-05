@@ -12,7 +12,9 @@
   --second: rgb(231, 248, 255);
   --hover-color: #f3f3f3;
   --bar-color: rgba(0, 0, 0, 0.1);
+  --gray2: rgb(240, 242, 246);
   --theme-color: var(--gray);
+  --slate500: rgb(100, 116, 139);
 
   /* shadow */
   --shadow: 50px 50px 100px 10px rgb(0, 0, 0, 0.1);
@@ -38,6 +40,8 @@
   --border-in-light: 1px solid rgba(255, 255, 255, 0.192);
 
   --theme-color: var(--gray);
+  --gray2: rgb(96, 96, 96);
+  --slate500: rgb(203, 213, 225);
 
   div:not(.no-dark) > svg {
     filter: invert(0.5);

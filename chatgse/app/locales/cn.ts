@@ -79,6 +79,34 @@ const cn = {
       SaveAs: "存为面具",
     },
     IsContext: "预设提示词",
+    RAG: {
+      Description: "",
+      OK: "",
+      Reset: "",
+      Documents: {
+        Label: "",
+        DocumentsHints: "",
+        DocumentsPrompts: "",
+        UploadingMessage: "",
+      },
+      Settings: {
+        Label: "",
+        UseRAG: "",
+        SplitByChar: "",
+        ChunkSize: {
+          Label: "",
+          subLabel: ""
+        },
+        Overlap: {
+          Label: "",
+          subLabel: "",
+        },
+        ResultsNum: {
+          Label: "",
+          subLabel: "",
+        }
+      }
+    },
   },
   Export: {
     Title: "分享聊天记录",
@@ -425,12 +453,6 @@ const cn = {
   FineTuned: {
     Sysmessage: "你是一个助手",
   },
-  RAG: {
-    Page: {
-      Title: "",
-      Description: "",
-    }
-  },
   Mask: {
     Name: "面具",
     Page: {
@@ -497,6 +519,17 @@ const cn = {
     Import: "导入",
     Sync: "同步",
     Config: "配置",
+    DorpZone: {
+      FileWarning: "",
+      UploadPrompts: "",
+      UploadHints: "",
+      BrowseButton: {
+        Label: "",
+      },
+      UploadButton: {
+        Label: ""
+      }
+    }
   },
   Exporter: {
     Description: {

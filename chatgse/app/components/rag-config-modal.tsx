@@ -5,6 +5,7 @@ import OKIcon from "../icons/config.svg";
 import SettingsIcon from "../icons/rag-settings.svg";
 import RAGDocumentsIcon from "../icons/rag-documents.svg";
 import CloseIcon from "../icons/close.svg";
+import ClearIcon from "../icons/clear.svg";
 
 import Locale from "../locales";
 import { IconButton } from "./button";
@@ -147,7 +148,7 @@ export function RAGConfigModal(props: {onClose: () => void}) {
       <div className={styles["document-item"]}>
         <div className={styles["document-label"]}>{getDocumentName(doc)}</div>
         <div className={styles["document-stretch-area"]}></div>
-        <div className={styles["document-remove-icon"]} onClick={make_remove_function(doc.id)}><CloseIcon /></div>
+        <div className={`${styles["document-remove-icon"]} clickable`} onClick={make_remove_function(doc.id)}><ClearIcon /></div>
       </div>
     )
   }
@@ -163,7 +164,7 @@ export function RAGConfigModal(props: {onClose: () => void}) {
             key="reset"
             icon={<ResetIcon />}
             bordered
-            text="reset"
+            text={Locale.Chat.RAG.Reset}
             onClick={async () => {
               if (await showConfirm("Resetting will clear all settings. Are you sure?")) {
                 chatStore.updateCurrentSession(
@@ -178,7 +179,7 @@ export function RAGConfigModal(props: {onClose: () => void}) {
             key="ok"
             icon={<OKIcon />}
             bordered
-            text="OK"
+            text={Locale.Chat.RAG.OK}
             onClick={props.onClose}
           ></IconButton>
         ]}
@@ -186,7 +187,7 @@ export function RAGConfigModal(props: {onClose: () => void}) {
         <div className={styles["rag-page"]}>
           <div className={styles["rag-page-body"]}>
             <div className={styles["rag-description"]}>
-              {Locale.RAG.Page.Description}
+              {Locale.Chat.RAG.Description}
             </div>
   
             <div className={styles["rag-page-content"]}>
@@ -196,14 +197,14 @@ export function RAGConfigModal(props: {onClose: () => void}) {
                     <div className={styles["column-icon"]}>
                       <RAGDocumentsIcon />
                     </div>
-                    <div className={styles["column-label"]}>Documents</div>
+                    <div className={styles["column-label"]}>{Locale.Chat.RAG.Documents.Label}</div>
                   </div>
                   <div className={styles["column-body"]}>
                     {!session.ragConfig.useRAG ? (<div className={styles["feature-hints"]}>
-                      To use the feature, please enable it in the settings panel. →                  
+                      {Locale.Chat.RAG.Documents.DocumentsHints}         
                     </div>) : (<div />)}
                     <div className={styles["feature-hints"]}>
-                      Upload documents one at a time. Upon upload, the document is split according to the settings and the embeddings are stored in the connected vector database.
+                      {Locale.Chat.RAG.Documents.DocumentsPrompts}
                     </div>
                     <div className={styles["feature-hints"]}>
                       <ReactDropZone
@@ -214,7 +215,11 @@ export function RAGConfigModal(props: {onClose: () => void}) {
                     </div>
                     {(uploading) ? (
                       <div className={styles["uploading-prompts"]}>
-                        <div style={{marginLeft: 5, marginRight: 5}}><p>Embedding and Saving   </p></div><div><LoadingComponent noLogo /></div>
+                        <div style={{marginLeft: 5, marginRight: 5}}>
+                          <p>{Locale.Chat.RAG.Documents.UploadingMessage}
+                          </p>
+                        </div>
+                        <div><LoadingComponent noLogo /></div>
                     </div>
                     ) : (<></>)}
                     <div className={styles["documents"]}>
@@ -235,12 +240,12 @@ export function RAGConfigModal(props: {onClose: () => void}) {
                     <div className={styles["column-icon"]}>
                       <SettingsIcon />
                     </div>
-                    <div className={styles["column-label"]}>Settings</div>
+                    <div className={styles["column-label"]}>{Locale.Chat.RAG.Settings.Label}</div>
                   </div>
                   <div className={styles["column-body"]} >
                     <List>
                       <ListItem
-                        title="Use document sumarisaztion"
+                        title={Locale.Chat.RAG.Settings.UseRAG}
                       >
                         <input
                           type="checkbox"
@@ -253,7 +258,7 @@ export function RAGConfigModal(props: {onClose: () => void}) {
                         ></input>
                       </ListItem>
                       <ListItem
-                        title="Split by characters (instead of tokens)"
+                        title={Locale.Chat.RAG.Settings.SplitByChar}
                       >
                         <input
                           type="checkbox"
@@ -266,8 +271,8 @@ export function RAGConfigModal(props: {onClose: () => void}) {
                         ></input>
                       </ListItem>
                       <ListItem
-                        title="Chunk size"
-                        subTitle="How large should the embedded text fragments be?"
+                        title={Locale.Chat.RAG.Settings.ChunkSize.Label}
+                        subTitle={Locale.Chat.RAG.Settings.ChunkSize.subLabel}
                       >
                         <InputRange
                           value={session.ragConfig.chunkSize}
@@ -282,8 +287,8 @@ export function RAGConfigModal(props: {onClose: () => void}) {
                         ></InputRange>
                       </ListItem>
                       <ListItem
-                        title="Overlap"
-                        subTitle="Should the chunks overlap, and by how much?"
+                        title={Locale.Chat.RAG.Settings.Overlap.Label}
+                        subTitle={Locale.Chat.RAG.Settings.Overlap.subLabel}
                       >
                         <InputRange
                           value={session.ragConfig.overlapSize}
@@ -298,8 +303,8 @@ export function RAGConfigModal(props: {onClose: () => void}) {
                         ></InputRange>
                       </ListItem>
                       <ListItem
-                        title="Number of results"
-                        subTitle="How many chunks should be used to supplement the prompts"
+                        title={Locale.Chat.RAG.Settings.ResultsNum.Label}
+                        subTitle={Locale.Chat.RAG.Settings.ResultsNum.subLabel}
                       >
                         <InputRange
                           value={session.ragConfig.resultNum}
@@ -314,7 +319,6 @@ export function RAGConfigModal(props: {onClose: () => void}) {
                         ></InputRange>
                       </ListItem>
                     </List>
-                    
                   </div>
                 </div>
               </div>
