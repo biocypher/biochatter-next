@@ -28,10 +28,9 @@ yarn install
 yarn --cwd chatgse/ dev
 ```
 
-Note that for this current version, you need to have present the `.env` and
-`.bioserver.env` environment files present (there are templates for both with
-the ending `.template`). For using the regular OpenAI API (the easiest case),
-you have to supply a valid API key in `.bioserver.env`.
+Note that you need to have the `.bioserver.env` environment file present (there
+is a template with the ending `.template`). For using the regular OpenAI API
+(the easiest case), you have to supply a valid API key in `.bioserver.env`.
 
 ### Back-end: BioChatter Server
 
@@ -54,7 +53,8 @@ docker run -p 5000:5000 biochatter-server
 
 ## Development
 
-The front-end has been built as a [Vercel Next.js](https://nextjs.org/docs) application:
+The front-end has been built as a [Vercel Next.js](https://nextjs.org/docs)
+application:
 
 > Next.js is a React framework for building full-stack web applications. You use React Components to build user interfaces, and Next.js for additional features and optimizations.
 
