@@ -10,13 +10,12 @@ from src.conversation_manager import (
 )
 import logging
 
-
-from pprint import pprint
 from src.document_embedder import (
     get_all_documents, 
     new_embedder_document,
     remove_document
 )
+from src.utils import get_auth
 
 logging.basicConfig(level=logging.INFO)
 file_handler = logging.FileHandler("./logs/app.log")
@@ -59,23 +58,12 @@ def get_params_from_json_body(json: Optional[Any], name: str, defaultVal: Option
         return json[name]
     return defaultVal
 
-def get_auth(request):
-    auth = request.headers.get("Authorization")
-    auth = auth if auth is not None and len(auth) > 0 else ""
-    return auth
-
-@app.route('/v1/apis', methods=['GET'])
-def getAPIs():
-    return {"apis": ["/v1/chat/completions", "/v1/rag/newdocument", "/v1/rag/alldocuments"]}
-
 @app.route('/v1/chat/completions', methods=['POST'])
 def handle():
     print("[post] completions")
     auth = get_auth(request)
     jsonBody = request.json
     sessionId = get_params_from_json_body(jsonBody, "session_id", defaultVal="")
-    print("[fengsh] session id: " + sessionId)
-    print("[fengsh] auth: " + auth)
     messages = get_params_from_json_body(jsonBody, "messages", defaultVal=[])
     model = get_params_from_json_body(jsonBody, "model", defaultVal="gpt-3.5-turbo")
     temperature = get_params_from_json_body(jsonBody, "temperature", defaultVal=0.7)
@@ -128,7 +116,6 @@ def getAllDocuments():
     try:
         docs = get_all_documents(auth)
         docs = post_process(docs)
-        pprint(docs)
         return {"documents": docs, "status": "OK"}
     except Exception as e:
         return {"error": str(e)}

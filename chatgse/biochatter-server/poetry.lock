@@ -33,51 +33,8 @@ optional = false
 python-versions = ">=3.7"
 
 [[package]]
-name = "addict"
-version = "2.4.0"
-description = "Addict is a dictionary whose items can be set using both attribute and item syntax."
-optional = true
-python-versions = "*"
-files = [
-    {file = "addict-2.4.0-py3-none-any.whl", hash = "sha256:249bb56bbfd3cdc2a004ea0ff4c2b6ddc84d53bc2194761636eb314d5cfa5dfc"},
-    {file = "addict-2.4.0.tar.gz", hash = "sha256:b3b2210e0e067a281f5646c8c5db92e99b7231ea8b0eb5f74dbdf9e259d4e494"},
-]
-
-[[package]]
-name = "aiobotocore"
-version = "2.7.0"
-description = "Async client for aws services using botocore and aiohttp"
-optional = true
-python-versions = ">=3.8"
-files = [
-    {file = "aiobotocore-2.7.0-py3-none-any.whl", hash = "sha256:aec605df77ce4635a0479b50fd849aa6b640900f7b295021ecca192e1140e551"},
-    {file = "aiobotocore-2.7.0.tar.gz", hash = "sha256:506591374cc0aee1bdf0ebe290560424a24af176dfe2ea7057fe1df97c4f0467"},
-]
-
-[package.dependencies]
-aiohttp = ">=3.7.4.post0,<4.0.0"
-aioitertools = ">=0.5.1,<1.0.0"
-botocore = ">=1.31.16,<1.31.65"
-wrapt = ">=1.10.10,<2.0.0"
-
-[package.extras]
-awscli = ["awscli (>=1.29.16,<1.29.65)"]
-boto3 = ["boto3 (>=1.28.16,<1.28.65)"]
-
-[[package]]
-name = "aiofiles"
-version = "23.2.1"
-description = "File support for asyncio."
-optional = true
-python-versions = ">=3.7"
-files = [
-    {file = "aiofiles-23.2.1-py3-none-any.whl", hash = "sha256:19297512c647d4b27a2cf7c34caa7e405c0d60b5560618a29a9fe027b18b0107"},
-    {file = "aiofiles-23.2.1.tar.gz", hash = "sha256:84ec2218d8419404abcb9f0c02df3f34c6e0a68ed41072acfb1cef5cbc29051a"},
-]
-
-[[package]]
 name = "aiohttp"
-version = "3.9.1"
+version = "3.8.6"
 description = "Async http client/server framework (asyncio)"
 category = "main"
 optional = false
