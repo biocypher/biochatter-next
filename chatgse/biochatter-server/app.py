@@ -17,6 +17,7 @@ from src.document_embedder import (
 )
 from src.utils import get_auth
 
+# prepare logger
 logging.basicConfig(level=logging.INFO)
 file_handler = logging.FileHandler("./logs/app.log")
 file_handler.setLevel(logging.INFO)
@@ -34,12 +35,13 @@ root_logger.addHandler(stream_handler)
 
 from src.job_recycle_conversations import run_scheduled_job_continuously
 
-load_dotenv()
+# run scheduled job: recycle unused session
 cease_event = run_scheduled_job_continuously()
 def onExit():
     cease_event.set()
 atexit.register(onExit)
 
+load_dotenv()
 app = Flask(__name__)
 
 DEFAULT_RAGCONFIG = {

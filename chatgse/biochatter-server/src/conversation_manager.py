@@ -53,7 +53,7 @@ class SessionData:
             return
         if not messages or len(messages) == 0:
             return
-        api_key = parse_api_key(authKey)
+        api_key = authKey
         if not isinstance(self.chatter, AzureGptConversation): # chatter is instance of GptConversation
             import openai
             if not openai.api_key or not hasattr(self.chatter, "chat"):
