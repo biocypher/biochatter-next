@@ -14,6 +14,8 @@
 
 # production
 /build
+/volumes
+/tmp
 
 # misc
 .DS_Store
