@@ -19,7 +19,7 @@ from src.constants import (
     OPENAI_DEPLOYMENT_NAME,
     OPENAI_MODEL
 )
-from src.utils import get_connection_args, get_rag_agent_prompts, parse_api_key
+from src.utils import get_rag_agent_prompts, parse_api_key
 
 logger = logging.getLogger(__name__)
 
@@ -62,25 +62,18 @@ class SessionData:
                 self.chatter.set_api_key(api_key, self.sessionId)
         
         # update rag_agent
-        if not self.chatter.rag_agent:
-            connection_args = get_connection_args()
-            self.chatter.rag_agent = DocumentEmbedder(
-                used=True,
-                use_prompt=ragConfig["useRAG"],
-                chunk_size=ragConfig["chunkSize"],
-                chunk_overlap=ragConfig["overlapSize"],
-                split_by_characters=ragConfig["splitByChar"],
-                n_results=ragConfig["resultNum"],
-                api_key=api_key,
-                connection_args=connection_args
-            )
+        self.chatter.rag_agent = DocumentEmbedder(
+            used=True,
+            use_prompt=ragConfig["useRAG"],
+            chunk_size=ragConfig["chunkSize"],
+            chunk_overlap=ragConfig["overlapSize"],
+            split_by_characters=ragConfig["splitByChar"],
+            n_results=ragConfig["resultNum"],
+            api_key=api_key,
+            connection_args=ragConfig["connectionArgs"]
+        )
+        if ragConfig["useRAG"]:
             self.chatter.rag_agent.connect()
-        else:
-            self.chatter.rag_agent.use_prompt = ragConfig["useRAG"]
-            self.chatter.rag_agent.chunk_size = ragConfig["chunkSize"]
-            self.chatter.rag_agent.chunk_overlap = ragConfig["overlapSize"]
-            self.chatter.rag_agent.n_results = ragConfig["resultNum"]
-            self.chatter.rag_agent.split_by_characters = ragConfig["splitByChar"]
         
         text = messages[-1]["content"]
         messages = messages[:-1]

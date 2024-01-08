@@ -85,6 +85,7 @@ export const BiochatterPath = {
   NewDocument: "v1/rag/newdocument",
   AllDocuments: "v1/rag/alldocuments",
   Document: "v1/rag/document",
+  ConnectionStatus: "v1/rag/connectionstatus",
 }
 
 export const Azure = {
@@ -170,3 +171,9 @@ export const DEFAULT_MODELS = [
 
 export const CHAT_PAGE_SIZE = 15;
 export const MAX_RENDER_MSG_COUNT = 45;
+
+// biochatter-server error
+export const ERROR_BIOSERVER_OK = 0
+export const ERROR_BIOSERVER_UNKNOW = 5000
+export const ERROR_BIOSERVER_MILVUS_UNKNOWN = 5101
+export const ERROR_BIOSERVER_MILVUS_CONNECT_FAILED = 5102

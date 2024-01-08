@@ -8,7 +8,7 @@ async function handle(request: NextRequest) {
   const authValue = request.headers.get(AUTHORIZATION) ?? "";
   const baseUrl = getBaseUrl();
   const data = await request.json();
-  const path = BiochatterPath.AllDocuments;
+  const path = BiochatterPath.ConnectionStatus;
   const url = `${baseUrl}/${path}`;
   try {
     const res = await fetch(
@@ -19,19 +19,11 @@ async function handle(request: NextRequest) {
           [AUTHORIZATION]: authValue,
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({connectionArgs: data.connectionArgs})
+        body: JSON.stringify({connectionArgs: data.connectionArgs}),
       }
     );
-    const v = (await res.json()) as BioChatterServerResponse;
-    if (v.code !== ERROR_BIOSERVER_OK) {
-      if (v.code === ERROR_BIOSERVER_MILVUS_CONNECT_FAILED) {
-        return NextResponse.json({code: ERROR_BIOSERVER_MILVUS_CONNECT_FAILED});
-      } else {
-        return NextResponse.json({code: ERROR_BIOSERVER_UNKNOW,})
-      }
-    }
-    const value = v as any;
-    return NextResponse.json({documents: value.documents??[]})
+    const jsonBody = await res.json();
+    return NextResponse.json(jsonBody);
   } catch (e: any) {
     console.error(e);
     return NextResponse.json(prettyObject(e));

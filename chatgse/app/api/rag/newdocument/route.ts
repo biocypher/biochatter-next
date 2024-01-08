@@ -49,10 +49,8 @@ async function requestNewDocument(tmpFile: string, filename: string, ragConfig: 
   };
   try {
     const res = await fetch(fetchUrl, fetchOptions);
-    return new Response(res.body, {
-      status: res.status,
-      statusText: res.statusText,
-    });
+    const jsonBody = await res.json();
+    return NextResponse.json(jsonBody);
   } finally {
     clearTimeout(timeoutId);
     unlink(tmpFile);

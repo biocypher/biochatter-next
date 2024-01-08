@@ -4,8 +4,11 @@ import ResetIcon from "../icons/reload.svg";
 import OKIcon from "../icons/config.svg";
 import SettingsIcon from "../icons/rag-settings.svg";
 import RAGDocumentsIcon from "../icons/rag-documents.svg";
-import CloseIcon from "../icons/close.svg";
+import DisconnectedIcon from "../icons/disconnected.svg";
+import ConnectedIcon from "../icons/connected.svg"
+import ConnectionIcon from "../icons/connection.svg";
 import ClearIcon from "../icons/clear.svg";
+import ReloadingIcon from "../icons/three-dots.svg";
 
 import Locale from "../locales";
 import { IconButton } from "./button";
@@ -13,7 +16,7 @@ import { List, ListItem, LoadingComponent, Modal, ReactDropZone, showConfirm } f
 
 import styles from "./rag.module.scss";
 import { InputRange } from "./input-range";
-import { ApiPath } from "../constant";
+import { ApiPath, ERROR_BIOSERVER_MILVUS_CONNECT_FAILED, ERROR_BIOSERVER_OK } from "../constant";
 import { getHeaders } from "../client/api";
 import { useEffect, useState } from "react";
 
@@ -48,6 +51,8 @@ export function RAGConfigModal(props: {onClose: () => void}) {
   const session = chatStore.currentSession();
   const [documents, setDocuments] = useState<Array<any>>([]);
   const [uploading, setUploading] = useState(false);
+  const [connected, setConnected] = useState(false);
+  const [isReconnecting, setIsReconnecting] = useState(false);
 
   async function updateDocuments() {
     const RAG_URL = ApiPath.RAG;
@@ -61,19 +66,58 @@ export function RAGConfigModal(props: {onClose: () => void}) {
         method: 'POST',
         headers: {
           ...getAuthHeader(),
+          "Content-Type": "application/json",
         },
+        body: JSON.stringify({connectionArgs: session.ragConfig.connectionArgs}),
       });
       const value = await res.json();
       if (value.documents) {
         setDocuments(value.documents);
+      } else {
+        if (value.code === ERROR_BIOSERVER_MILVUS_CONNECT_FAILED) {
+          setConnected(false);
+        }
+        setDocuments([]);
       }
     } catch (e: any) {
       console.error(e);
     }
   }
+  async function updateConnectionStatus() {
+    const RAG_URL = ApiPath.RAG;
+    let fetchUrl = RAG_URL as string;
+    if (!fetchUrl.endsWith('/')) {
+      fetchUrl += '/';
+    }
+    const connectionStatusUrl = fetchUrl + "connectionstatus"
+    setIsReconnecting(true);
+    try {
+      const res = await fetch(connectionStatusUrl, {
+        method: 'POST',
+        headers: {
+          ...getAuthHeader(),
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({connectionArgs: session.ragConfig.connectionArgs}),
+      });
+      const value = await res.json();
+      if (value?.code === ERROR_BIOSERVER_OK && value.status) {
+        if (value.status === "connected") {
+          setConnected(true);
+        } else {
+          setConnected(false);
+        }
+      }
+      setIsReconnecting(false);
+    } catch (e: any) {
+      console.error(e);
+      setIsReconnecting(false);
+    }
+    updateDocuments();
+  }
 
   useEffect(() => {
-    updateDocuments();
+    updateConnectionStatus();
   }, []);
 
   async function onUpload(file: File, done: ()=>void) {
@@ -125,7 +169,7 @@ export function RAGConfigModal(props: {onClose: () => void}) {
     try {
       const res = await fetch(delPath, {
         method: "DELETE",
-        body: JSON.stringify({docId}),
+        body: JSON.stringify({docId, connectionArgs: session.ragConfig.connectionArgs}),
         headers: {
           ...getAuthHeader()
         }
@@ -243,6 +287,88 @@ export function RAGConfigModal(props: {onClose: () => void}) {
                     <div className={styles["column-label"]}>{Locale.Chat.RAG.Settings.Label}</div>
                   </div>
                   <div className={styles["column-body"]} >
+                    <List>
+                      <ListItem
+                        title={Locale.Chat.RAG.Settings.ConnectionStatus}
+                      >
+                        {connected ? (
+                          <div style={{display: "flex", flexDirection: "row", alignItems: "center"}}>
+                            <div className={styles["connected-snippet"]}><p>connected</p></div>                            
+                            <div>
+                              <IconButton
+                                text={Locale.Chat.RAG.Settings.Refresh}
+                                icon={isReconnecting ? (<ReloadingIcon width={32} height={16} />) : <ConnectionIcon />}
+                                onClick={updateConnectionStatus}
+                              ></IconButton>
+                            </div>
+                          </div>
+                        ) : (
+                          <div style={{display: "flex", flexDirection: "row", alignItems: "center"}}>
+                            <div className={styles["disconnected-snippet"]}><p>disconnected</p></div>                                                      
+                            <div>
+                              <IconButton
+                                text={Locale.Chat.RAG.Settings.Reconnect}
+                                icon={isReconnecting ? (<ReloadingIcon width={32} height={16} />) : <ConnectionIcon />}
+                                onClick={updateConnectionStatus}
+                              ></IconButton>
+                            </div>
+                          </div>
+                        )}
+                      </ListItem>
+                      <ListItem
+                        title={Locale.Chat.RAG.Settings.DatabaseURL}
+                      >
+                        <input
+                          type="text"
+                          value={session.ragConfig.connectionArgs.host??"127.0.0.1"}
+                          onChange={(e) => {
+                            chatStore.updateCurrentSession(
+                              (sess) => (sess.ragConfig.connectionArgs.host = e.currentTarget.value)
+                            )
+                          }}
+                        ></input>
+                      </ListItem>
+                      <ListItem
+                        title={Locale.Chat.RAG.Settings.DatabasePort}
+                      >
+                        <input
+                          type="text"
+                          value={session.ragConfig.connectionArgs.port??"19530"}
+                          onChange={(e) => {
+                            chatStore.updateCurrentSession(
+                              (sess) => (sess.ragConfig.connectionArgs.port = (Number(e.currentTarget.value) as unknown as string))
+                            )
+                          }}
+                        ></input>
+                      </ListItem>
+                      <ListItem
+                        title={Locale.Chat.RAG.Settings.DatabaseUser}
+                      >
+                        <input
+                          disabled
+                          type="text"
+                          onChange={(e) => {
+                            chatStore.updateCurrentSession(
+                              (sess) => (sess.ragConfig.connectionArgs.user = e.currentTarget.value)
+                            )
+                          }}
+                        ></input>
+                      </ListItem>
+                      <ListItem
+                        title={Locale.Chat.RAG.Settings.DatabasePassword}
+                      >
+                        <input
+                          disabled
+                          type="password"
+                          onChange={(e) => {
+                            chatStore.updateCurrentSession(
+                              (sess) => (sess.ragConfig.connectionArgs.password = e.currentTarget.value)
+                            )
+                          }}
+                        ></input>
+                      </ListItem>
+
+                    </List>
                     <List>
                       <ListItem
                         title={Locale.Chat.RAG.Settings.UseRAG}

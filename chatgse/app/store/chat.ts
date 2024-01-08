@@ -21,7 +21,14 @@ import { createPersistStore } from "../utils/store";
 
 const generateUniqId = () => uuidv4();
 
+export interface DbConnectionArgs {
+  host: string;
+  port: string;
+  user?: string;
+  password?: string
+}
 export interface RAGConfig {
+  connectionArgs: DbConnectionArgs;
   useRAG: boolean;
   splitByChar: boolean;
   chunkSize: number;
@@ -71,6 +78,12 @@ export interface ChatSession {
 }
 export function createEmptyRAGConfig(): RAGConfig {
   return {
+    connectionArgs: {
+      host: "127.0.0.1",
+      port: "19530",
+      user: "",
+      password: "",
+    },
     useRAG: false,
     splitByChar: true,
     chunkSize: 1000,

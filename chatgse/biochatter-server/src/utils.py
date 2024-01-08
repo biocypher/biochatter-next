@@ -1,6 +1,8 @@
 
 from typing import Dict, List
 import os
+
+from flask import Request
 from src.constants import OPENAI_API_KEY
 
 def parse_api_key(bearToken: str) -> str:
@@ -9,14 +11,6 @@ def parse_api_key(bearToken: str) -> str:
     bearToken = bearToken.strip()
     bearToken = bearToken.replace("Bearer ", "")
     return bearToken
-
-def get_connection_args(vendor="milvus") -> Dict:
-    host = "127.0.0.1" if not "HOST" in os.environ else os.environ["HOST"]
-    port = "19530" if not "PORT" in os.environ else os.environ["PORT"]
-    return {
-        "host": host,
-        "port": port
-    }
 
 def get_rag_agent_prompts() -> List[str]:
     return [

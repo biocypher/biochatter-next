@@ -131,3 +131,8 @@ export function getBaseUrl(): string {
   }
   return baseUrl;
 }
+
+export interface BioChatterServerResponse {
+  code: number;
+  error?: string;
+}

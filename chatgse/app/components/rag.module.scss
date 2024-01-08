@@ -61,6 +61,28 @@
           display: flex;
           flex-direction: column;
 
+          .connected-snippet {
+            height: 36px;
+            color: rgba($color: green, $alpha: 0.8);
+            border-color: rgba($color: green, $alpha: 0.5);
+            border-radius: 10px;
+            padding: 0 10px;
+            background-color: rgba($color: green, $alpha: 0.05);
+            margin-right: 5px;
+            display: flex;
+            align-items: center;
+          }
+          .disconnected-snippet {
+            height: 36px;
+            color: rgba($color: red, $alpha: 0.8);
+            border-color: rgba($color: red, $alpha: 0.5);
+            border-radius: 10px;
+            padding: 0 10px;
+            background-color: rgba($color: red, $alpha: 0.05);
+            margin-right: 5px;
+            display: flex;
+            align-items: center;
+          }
           .feature-hints {
             flex-grow: 0;
             margin-bottom: 5px;

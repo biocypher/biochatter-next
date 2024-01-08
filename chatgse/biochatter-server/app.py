@@ -3,15 +3,20 @@ from typing import Optional, Any, List
 from flask import Flask, request
 from dotenv import load_dotenv
 import atexit
+import logging
+
+from pymilvus import MilvusException
+import pymilvus
+from src.constants import ERROR_MILVUS_CONNECT_FAILED, ERROR_MILVUS_UNKNOWN, ERROR_OK, ERROR_UNKNOW, ERRSTR_MILVUS_CONNECT_FAILED
 from src.conversation_manager import (
     chat,
     has_conversation, 
     initialize_conversation
 )
-import logging
 
 from src.document_embedder import (
-    get_all_documents, 
+    get_all_documents,
+    get_connection_status, 
     new_embedder_document,
     remove_document
 )
@@ -62,7 +67,6 @@ def get_params_from_json_body(json: Optional[Any], name: str, defaultVal: Option
 
 @app.route('/v1/chat/completions', methods=['POST'])
 def handle():
-    print("[post] completions")
     auth = get_auth(request)
     jsonBody = request.json
     sessionId = get_params_from_json_body(jsonBody, "session_id", defaultVal="")
@@ -88,7 +92,12 @@ def handle():
         )
     try:
         (msg, usage) = chat(sessionId, messages, auth, ragConfig)
-        return {"choices": [{"index": 0, "message": {"role": "assistant", "content": msg}, "finish_reason": "stop"}], "usage": usage}
+        return {"choices": [{"index": 0, "message": {"role": "assistant", "content": msg}, "finish_reason": "stop"}], "usage": usage, "code": ERROR_OK}
+    except MilvusException as e:
+        if e.code == pymilvus.Status.CONNECT_FAILED:
+            return {"error": ERRSTR_MILVUS_CONNECT_FAILED, "code": ERROR_MILVUS_CONNECT_FAILED}
+        else:
+            return {"error": e.message, "code": ERROR_MILVUS_UNKNOWN}
     except Exception as e:
         return {"error": str(e)}
 
@@ -104,36 +113,67 @@ def newDocument():
     # TODO: consider to be compatible with XinferenceDocumentEmbedder
     try:
         new_embedder_document(authKey=auth,tmpFile=tmpFile, filename=filename, rag_config=ragConfig)
-        return {"status": "OK"}
+        return {"status": "OK", "code": ERROR_OK}
+    except MilvusException as e:
+        if e.code == pymilvus.Status.CONNECT_FAILED:
+            return {"error": ERRSTR_MILVUS_CONNECT_FAILED, "code": ERROR_MILVUS_CONNECT_FAILED}
+        else:
+            return {"error": e.message, "code": ERROR_MILVUS_UNKNOWN}
     except Exception as e:
-        return {"error": str(e)}
+        return {"error": str(e), "code": ERROR_UNKNOW}
     
-@app.route('/v1/rag/alldocuments', methods=['GET'])
+@app.route('/v1/rag/alldocuments', methods=['POST'])
 def getAllDocuments():
     def post_process(docs: List[Any]):
         for doc in docs:
             doc['id'] = str(doc['id'])
         return docs
     auth = get_auth(request)
+    jsonBody = request.json
+    connection_args = get_params_from_json_body(jsonBody, "connectionArgs", {})
     try:
-        docs = get_all_documents(auth)
+        docs = get_all_documents(auth, connection_args)
         docs = post_process(docs)
-        return {"documents": docs, "status": "OK"}
+        return {"documents": docs, "status": "OK", "code": ERROR_OK}
+    except MilvusException as e:
+        if e.code == pymilvus.Status.CONNECT_FAILED:
+            return {"error": ERRSTR_MILVUS_CONNECT_FAILED, "code": ERROR_MILVUS_CONNECT_FAILED}
+        else:
+            return {"error": e.message, "code": ERROR_MILVUS_UNKNOWN}
     except Exception as e:
-        return {"error": str(e)}
+        return {"error": str(e), "code": ERROR_UNKNOW}
     
 @app.route('/v1/rag/document', methods=['DELETE'])
 def removeDocument():
     jsonBody = request.json
     auth = get_auth(request)
     docId = get_params_from_json_body(jsonBody, 'docId', '')
+    connection_args = get_params_from_json_body(jsonBody, "connectionArgs", {})
     if len(docId) == 0:
         return {"error": "Failed to find document"}
     try:
-        remove_document(docId, authKey=auth)
-        return {"status": "OK"}
+        remove_document(docId, authKey=auth, connection_args=connection_args)
+        return {"status": "OK", "code": ERROR_OK}
+    except MilvusException as e:
+        if e.code == pymilvus.Status.CONNECT_FAILED:
+            return {"error": ERRSTR_MILVUS_CONNECT_FAILED, "code": ERROR_MILVUS_CONNECT_FAILED}
+        else:
+            return {"error": e.message, "code": ERROR_MILVUS_UNKNOWN}
     except Exception as e:
-        return {"error": str(e)}
+        return {"error": str(e), "code": ERROR_UNKNOW}
+    
+@app.route('/v1/rag/connectionstatus', methods=['POST'])
+def getConnectionStatus():
+    try:
+        auth = get_auth(request)
+        jsonBody = request.json
+        connection_args = get_params_from_json_body(jsonBody, "connectionArgs", {})    
+        connected = get_connection_status(connection_args, auth)
+        return {"status": "connected" if connected else "disconnected", "code": ERROR_OK}
+    except MilvusException as e:
+        return {"error": e.message, "code": ERROR_MILVUS_UNKNOWN}
+    except Exception as e:
+        return {"error": str(e), "code": ERROR_UNKNOW}
     
     
 

@@ -91,6 +91,13 @@ const cn = {
       },
       Settings: {
         Label: "",
+        ConnectionStatus: "",
+        Refresh: "",
+        Reconnect: "",
+        DatabaseURL: "",
+        DatabasePort: "",
+        DatabaseUser: "",
+        DatabasePassword: "",
         UseRAG: "",
         SplitByChar: "",
         ChunkSize: {

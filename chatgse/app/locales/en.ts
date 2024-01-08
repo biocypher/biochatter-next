@@ -93,6 +93,13 @@ const en: LocaleType = {
       },
       Settings: {
         Label: "Settings",
+        ConnectionStatus: "Connection status",
+        Refresh: "reconnect",
+        Reconnect: "reconnect",
+        DatabaseURL: "Database URL",
+        DatabasePort: "Database port",
+        DatabaseUser: "Database user",
+        DatabasePassword: "Database password",
         UseRAG: "Use Retrieval Augmented Generation",
         SplitByChar: "Split by characters (instead of tokens)",
         ChunkSize: {

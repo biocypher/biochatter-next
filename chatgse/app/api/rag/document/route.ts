@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { getBaseUrl } from "../../common";
+import { BioChatterServerResponse, getBaseUrl } from "../../common";
 import { BiochatterPath } from "@/app/constant";
 import { prettyObject } from "@/app/utils/format";
 
@@ -23,7 +23,8 @@ async function handle(request: NextRequest) {
         body: JSON.stringify({docId})
       }
     );
-    return res;
+    const jsonBody = await res.json();
+    return NextResponse.json(jsonBody);
   } catch (e: any) {
     console.error(e);
     return NextResponse.json(prettyObject(e));
