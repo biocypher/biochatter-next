@@ -289,6 +289,19 @@ export function RAGConfigModal(props: {onClose: () => void}) {
                   <div className={styles["column-body"]} >
                     <List>
                       <ListItem
+                        title={Locale.Chat.RAG.Settings.UseRAG}
+                      >
+                        <input
+                          type="checkbox"
+                          checked={session.ragConfig.useRAG}
+                          onChange={(e) => {
+                            chatStore.updateCurrentSession(
+                              (sess) => (sess.ragConfig.useRAG = e.currentTarget.checked)
+                            )
+                          }}
+                        ></input>
+                      </ListItem>
+                      <ListItem
                         title={Locale.Chat.RAG.Settings.ConnectionStatus}
                       >
                         {connected ? (
@@ -296,6 +309,7 @@ export function RAGConfigModal(props: {onClose: () => void}) {
                             <div className={styles["connected-snippet"]}><p>connected</p></div>                            
                             <div>
                               <IconButton
+                                disabled={!session.ragConfig.useRAG}
                                 text={Locale.Chat.RAG.Settings.Refresh}
                                 icon={isReconnecting ? (<ReloadingIcon width={32} height={16} />) : <ConnectionIcon />}
                                 onClick={updateConnectionStatus}
@@ -307,6 +321,7 @@ export function RAGConfigModal(props: {onClose: () => void}) {
                             <div className={styles["disconnected-snippet"]}><p>disconnected</p></div>                                                      
                             <div>
                               <IconButton
+                                disabled={!session.ragConfig.useRAG}
                                 text={Locale.Chat.RAG.Settings.Reconnect}
                                 icon={isReconnecting ? (<ReloadingIcon width={32} height={16} />) : <ConnectionIcon />}
                                 onClick={updateConnectionStatus}
@@ -319,6 +334,7 @@ export function RAGConfigModal(props: {onClose: () => void}) {
                         title={Locale.Chat.RAG.Settings.DatabaseURL}
                       >
                         <input
+                          disabled={!session.ragConfig.useRAG}
                           type="text"
                           value={session.ragConfig.connectionArgs.host??"127.0.0.1"}
                           onChange={(e) => {
@@ -332,6 +348,7 @@ export function RAGConfigModal(props: {onClose: () => void}) {
                         title={Locale.Chat.RAG.Settings.DatabasePort}
                       >
                         <input
+                          disabled={!session.ragConfig.useRAG}
                           type="text"
                           value={session.ragConfig.connectionArgs.port??"19530"}
                           onChange={(e) => {
@@ -370,19 +387,6 @@ export function RAGConfigModal(props: {onClose: () => void}) {
 
                     </List>
                     <List>
-                      <ListItem
-                        title={Locale.Chat.RAG.Settings.UseRAG}
-                      >
-                        <input
-                          type="checkbox"
-                          checked={session.ragConfig.useRAG}
-                          onChange={(e) => {
-                            chatStore.updateCurrentSession(
-                              (sess) => (sess.ragConfig.useRAG = e.currentTarget.checked)
-                            )
-                          }}
-                        ></input>
-                      </ListItem>
                       <ListItem
                         title={Locale.Chat.RAG.Settings.SplitByChar}
                       >
