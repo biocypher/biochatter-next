@@ -191,20 +191,21 @@ const en: LocaleType = {
         "Being modular and extensible.",
         "Injecting prior knowledge into LLM queries.",
       ],
-      Disclaimer: "This app is still in development; you are seeing a preview with limited functionality.\nFor more information on our vision of the platform, please see our [preprint](https://arxiv.org/abs/2305.06488)!\nIf you'd like to contribute to the project, please find us on [GitHub](https://github.com/biocypher/ChatGSE) or [Zulip](https://biocypher.zulipchat.com/). We'd love to hear from you!",
+      Disclaimer: "For more information on the platform, please see our [preprint](https://arxiv.org/abs/2305.06488)!\nIf you'd like to contribute to the project, please find us on [GitHub](https://github.com/biocypher/ChatGSE) or [Zulip](https://biocypher.zulipchat.com/). We'd love to hear from you!",
       About: {
         Name: "About",
         Title: "About",
-        Heading1: "BioChatter is developed by [Sebastian Lobentanzer](https://slobentanzer.github.io/); you can find the source code on [GitHub](https://github.com/biocypher/chatgse).",
-        ListTitle: "BioChatter is a tool to rapidly contextualise common end results of biomedical analyses. It works by setting up a topic-constrained conversation with a pre-trained language model. The main benefits of this approach are:",
+        Citation: "BioChatter is developed by a multicultural team over on [GitHub](https://github.com/biocypher) ([BioChatter](https://github.com/biocypher/biochatter), [BioChatter Server](https://github.com/biocypher/biochatter-server), [ChatGSE](https://github.com/biocypher/chatgse), [ChatGSE Next](https://github.com/biocypher/chatgse-next)), led by [Sebastian Lobentanzer](https://slobentanzer.github.io/).",
+        ListTitle: "BioChatter is a tool to rapidly contextualise common end results of biomedical analyses. It works by setting up a topic-constrained conversation with a pre-trained language model. Optionally, auxiliary technologies such as knowledge graphs and vector databases can be seamlessly integrated into the conversations. The main benefits of this approach are:",
         ListItems: [
-          "Integration with the low-dimensional outputs of popular bioinformatics tools (e.g. gsea, progeny, decoupler)",
-          "Prompts tuned to biomedical research and your specific queries",
+          "Transparency to increase trust in the framework and LLM-driven insights",
+          "Modularity of components: use any model, any prompt, and any database",
+          "Native connectivity to BioCypher knowledge graphs",
           "Integrated safeguards to prevent false information and comparison to curated prior knowledge",
           "Confidentiality of the shared data (as opposed to the ChatGPT interface, which allows storage and reuse of the user's prompts by OpenAI)"
         ],
         Heading2: "About the models",
-        Models: "The default model loaded is `OpenAIs gpt-3.5-turbo` model, which in the standard version has a token limit of 4000 per conversation. This model currently comes in two versions, `0301` and `0613`. The latter is the more recent one with improved interpretation of system messages and capabilities to handle functions (returning attribute values of a given function as JSON). Additionally, OpenAI provide a `gpt-3.5-turbo-16k` model with increased token limit of 16000 per conversation. This model is slightly more expensive, but can be useful for longer conversations, particularly when including the document summarisation `/prompt` injection feature."
+        Models: "We offer support of proprietary models via the OpenAI API, as well as open source models via deployment mechanisms such as the Xorbits Inference framework. We also allow running models fully browser based using web assembly integration. You can select models in the settings panel.",
       },
     }
   },
