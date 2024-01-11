@@ -17,6 +17,7 @@ import {
 import { prettyObject } from "@/app/utils/format";
 import { getClientConfig } from "@/app/config/client";
 import { makeAzurePath } from "@/app/azure";
+import { useRAGStore } from "@/app/store/rag";
 
 export interface OpenAIListModelResponse {
   object: string;
@@ -79,7 +80,7 @@ export class ChatGPTApi implements LLMApi {
         model: options.config.model,
       },
     };
-    const ragConfig = useChatStore.getState().currentSession().ragConfig;
+    const ragConfig = useRAGStore.getState().currentRAGConfig();
 
     const requestPayload = {
       messages,

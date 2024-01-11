@@ -4,7 +4,7 @@ from flask import Flask, request
 from dotenv import load_dotenv
 import atexit
 import logging
-
+import os
 from pymilvus import MilvusException
 import pymilvus
 from src.constants import ERROR_MILVUS_CONNECT_FAILED, ERROR_MILVUS_UNKNOWN, ERROR_OK, ERROR_UNKNOW, ERRSTR_MILVUS_CONNECT_FAILED
@@ -54,29 +54,45 @@ DEFAULT_RAGCONFIG = {
     "splitByChar": True,
     "chunkSize": 1000,
     "overlapSize": 0,
-    "selectedDocIds": [], 
     "resultNum": 3
 }
 
-def get_params_from_json_body(json: Optional[Any], name: str, defaultVal: Optional[Any]) -> Optional[Any]:
+def _process_connection_args(name: str, value: Any) -> Any:
+    if name != "connectionArgs" and name != "ragConfig":
+        return value
+
+    if name == "connectionArgs" and "host" in value and value["host"].lower() == "local":
+        value["host"] = "127.0.0.1" if not "HOST" in os.environ else os.environ["HOST"]
+    elif name == "ragConfig":
+        if type(value) is str:
+            value = json.loads(value)
+        if "host" in value["connectionArgs"] and value["connectionArgs"]["host"].lower() == "local":
+            value["connectionArgs"]["host"] = "127.0.0.1" if not "HOST" in os.environ else os.environ["HOST"]
+
+    return value
+
+
+def extract_and_process_params_from_json_body(json: Optional[Any], name: str, defaultVal: Optional[Any]) -> Optional[Any]:
     if not json:
         return defaultVal
-    if name in json:
-        return json[name]
-    return defaultVal
+    if not name in json:
+        return defaultVal
+    val = json[name]
+    val = _process_connection_args(name, val)
+    return val
 
 @app.route('/v1/chat/completions', methods=['POST'])
 def handle():
     auth = get_auth(request)
     jsonBody = request.json
-    sessionId = get_params_from_json_body(jsonBody, "session_id", defaultVal="")
-    messages = get_params_from_json_body(jsonBody, "messages", defaultVal=[])
-    model = get_params_from_json_body(jsonBody, "model", defaultVal="gpt-3.5-turbo")
-    temperature = get_params_from_json_body(jsonBody, "temperature", defaultVal=0.7)
-    presence_penalty = get_params_from_json_body(jsonBody, "presence_penalty", defaultVal=0)
-    frequency_penalty = get_params_from_json_body(jsonBody, "frequency_penalty", defaultVal=0)
-    top_p = get_params_from_json_body(jsonBody, "top_p", defaultVal=1)
-    ragConfig = get_params_from_json_body(jsonBody, "ragConfig", defaultVal=DEFAULT_RAGCONFIG)
+    sessionId = extract_and_process_params_from_json_body(jsonBody, "session_id", defaultVal="")
+    messages = extract_and_process_params_from_json_body(jsonBody, "messages", defaultVal=[])
+    model = extract_and_process_params_from_json_body(jsonBody, "model", defaultVal="gpt-3.5-turbo")
+    temperature = extract_and_process_params_from_json_body(jsonBody, "temperature", defaultVal=0.7)
+    presence_penalty = extract_and_process_params_from_json_body(jsonBody, "presence_penalty", defaultVal=0)
+    frequency_penalty = extract_and_process_params_from_json_body(jsonBody, "frequency_penalty", defaultVal=0)
+    top_p = extract_and_process_params_from_json_body(jsonBody, "top_p", defaultVal=1)
+    ragConfig = extract_and_process_params_from_json_body(jsonBody, "ragConfig", defaultVal=DEFAULT_RAGCONFIG)
 
     if not has_conversation(sessionId):
         initialize_conversation(
@@ -104,16 +120,16 @@ def handle():
 @app.route('/v1/rag/newdocument', methods=['POST'])
 def newDocument():
     jsonBody = request.json
-    tmpFile = get_params_from_json_body(jsonBody, 'tmpFile', '')
-    filename = get_params_from_json_body(jsonBody, 'filename', '')
-    ragConfig = get_params_from_json_body(jsonBody, 'ragConfig', DEFAULT_RAGCONFIG)
+    tmpFile = extract_and_process_params_from_json_body(jsonBody, 'tmpFile', '')
+    filename = extract_and_process_params_from_json_body(jsonBody, 'filename', '')
+    ragConfig = extract_and_process_params_from_json_body(jsonBody, 'ragConfig', DEFAULT_RAGCONFIG)
     if type(ragConfig) is str:
         ragConfig = json.loads(ragConfig)
     auth = get_auth(request)
     # TODO: consider to be compatible with XinferenceDocumentEmbedder
     try:
-        new_embedder_document(authKey=auth,tmpFile=tmpFile, filename=filename, rag_config=ragConfig)
-        return {"status": "OK", "code": ERROR_OK}
+        doc_id = new_embedder_document(authKey=auth,tmpFile=tmpFile, filename=filename, rag_config=ragConfig)
+        return {"id": doc_id, "code": ERROR_OK}
     except MilvusException as e:
         if e.code == pymilvus.Status.CONNECT_FAILED:
             return {"error": ERRSTR_MILVUS_CONNECT_FAILED, "code": ERROR_MILVUS_CONNECT_FAILED}
@@ -130,11 +146,12 @@ def getAllDocuments():
         return docs
     auth = get_auth(request)
     jsonBody = request.json
-    connection_args = get_params_from_json_body(jsonBody, "connectionArgs", {})
+    connection_args = extract_and_process_params_from_json_body(jsonBody, "connectionArgs", None)
+    doc_ids = extract_and_process_params_from_json_body(jsonBody, "docIds", None)
     try:
-        docs = get_all_documents(auth, connection_args)
+        docs = get_all_documents(auth, connection_args, doc_ids=doc_ids)
         docs = post_process(docs)
-        return {"documents": docs, "status": "OK", "code": ERROR_OK}
+        return {"documents": docs, "code": ERROR_OK}
     except MilvusException as e:
         if e.code == pymilvus.Status.CONNECT_FAILED:
             return {"error": ERRSTR_MILVUS_CONNECT_FAILED, "code": ERROR_MILVUS_CONNECT_FAILED}
@@ -147,13 +164,14 @@ def getAllDocuments():
 def removeDocument():
     jsonBody = request.json
     auth = get_auth(request)
-    docId = get_params_from_json_body(jsonBody, 'docId', '')
-    connection_args = get_params_from_json_body(jsonBody, "connectionArgs", {})
+    docId = extract_and_process_params_from_json_body(jsonBody, 'docId', '')
+    connection_args = extract_and_process_params_from_json_body(jsonBody, "connectionArgs", None)
+    doc_ids = extract_and_process_params_from_json_body(jsonBody, "docIds", None)
     if len(docId) == 0:
         return {"error": "Failed to find document"}
     try:
-        remove_document(docId, authKey=auth, connection_args=connection_args)
-        return {"status": "OK", "code": ERROR_OK}
+        remove_document(docId, authKey=auth, connection_args=connection_args, doc_ids=doc_ids)
+        return {"id": docId, "code": ERROR_OK}
     except MilvusException as e:
         if e.code == pymilvus.Status.CONNECT_FAILED:
             return {"error": ERRSTR_MILVUS_CONNECT_FAILED, "code": ERROR_MILVUS_CONNECT_FAILED}
@@ -167,7 +185,7 @@ def getConnectionStatus():
     try:
         auth = get_auth(request)
         jsonBody = request.json
-        connection_args = get_params_from_json_body(jsonBody, "connectionArgs", {})    
+        connection_args = extract_and_process_params_from_json_body(jsonBody, "connectionArgs", None)    
         connected = get_connection_status(connection_args, auth)
         return {"status": "connected" if connected else "disconnected", "code": ERROR_OK}
     except MilvusException as e:

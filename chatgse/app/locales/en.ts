@@ -466,6 +466,44 @@ const en: LocaleType = {
   FineTuned: {
     Sysmessage: "You are an assistant that",
   },
+  RAG: {
+    Page: {
+      Title: "RAG Settings",
+    },
+    Description: "While Large Language Models have access to vast amounts of knowledge, this knowledge only includes what was present in their training set, and thus excludes very current research as well as research articles that are not open access. To fill in the gaps of the model's knowledge, we include a document summarisation approach that stores knowledge from user-provided documents in a vector database, which can be used to supplement the model prompt by retrieving the most relevant contents of the provided documents. This process builds on the unique functionality of vector databases to perform similarity search on the embeddings of the documents' contents.",
+    OK: "OK",
+    Reset: "Reset",
+    Documents: {
+      Label: "Documents",
+      DocumentsHints: "To use the feature, please enable it in the settings panel. →",
+      DocumentsPrompts: "Upload documents one at a time. Upon upload, the document is split according to the settings and the embeddings are stored in the connected vector database.",
+      UploadingMessage: "Embedding and Saving",
+    },
+    Settings: {
+      Label: "Settings",
+      ConnectionStatus: "Connection status",
+      Refresh: "reconnect",
+      Reconnect: "reconnect",
+      DatabaseURL: "Database URL",
+      DatabasePort: "Database port",
+      DatabaseUser: "Database user",
+      DatabasePassword: "Database password",
+      UseRAG: "Use Retrieval Augmented Generation",
+      SplitByChar: "Split by characters (instead of tokens)",
+      ChunkSize: {
+        Label: "Chunk size",
+        subLabel: "How large should the embedded text fragments be?"
+      },
+      Overlap: {
+        Label: "Overlap",
+        subLabel: "Should the chunks overlap, and by how much?",
+      },
+      ResultsNum: {
+        Label: "Number of results",
+        subLabel: "How many chunks should be used to supplement the prompts",
+      }
+    }
+  },
   Mask: {
     Name: "Persona",
     Page: {

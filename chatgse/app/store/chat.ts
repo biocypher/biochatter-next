@@ -21,23 +21,6 @@ import { createPersistStore } from "../utils/store";
 
 const generateUniqId = () => uuidv4();
 
-export interface DbConnectionArgs {
-  host: string;
-  port: string;
-  user?: string;
-  password?: string
-}
-export interface RAGConfig {
-  connectionArgs: DbConnectionArgs;
-  useRAG: boolean;
-  splitByChar: boolean;
-  chunkSize: number;
-  overlapSize: number,
-  resultNum: number;
-
-  selectedDocIds: Array<string>;
-}
-
 export type ChatMessage = RequestMessage & {
   date: string;
   streaming?: boolean;
@@ -74,23 +57,6 @@ export interface ChatSession {
   clearContextIndex?: number;
 
   mask: Mask;
-  ragConfig: RAGConfig;
-}
-export function createEmptyRAGConfig(): RAGConfig {
-  return {
-    connectionArgs: {
-      host: "127.0.0.1",
-      port: "19530",
-      user: "",
-      password: "",
-    },
-    useRAG: false,
-    splitByChar: true,
-    chunkSize: 1000,
-    overlapSize: 0,
-    resultNum: 3,
-    selectedDocIds: []
-  };
 }
 
 export const DEFAULT_TOPIC = Locale.Store.DefaultTopic;
@@ -114,7 +80,6 @@ function createEmptySession(): ChatSession {
     lastSummarizeIndex: 0,
 
     mask: createEmptyMask(),
-    ragConfig: createEmptyRAGConfig(),
   };
 }
 

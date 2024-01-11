@@ -70,7 +70,8 @@ class SessionData:
             split_by_characters=ragConfig["splitByChar"],
             n_results=ragConfig["resultNum"],
             api_key=api_key,
-            connection_args=ragConfig["connectionArgs"]
+            connection_args=ragConfig["connectionArgs"],
+            # doc_ids=ragConfig["docIds"] if "docIds" in ragConfig else None
         )
         if ragConfig["useRAG"]:
             self.chatter.rag_agent.connect()

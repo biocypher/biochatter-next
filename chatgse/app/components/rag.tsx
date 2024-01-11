@@ -1,24 +1,27 @@
-import { createEmptyRAGConfig, useChatStore } from "../store";
+import { useNavigate } from "react-router-dom";
+import { useRAGStore } from "../store/rag";
+import { useChatStore } from "../store";
+import { ErrorBoundary } from "./error";
+import Locale from "../locales";
 
+import { List, ListItem, LoadingComponent, Modal, ReactDropZone, showConfirm } from "./ui-lib";
+
+import CloseIcon from "../icons/close.svg";
 import ResetIcon from "../icons/reload.svg";
 import OKIcon from "../icons/config.svg";
 import SettingsIcon from "../icons/rag-settings.svg";
 import RAGDocumentsIcon from "../icons/rag-documents.svg";
-import DisconnectedIcon from "../icons/disconnected.svg";
-import ConnectedIcon from "../icons/connected.svg"
 import ConnectionIcon from "../icons/connection.svg";
 import ClearIcon from "../icons/clear.svg";
 import ReloadingIcon from "../icons/three-dots.svg";
 
-import Locale from "../locales";
-import { IconButton } from "./button";
-import { List, ListItem, LoadingComponent, Modal, ReactDropZone, showConfirm } from "./ui-lib";
-
 import styles from "./rag.module.scss";
-import { InputRange } from "./input-range";
-import { ApiPath, ERROR_BIOSERVER_MILVUS_CONNECT_FAILED, ERROR_BIOSERVER_OK } from "../constant";
-import { getHeaders } from "../client/api";
+
+import { IconButton } from "./button";
 import { useEffect, useState } from "react";
+import { getHeaders } from "../client/api";
+import { ApiPath, ERROR_BIOSERVER_MILVUS_CONNECT_FAILED, ERROR_BIOSERVER_OK } from "../constant";
+import { InputRange } from "./input-range";
 
 const AUTHORIZATION = "Authorization";
 const APIKEY = "api-key";
@@ -46,13 +49,19 @@ function getDocumentName(doc: any) {
   return "unknown";
 }
 
-export function RAGConfigModal(props: {onClose: () => void}) {
-  const chatStore = useChatStore();
-  const session = chatStore.currentSession();
+export function RAGPage() {
+  const navigate = useNavigate();
+
+  const ragStore = useRAGStore();
+
   const [documents, setDocuments] = useState<Array<any>>([]);
   const [uploading, setUploading] = useState(false);
   const [connected, setConnected] = useState(false);
   const [isReconnecting, setIsReconnecting] = useState(false);
+  // const [ragConfig, setRagConfig] = useState({...ragStore.currentRAGConfig(), connectionArgs: {...ragStore.currentRAGConfig().connectionArgs}});
+  const ragConfig = ragStore.currentRAGConfig();
+  const [host, setHost] = useState("local");
+  const [port, setPort] = useState("19530");
 
   async function updateDocuments() {
     const RAG_URL = ApiPath.RAG;
@@ -60,6 +69,11 @@ export function RAGConfigModal(props: {onClose: () => void}) {
     if (!fetchUrl.endsWith('/')) {
       fetchUrl += '/';
     }
+    
+    const theConfig = ragStore.currentRAGConfig();
+    console.log(`[updateDocuments] ${theConfig.connectionArgs.host}`);
+    console.log(`[updateDocuments] ${ragConfig.connectionArgs.host}`);
+    // console.dir(ragConfig);
     fetchUrl += 'alldocuments';
     try {
       const res = await fetch(fetchUrl, {
@@ -68,7 +82,7 @@ export function RAGConfigModal(props: {onClose: () => void}) {
           ...getAuthHeader(),
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({connectionArgs: session.ragConfig.connectionArgs}),
+        body: JSON.stringify({connectionArgs: theConfig.connectionArgs}),
       });
       const value = await res.json();
       if (value.documents) {
@@ -98,12 +112,13 @@ export function RAGConfigModal(props: {onClose: () => void}) {
           ...getAuthHeader(),
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({connectionArgs: session.ragConfig.connectionArgs}),
+        body: JSON.stringify({connectionArgs: {host, port}}),
       });
       const value = await res.json();
       if (value?.code === ERROR_BIOSERVER_OK && value.status) {
         if (value.status === "connected") {
           setConnected(true);
+          ragStore.selectRAGConfig(host, port);
         } else {
           setConnected(false);
         }
@@ -113,8 +128,10 @@ export function RAGConfigModal(props: {onClose: () => void}) {
       console.error(e);
       setIsReconnecting(false);
     }
-    updateDocuments();
   }
+  useEffect(() => {
+    updateDocuments();
+  }, [ragConfig])
 
   useEffect(() => {
     updateConnectionStatus();
@@ -130,7 +147,7 @@ export function RAGConfigModal(props: {onClose: () => void}) {
     uploadPath += path;
     const data = new FormData();
     data.set('file', file);
-    data.set('ragConfig', JSON.stringify(session.ragConfig));
+    data.set('ragConfig', JSON.stringify(ragConfig));
     
     try {
       setUploading(true);
@@ -169,7 +186,7 @@ export function RAGConfigModal(props: {onClose: () => void}) {
     try {
       const res = await fetch(delPath, {
         method: "DELETE",
-        body: JSON.stringify({docId, connectionArgs: session.ragConfig.connectionArgs}),
+        body: JSON.stringify({docId, connectionArgs: ragConfig.connectionArgs}),
         headers: {
           ...getAuthHeader()
         }
@@ -198,40 +215,28 @@ export function RAGConfigModal(props: {onClose: () => void}) {
   }
 
   return (
-    <div className="modal-mask">
-      <Modal
-        title="Current RAG Settings"
-        onClose={props.onClose}
-        defaultMax={true}
-        actions={[
-          <IconButton
-            key="reset"
-            icon={<ResetIcon />}
-            bordered
-            text={Locale.Chat.RAG.Reset}
-            onClick={async () => {
-              if (await showConfirm("Resetting will clear all settings. Are you sure?")) {
-                chatStore.updateCurrentSession(
-                  (session) => {
-                    session.ragConfig = createEmptyRAGConfig();
-                  }
-                )
-              }
-            }}
-          ></IconButton>,
-          <IconButton
-            key="ok"
-            icon={<OKIcon />}
-            bordered
-            text={Locale.Chat.RAG.OK}
-            onClick={props.onClose}
-          ></IconButton>
-        ]}
-      >
-        <div className={styles["rag-page"]}>
-          <div className={styles["rag-page-body"]}>
+    <ErrorBoundary>
+      <div className={styles["rag-page"]}>
+        <div className="window-header">
+          <div className="window-header-title">
+            <div className="window-header-main-title">
+              {Locale.RAG.Page.Title}
+            </div>
+          </div>
+
+          <div className="window-actions">
+            <div className="window-action-button">
+              <IconButton
+                icon={<CloseIcon />}
+                bordered
+                onClick={() => navigate(-1)}
+              />
+            </div>
+          </div>
+        </div>
+        <div className={styles["rag-page-body"]}>
             <div className={styles["rag-description"]}>
-              {Locale.Chat.RAG.Description}
+              {Locale.RAG.Description}
             </div>
   
             <div className={styles["rag-page-content"]}>
@@ -241,18 +246,18 @@ export function RAGConfigModal(props: {onClose: () => void}) {
                     <div className={styles["column-icon"]}>
                       <RAGDocumentsIcon />
                     </div>
-                    <div className={styles["column-label"]}>{Locale.Chat.RAG.Documents.Label}</div>
+                    <div className={styles["column-label"]}>{Locale.RAG.Documents.Label}</div>
                   </div>
                   <div className={styles["column-body"]}>
-                    {!session.ragConfig.useRAG ? (<div className={styles["feature-hints"]}>
-                      {Locale.Chat.RAG.Documents.DocumentsHints}         
+                    {!ragStore.useRAG? (<div className={styles["feature-hints"]}>
+                      {Locale.RAG.Documents.DocumentsHints}         
                     </div>) : (<div />)}
                     <div className={styles["feature-hints"]}>
-                      {Locale.Chat.RAG.Documents.DocumentsPrompts}
+                      {Locale.RAG.Documents.DocumentsPrompts}
                     </div>
                     <div className={styles["feature-hints"]}>
                       <ReactDropZone
-                        disabled={!session.ragConfig.useRAG}
+                        disabled={!ragStore.useRAG}
                         accept={{"application/pdf": ["application/pdf"], "text/plain": ["text/plain"]}}
                         onUpload={onUpload}
                       />
@@ -260,7 +265,7 @@ export function RAGConfigModal(props: {onClose: () => void}) {
                     {(uploading) ? (
                       <div className={styles["uploading-prompts"]}>
                         <div style={{marginLeft: 5, marginRight: 5}}>
-                          <p>{Locale.Chat.RAG.Documents.UploadingMessage}
+                          <p>{Locale.RAG.Documents.UploadingMessage}
                           </p>
                         </div>
                         <div><LoadingComponent noLogo /></div>
@@ -284,33 +289,31 @@ export function RAGConfigModal(props: {onClose: () => void}) {
                     <div className={styles["column-icon"]}>
                       <SettingsIcon />
                     </div>
-                    <div className={styles["column-label"]}>{Locale.Chat.RAG.Settings.Label}</div>
+                    <div className={styles["column-label"]}>{Locale.RAG.Settings.Label}</div>
                   </div>
                   <div className={styles["column-body"]} >
                     <List>
                       <ListItem
-                        title={Locale.Chat.RAG.Settings.UseRAG}
+                        title={Locale.RAG.Settings.UseRAG}
                       >
                         <input
                           type="checkbox"
-                          checked={session.ragConfig.useRAG}
+                          checked={ragStore.useRAG}
                           onChange={(e) => {
-                            chatStore.updateCurrentSession(
-                              (sess) => (sess.ragConfig.useRAG = e.currentTarget.checked)
-                            )
+                            ragStore.setUseRAG(e.currentTarget.checked)
                           }}
                         ></input>
                       </ListItem>
                       <ListItem
-                        title={Locale.Chat.RAG.Settings.ConnectionStatus}
+                        title={Locale.RAG.Settings.ConnectionStatus}
                       >
                         {connected ? (
                           <div style={{display: "flex", flexDirection: "row", alignItems: "center"}}>
                             <div className={styles["connected-snippet"]}><p>connected</p></div>                            
                             <div>
                               <IconButton
-                                disabled={!session.ragConfig.useRAG}
-                                text={Locale.Chat.RAG.Settings.Refresh}
+                                disabled={!ragStore.useRAG}
+                                text={Locale.RAG.Settings.Refresh}
                                 icon={isReconnecting ? (<ReloadingIcon width={32} height={16} />) : <ConnectionIcon />}
                                 onClick={updateConnectionStatus}
                               ></IconButton>
@@ -321,8 +324,8 @@ export function RAGConfigModal(props: {onClose: () => void}) {
                             <div className={styles["disconnected-snippet"]}><p>disconnected</p></div>                                                      
                             <div>
                               <IconButton
-                                disabled={!session.ragConfig.useRAG}
-                                text={Locale.Chat.RAG.Settings.Reconnect}
+                                disabled={!ragStore.useRAG}
+                                text={Locale.RAG.Settings.Reconnect}
                                 icon={isReconnecting ? (<ReloadingIcon width={32} height={16} />) : <ConnectionIcon />}
                                 onClick={updateConnectionStatus}
                               ></IconButton>
@@ -331,55 +334,51 @@ export function RAGConfigModal(props: {onClose: () => void}) {
                         )}
                       </ListItem>
                       <ListItem
-                        title={Locale.Chat.RAG.Settings.DatabaseURL}
+                        title={Locale.RAG.Settings.DatabaseURL}
                       >
                         <input
-                          disabled={!session.ragConfig.useRAG}
+                          disabled={!ragStore.useRAG}
                           type="text"
-                          value={session.ragConfig.connectionArgs.host??"127.0.0.1"}
+                          value={host}
                           onChange={(e) => {
-                            chatStore.updateCurrentSession(
-                              (sess) => (sess.ragConfig.connectionArgs.host = e.currentTarget.value)
-                            )
+                            setHost(e.currentTarget?.value??"local")
                           }}
                         ></input>
                       </ListItem>
                       <ListItem
-                        title={Locale.Chat.RAG.Settings.DatabasePort}
+                        title={Locale.RAG.Settings.DatabasePort}
                       >
                         <input
-                          disabled={!session.ragConfig.useRAG}
+                          disabled={!ragStore.useRAG}
                           type="text"
-                          value={session.ragConfig.connectionArgs.port??"19530"}
+                          value={port}
                           onChange={(e) => {
-                            chatStore.updateCurrentSession(
-                              (sess) => (sess.ragConfig.connectionArgs.port = (Number(e.currentTarget.value) as unknown as string))
-                            )
+                            setPort(e.currentTarget?.value??"19530")
                           }}
                         ></input>
                       </ListItem>
                       <ListItem
-                        title={Locale.Chat.RAG.Settings.DatabaseUser}
+                        title={Locale.RAG.Settings.DatabaseUser}
                       >
                         <input
                           disabled
                           type="text"
                           onChange={(e) => {
-                            chatStore.updateCurrentSession(
-                              (sess) => (sess.ragConfig.connectionArgs.user = e.currentTarget.value)
+                            ragStore.updateCurrentRAGConfig(
+                              (config) => (config.connectionArgs.user = e.currentTarget.value)
                             )
                           }}
                         ></input>
                       </ListItem>
                       <ListItem
-                        title={Locale.Chat.RAG.Settings.DatabasePassword}
+                        title={Locale.RAG.Settings.DatabasePassword}
                       >
                         <input
                           disabled
                           type="password"
                           onChange={(e) => {
-                            chatStore.updateCurrentSession(
-                              (sess) => (sess.ragConfig.connectionArgs.password = e.currentTarget.value)
+                            ragStore.updateCurrentRAGConfig(
+                              (config) => (config.connectionArgs.password = e.currentTarget.value)
                             )
                           }}
                         ></input>
@@ -388,62 +387,62 @@ export function RAGConfigModal(props: {onClose: () => void}) {
                     </List>
                     <List>
                       <ListItem
-                        title={Locale.Chat.RAG.Settings.SplitByChar}
+                        title={Locale.RAG.Settings.SplitByChar}
                       >
                         <input
                           type="checkbox"
-                          checked={session.ragConfig.splitByChar}
+                          checked={ragConfig.splitByChar}
                           onChange={(e) => {
-                            chatStore.updateCurrentSession(
-                              (sess) => (sess.ragConfig.splitByChar = e.currentTarget.checked)
+                            ragStore.updateCurrentRAGConfig(
+                              (config) => (config.splitByChar = e.currentTarget.checked)
                             )
                           }}
                         ></input>
                       </ListItem>
                       <ListItem
-                        title={Locale.Chat.RAG.Settings.ChunkSize.Label}
-                        subTitle={Locale.Chat.RAG.Settings.ChunkSize.subLabel}
+                        title={Locale.RAG.Settings.ChunkSize.Label}
+                        subTitle={Locale.RAG.Settings.ChunkSize.subLabel}
                       >
                         <InputRange
-                          value={session.ragConfig.chunkSize}
+                          value={ragConfig.chunkSize}
                           min="0"
                           max="5000"
                           step="10"
                           onChange={(e) => {
-                            chatStore.updateCurrentSession(
-                              (sess) =>(sess.ragConfig.chunkSize = parseInt(e.currentTarget.value))
+                            ragStore.updateCurrentRAGConfig(
+                              (config) => (config.chunkSize = parseInt(e.currentTarget.value))
                             )
                           }}
                         ></InputRange>
                       </ListItem>
                       <ListItem
-                        title={Locale.Chat.RAG.Settings.Overlap.Label}
-                        subTitle={Locale.Chat.RAG.Settings.Overlap.subLabel}
+                        title={Locale.RAG.Settings.Overlap.Label}
+                        subTitle={Locale.RAG.Settings.Overlap.subLabel}
                       >
                         <InputRange
-                          value={session.ragConfig.overlapSize}
+                          value={ragConfig.overlapSize}
                           min="0"
                           max="1000"
                           step="1"
                           onChange={(e) => {
-                            chatStore.updateCurrentSession(
-                              (sess) => (sess.ragConfig.overlapSize = Number(e.currentTarget.value))
+                            ragStore.updateCurrentRAGConfig(
+                              (config) => (config.overlapSize = Number(e.currentTarget.value))
                             )
                           }}
                         ></InputRange>
                       </ListItem>
                       <ListItem
-                        title={Locale.Chat.RAG.Settings.ResultsNum.Label}
-                        subTitle={Locale.Chat.RAG.Settings.ResultsNum.subLabel}
+                        title={Locale.RAG.Settings.ResultsNum.Label}
+                        subTitle={Locale.RAG.Settings.ResultsNum.subLabel}
                       >
                         <InputRange
-                          value={session.ragConfig.resultNum}
+                          value={ragConfig.resultNum}
                           min="0"
                           max="1000"
                           step="1"
                           onChange={(e) => {
-                            chatStore.updateCurrentSession(
-                              (sess) => (sess.ragConfig.resultNum = Number(e.currentTarget.value))
+                            ragStore.updateCurrentRAGConfig(
+                              (config) => (config.resultNum = Number(e.currentTarget.value))
                             )
                           }}
                         ></InputRange>
@@ -454,8 +453,7 @@ export function RAGConfigModal(props: {onClose: () => void}) {
               </div>
             </div>
           </div>
-        </div>
-      </Modal>
-    </div>
+      </div>
+    </ErrorBoundary>
   )
 }

@@ -460,6 +460,44 @@ const cn = {
   FineTuned: {
     Sysmessage: "你是一个助手",
   },
+  RAG: {
+    Page: {
+      Title: "",
+    },
+    Description: "",
+    OK: "",
+    Reset: "",
+    Documents: {
+      Label: "",
+      DocumentsHints: "",
+      DocumentsPrompts: "",
+      UploadingMessage: "",
+    },
+    Settings: {
+      Label: "",
+      ConnectionStatus: "",
+      Refresh: "",
+      Reconnect: "",
+      DatabaseURL: "",
+      DatabasePort: "",
+      DatabaseUser: "",
+      DatabasePassword: "",
+      UseRAG: "",
+      SplitByChar: "",
+      ChunkSize: {
+        Label: "",
+        subLabel: ""
+      },
+      Overlap: {
+        Label: "",
+        subLabel: "",
+      },
+      ResultsNum: {
+        Label: "",
+        subLabel: "",
+      }
+    }
+  },
   Mask: {
     Name: "面具",
     Page: {

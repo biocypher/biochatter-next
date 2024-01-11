@@ -1,6 +1,6 @@
 
 from biochatter.vectorstore import DocumentEmbedder, DocumentReader
-from typing import Any, Dict, Optional
+from typing import Any, Dict, List, Optional
 import logging
 
 logger = logging.getLogger(__name__)
@@ -25,22 +25,24 @@ def new_embedder_document(authKey: str, tmpFile: str, filename: str, rag_config:
             doc.metadata.update({"source": filename})
     logger.info('save_document')
     logger.error('save_document')
-    rag_agent.save_document(docs)
+    return rag_agent.save_document(docs)
     
-def get_all_documents(authKey: str, connection_args: Dict):
+def get_all_documents(authKey: str, connection_args: Dict, doc_ids: Optional[List[str]] = None):
     api_key = authKey
     rag_agent = DocumentEmbedder(
         api_key=api_key,
-        connection_args=connection_args
+        connection_args=connection_args,
+        # doc_ids=doc_ids
     )
     rag_agent.connect()
     return rag_agent.get_all_documents()
 
-def remove_document(docId: str, authKey: str, connection_args):
+def remove_document(docId: str, authKey: str, connection_args, doc_ids: Optional[List[str]] = None):
     api_key = authKey
     rag_agent = DocumentEmbedder(
         api_key=api_key,
-        connection_args=connection_args
+        connection_args=connection_args,
+        # doc_ids=doc_ids
     )
     rag_agent.connect()
     rag_agent.remove_document(doc_id=docId)
