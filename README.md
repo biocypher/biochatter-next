@@ -21,11 +21,12 @@ The client can be accessed in the browser at http://localhost:3000.
 If you want or need to install and run the two services locally and separately,
 you need to have [Node.js](https://nodejs.org/en/) and
 [yarn](https://yarnpkg.com/) installed. Then, you can run the following code in
-the root directory of this repository:
+the `chatgse` directory of this repository:
 
 ```console
+cd chatgse
 yarn install
-yarn --cwd chatgse/ dev
+yarn dev
 ```
 
 Note that you need to have the `.bioserver.env` environment file present (there
