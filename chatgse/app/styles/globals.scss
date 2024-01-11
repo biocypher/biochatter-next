@@ -7,14 +7,20 @@
   /* color */
   --white: white;
   --black: rgb(48, 48, 48);
-  --gray: rgb(250, 250, 250);
-  --primary: rgb(29, 147, 171);
-  --second: rgb(231, 248, 255);
+  --gray: rgb(216, 216, 216);
+  --primary: rgb(64, 168, 189);
+  --second: rgba(231, 248, 255, 0.417);
   --hover-color: #f3f3f3;
   --bar-color: rgba(0, 0, 0, 0.1);
   --gray2: rgb(240, 242, 246);
   --theme-color: var(--gray);
   --slate500: rgb(100, 116, 139);
+
+  --link: rgb(90, 91, 169);
+  --link-visited: rgb(123, 123, 169);
+
+  --alert-bg: rgb(255, 245, 245);
+  --alert-fg: rgb(138, 0, 0);
 
   /* shadow */
   --shadow: 50px 50px 100px 10px rgb(0, 0, 0, 0.1);
@@ -28,23 +34,32 @@
   --theme: dark;
 
   /* color */
-  --white: rgb(30, 30, 30);
-  --black: rgb(187, 187, 187);
-  --gray: rgb(21, 21, 21);
-  --primary: rgb(29, 147, 171);
-  --second: rgb(27 38 42);
-  --hover-color: #323232;
+  --white: rgb(32, 37, 44);
+  --black: rgb(230, 237, 243);
+  --gray: rgb(1, 4, 9);
+  --primary: rgb(53, 83, 115);
+  --second: rgba(33, 52, 73, 0.266);
+  --hover-color: rgb(49, 55, 61);
+
+  --link: rgb(147, 148, 221);
+  --link-visited: rgb(168, 122, 184);
+
+  --alert-bg: rgb(82, 48, 48);
+  --alert-fg: rgb(246, 159, 159);
 
   --bar-color: rgba(255, 255, 255, 0.1);
 
-  --border-in-light: 1px solid rgba(255, 255, 255, 0.192);
+  /* shadow */
+  --card-shadow: 0px 2px 4px 0px rgba(0, 0, 0, 0.255);
+
+  --border-in-light: 1px solid rgba(255, 255, 255, 0.218);
 
   --theme-color: var(--gray);
   --gray2: rgb(96, 96, 96);
   --slate500: rgb(203, 213, 225);
 
-  div:not(.no-dark) > svg {
-    filter: invert(0.5);
+  div:not(.no-dark)>svg {
+    filter: invert(0.7);
   }
 }
 
@@ -90,6 +105,7 @@
     @include dark;
   }
 }
+
 html {
   height: var(--full-height);
 
@@ -259,13 +275,17 @@ div.math {
   }
 }
 
-.link {
+a {
   font-size: 12px;
-  color: var(--primary);
+  color: var(--link);
   text-decoration: none;
 
   &:hover {
     text-decoration: underline;
+  }
+
+  &:visited {
+    color: var(--link-visited);
   }
 }
 
@@ -309,6 +329,7 @@ pre {
   &:hover {
     filter: brightness(0.9);
   }
+
   &:focus {
     filter: brightness(0.95);
   }

@@ -16,9 +16,8 @@ services:
       - flask-app
  
   flask-app:
-    build:
-      context: ./biochatter-server/
-      dockerfile: Dockerfile
+    container_name: biochatter-server
+    image: biocypher/biochatter-server:latest
     env_file:
       - .bioserver.env
     ports:

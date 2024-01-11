@@ -100,7 +100,7 @@ export function Loading() {
 export function LoadingComponent(props: { noLogo?: boolean, width?: number, height?: 32 }) {
   return (
     <div className={styles["loading-content"] + " no-dark"}>
-      {!props.noLogo && <LoadingIcon width={props.width??32} height={props.height??32}/>}
+      {!props.noLogo && <LoadingIcon width={props.width ?? 32} height={props.height ?? 32} />}
       <LoadingIcon />
     </div>
   );
@@ -499,13 +499,13 @@ export function Selector<T>(props: {
 }
 
 const MAX_FILE_SIZE = 50 * 1024 * 1024; // 50MB
-export function ReactDropZone({accept, open, disabled, onUpload}: {
-  accept: Record<string,Array<string>>;
+export function ReactDropZone({ accept, open, disabled, onUpload }: {
+  accept: Record<string, Array<string>>;
   open?: () => void;
   disabled?: boolean
-  onUpload: (_: File, done: ()=>void) => Promise<void>;
+  onUpload: (_: File, done: () => void) => Promise<void>;
 }) {
-  const [fileToUpload, setFileToUpload] = useState< File | undefined >();
+  const [fileToUpload, setFileToUpload] = useState<File | undefined>();
   function onFileDrop(acceptedFiles: Array<File>) {
     const file = acceptedFiles.length > 0 ? acceptedFiles[0] : undefined;
     if (file === undefined) {
@@ -513,7 +513,7 @@ export function ReactDropZone({accept, open, disabled, onUpload}: {
     }
     setFileToUpload(acceptedFiles.length > 0 ? acceptedFiles[0] : undefined);
   }
-  function onRemoveFile() {    
+  function onRemoveFile() {
     setFileToUpload(undefined)
   }
   async function onUploadFile() {
@@ -524,16 +524,19 @@ export function ReactDropZone({accept, open, disabled, onUpload}: {
       setFileToUpload(undefined);
     });
   }
-  
+
   const { getRootProps, getInputProps, isDragActive, acceptedFiles } =
     useDropzone({
       accept,
       onDrop: onFileDrop,
       multiple: false,
-      disabled
+      disabled,
+      onDragEnter: undefined,
+      onDragLeave: undefined,
+      onDragOver: undefined,
     });
-  
-  const files = (fileToUpload === undefined ? [] : [fileToUpload]).map((file:any) => (
+
+  const files = (fileToUpload === undefined ? [] : [fileToUpload]).map((file: any) => (
     <li key={file.path} className={styles["file-item"]}>
       <div className={styles["file-info"]}>{file.path} - {file.size} bytes </div>
       <div className={styles["file-warning"]}>
@@ -544,7 +547,7 @@ export function ReactDropZone({accept, open, disabled, onUpload}: {
           </>
         ) : (<div />)}
       </div>
-      <div 
+      <div
         className={`${styles["file-remove-icon"]}`}
         onClick={onRemoveFile}
       ><CloseIcon /></div>
@@ -553,18 +556,18 @@ export function ReactDropZone({accept, open, disabled, onUpload}: {
 
   return (
     <div className={styles["dropzone-container"]}>
-      <div { ...getRootProps({ className: styles["dropzone"] }) } >
+      <div {...getRootProps({ className: styles["dropzone"] })} >
         <input className="input-zone" {...getInputProps()} />
         <div className={styles["text-area"]}>
           <div className={styles["upload-icon"]}>
             <UploadIcon />
           </div>
-          <div className={styles["upload-prompts"]} aria-disabled={disabled??false}>
+          <div className={styles["upload-prompts"]} aria-disabled={disabled ?? false}>
             <div>Drag and drop file here</div>
             <div className={styles["upload-hints"]}>Limit 50MB per file • TXT, PDF</div>
           </div>
           <div className={styles["stretch-area"]} />
-          <button type="button" disabled={disabled??false} onClick={open} className={styles["browse-btn"]}>
+          <button type="button" disabled={disabled ?? false} onClick={open} className={styles["browse-btn"]}>
             Browse files
           </button>
         </div>
@@ -573,7 +576,7 @@ export function ReactDropZone({accept, open, disabled, onUpload}: {
         <ul>{files}</ul>
       </aside>
       <div>
-        <button disabled={disabled??false} className={styles["upload-btn"]} onClick={onUploadFile}>
+        <button disabled={disabled ?? false} className={styles["upload-btn"]} onClick={onUploadFile}>
           Upload
         </button>
       </div>
