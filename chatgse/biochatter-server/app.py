@@ -50,7 +50,6 @@ load_dotenv()
 app = Flask(__name__)
 
 DEFAULT_RAGCONFIG = {
-    "useRAG": False,
     "splitByChar": True,
     "chunkSize": 1000,
     "overlapSize": 0,
@@ -93,6 +92,7 @@ def handle():
     frequency_penalty = extract_and_process_params_from_json_body(jsonBody, "frequency_penalty", defaultVal=0)
     top_p = extract_and_process_params_from_json_body(jsonBody, "top_p", defaultVal=1)
     ragConfig = extract_and_process_params_from_json_body(jsonBody, "ragConfig", defaultVal=DEFAULT_RAGCONFIG)
+    useRAG = extract_and_process_params_from_json_body(jsonBody, "useRAG", defaultVal=False)
 
     if not has_conversation(sessionId):
         initialize_conversation(
@@ -107,7 +107,7 @@ def handle():
             }
         )
     try:
-        (msg, usage) = chat(sessionId, messages, auth, ragConfig)
+        (msg, usage) = chat(sessionId, messages, auth, ragConfig, useRAG)
         return {"choices": [{"index": 0, "message": {"role": "assistant", "content": msg}, "finish_reason": "stop"}], "usage": usage, "code": ERROR_OK}
     except MilvusException as e:
         if e.code == pymilvus.Status.CONNECT_FAILED:
@@ -123,12 +123,13 @@ def newDocument():
     tmpFile = extract_and_process_params_from_json_body(jsonBody, 'tmpFile', '')
     filename = extract_and_process_params_from_json_body(jsonBody, 'filename', '')
     ragConfig = extract_and_process_params_from_json_body(jsonBody, 'ragConfig', DEFAULT_RAGCONFIG)
+    useRAG = extract_and_process_params_from_json_body(jsonBody, 'useRAG', False)
     if type(ragConfig) is str:
         ragConfig = json.loads(ragConfig)
     auth = get_auth(request)
     # TODO: consider to be compatible with XinferenceDocumentEmbedder
     try:
-        doc_id = new_embedder_document(authKey=auth,tmpFile=tmpFile, filename=filename, rag_config=ragConfig)
+        doc_id = new_embedder_document(authKey=auth,tmpFile=tmpFile, filename=filename, rag_config=ragConfig, useRAG=useRAG)
         return {"id": doc_id, "code": ERROR_OK}
     except MilvusException as e:
         if e.code == pymilvus.Status.CONNECT_FAILED:

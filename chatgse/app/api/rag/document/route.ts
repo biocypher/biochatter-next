@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { BioChatterServerResponse, getBaseUrl } from "../../common";
-import { BiochatterPath } from "@/app/constant";
+import { BiochatterPath, ERROR_BIOSERVER_OK } from "@/app/constant";
 import { prettyObject } from "@/app/utils/format";
 
 async function handle(request: NextRequest) {
@@ -12,6 +12,7 @@ async function handle(request: NextRequest) {
   try {
     const data = await request.json();
     const docId = data.docId;
+    const connectionArgs = data.connectionArgs;
     const res = await fetch(
       url,
       {
@@ -20,10 +21,14 @@ async function handle(request: NextRequest) {
           [AUTHORIZATION]: authValue,
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({docId})
+        body: JSON.stringify({docId, connectionArgs})
       }
     );
     const jsonBody = await res.json();
+    const value = jsonBody as BioChatterServerResponse;
+    if (value.code !== ERROR_BIOSERVER_OK) {
+      console.error(value.error ?? "Unknown errors occurred in biochatter-server")
+    }
     return NextResponse.json(jsonBody);
   } catch (e: any) {
     console.error(e);

@@ -22,6 +22,7 @@ import { useEffect, useState } from "react";
 import { getHeaders } from "../client/api";
 import { ApiPath, ERROR_BIOSERVER_MILVUS_CONNECT_FAILED, ERROR_BIOSERVER_OK } from "../constant";
 import { InputRange } from "./input-range";
+import { useDebouncedCallback } from "use-debounce";
 
 const AUTHORIZATION = "Authorization";
 const APIKEY = "api-key";
@@ -63,7 +64,7 @@ export function RAGPage() {
   const [host, setHost] = useState("local");
   const [port, setPort] = useState("19530");
 
-  async function updateDocuments() {
+  const updateDocuments = useDebouncedCallback(async () => {
     const RAG_URL = ApiPath.RAG;
     let fetchUrl = RAG_URL as string;
     if (!fetchUrl.endsWith('/')) {
@@ -96,8 +97,8 @@ export function RAGPage() {
     } catch (e: any) {
       console.error(e);
     }
-  }
-  async function updateConnectionStatus() {
+  });
+  const updateConnectionStatus = useDebouncedCallback(async () => {
     const RAG_URL = ApiPath.RAG;
     let fetchUrl = RAG_URL as string;
     if (!fetchUrl.endsWith('/')) {
@@ -128,10 +129,8 @@ export function RAGPage() {
       console.error(e);
       setIsReconnecting(false);
     }
-  }
-  useEffect(() => {
     updateDocuments();
-  }, [ragConfig])
+  });
 
   useEffect(() => {
     updateConnectionStatus();
@@ -148,6 +147,7 @@ export function RAGPage() {
     const data = new FormData();
     data.set('file', file);
     data.set('ragConfig', JSON.stringify(ragConfig));
+    data.set('useRAG', useRAGStore.getState().useRAG as unknown as string);
     
     try {
       setUploading(true);

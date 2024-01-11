@@ -4,8 +4,9 @@ import * as path from "path";
 import { NextRequest, NextResponse } from "next/server";
 import { nanoid } from "nanoid";
 import { getServerSideConfig } from "@/app/config/server";
-import { BiochatterPath, LOCAL_BASE_URL } from "@/app/constant";
+import { BiochatterPath, ERROR_BIOSERVER_OK, LOCAL_BASE_URL } from "@/app/constant";
 import { prettyObject } from "@/app/utils/format";
+import { BioChatterServerResponse } from "../../common";
 
 const serverConfig = getServerSideConfig();
 
@@ -20,7 +21,13 @@ async function writeToTempFile(f: File): Promise<string> {
   return tmpPath;
 }
 
-async function requestNewDocument(tmpFile: string, filename: string, ragConfig: string, authValue: string) {
+async function requestNewDocument(
+  tmpFile: string, 
+  filename: string, 
+  ragConfig: string, 
+  useRAG: string,
+  authValue: string
+) {
   let baseUrl = serverConfig.baseUrl ?? LOCAL_BASE_URL;
   const authHeaderName = "Authorization";
 
@@ -44,12 +51,16 @@ async function requestNewDocument(tmpFile: string, filename: string, ragConfig: 
       [authHeaderName]: authValue,
     },
     method: "POST",
-    body: JSON.stringify({filename, tmpFile, ragConfig}),
+    body: JSON.stringify({filename, tmpFile, ragConfig, useRAG}),
     signal: controller.signal
   };
   try {
     const res = await fetch(fetchUrl, fetchOptions);
     const jsonBody = await res.json();
+    const value = jsonBody as BioChatterServerResponse;
+    if (value.code !== ERROR_BIOSERVER_OK) {
+      console.error(value.error ?? "Unknown errors occurred in biochatter-server")
+    }
     return NextResponse.json(jsonBody);
   } finally {
     clearTimeout(timeoutId);
@@ -62,14 +73,15 @@ async function handle(request: NextRequest) {
   const data = request.formData();
   const file: File | null = (await data).get('file') as unknown as File;
   const ragConfig: string | null = (await data).get('ragConfig') as unknown as string;
-
+  const useRAG: string | null = (await data).get("useRAG") as unknown as string;
+  
   if (!file) {
     return NextResponse.json({ success: false })
   }
 
   try {
     const tmpFile = await writeToTempFile(file);
-    const res = await requestNewDocument(tmpFile, file.name, ragConfig??"", authValue);
+    const res = await requestNewDocument(tmpFile, file.name, ragConfig??"", useRAG??"false", authValue);
     return res;
   } catch (e: any) {
     console.error(e);

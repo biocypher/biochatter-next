@@ -29,6 +29,8 @@ async function handle(request: NextRequest) {
       } else {
         return NextResponse.json({code: ERROR_BIOSERVER_UNKNOW,})
       }
+    } else {
+      console.log(v.error ?? "Unkonw errors occurred in biochatter-server")
     }
     const value = v as any;
     return NextResponse.json({documents: value.documents??[]})

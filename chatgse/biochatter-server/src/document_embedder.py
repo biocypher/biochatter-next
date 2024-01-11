@@ -5,11 +5,11 @@ import logging
 
 logger = logging.getLogger(__name__)
 
-def new_embedder_document(authKey: str, tmpFile: str, filename: str, rag_config: Any):
+def new_embedder_document(authKey: str, tmpFile: str, filename: str, rag_config: Any, useRAG: Optional[bool] = False):
     api_key = authKey
     rag_agent = DocumentEmbedder(
       used=True,
-      use_prompt=rag_config["useRAG"],
+      use_prompt=useRAG,
       chunk_size=rag_config["chunkSize"],
       chunk_overlap=rag_config["overlapSize"],
       split_by_characters=rag_config["splitByChar"],

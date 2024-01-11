@@ -48,7 +48,7 @@ class SessionData:
         self.refreshedAt = self.createdAt
         self.maxAge =  MAX_AGE
 
-    def chat(self, messages: List[str], authKey: str, ragConfig: dict):
+    def chat(self, messages: List[str], authKey: str, ragConfig: dict, useRAG: Optional[bool]=False):
         if self.chatter is None:
             return
         if not messages or len(messages) == 0:
@@ -64,7 +64,7 @@ class SessionData:
         # update rag_agent
         self.chatter.rag_agent = DocumentEmbedder(
             used=True,
-            use_prompt=ragConfig["useRAG"],
+            use_prompt=useRAG,
             chunk_size=ragConfig["chunkSize"],
             chunk_overlap=ragConfig["overlapSize"],
             split_by_characters=ragConfig["splitByChar"],
@@ -73,7 +73,7 @@ class SessionData:
             connection_args=ragConfig["connectionArgs"],
             # doc_ids=ragConfig["docIds"] if "docIds" in ragConfig else None
         )
-        if ragConfig["useRAG"]:
+        if useRAG:
             self.chatter.rag_agent.connect()
         
         text = messages[-1]["content"]
