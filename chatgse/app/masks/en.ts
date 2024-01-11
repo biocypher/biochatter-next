@@ -132,7 +132,7 @@ export const EN_MASKS: BuiltinMask[] = [
   //   createdAt: 1688899480413,
   // }
   {
-    avatar: "🧑‍🔬",
+    avatar: "U+1F600",
     name: "Biomedical research assistant",
     context: [
       {
