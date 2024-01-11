@@ -196,11 +196,11 @@ const en: LocaleType = {
         Name: "About",
         Title: "About",
         Citation: "BioChatter is developed by a multicultural team over on [GitHub](https://github.com/biocypher) ([BioChatter](https://github.com/biocypher/biochatter), [BioChatter Server](https://github.com/biocypher/biochatter-server), [ChatGSE](https://github.com/biocypher/chatgse), [ChatGSE Next](https://github.com/biocypher/chatgse-next)), led by [Sebastian Lobentanzer](https://slobentanzer.github.io/).",
-        ListTitle: "BioChatter is a tool to rapidly contextualise common end results of biomedical analyses. It works by setting up a topic-constrained conversation with a pre-trained language model. Optionally, auxiliary technologies such as knowledge graphs and vector databases can be seamlessly integrated into the conversations. The main benefits of this approach are:",
+        ListTitle: "BioChatter is a tool to integrate biomedical research with current developments in Large Language Models in a user-friendly package. It works by setting up a topic-constrained conversation with a pre-trained language model. Optionally, auxiliary technologies such as knowledge graphs and vector databases can be seamlessly integrated into the conversations. The main benefits of this approach are:",
         ListItems: [
           "Transparency to increase trust in the framework and LLM-driven insights",
           "Modularity of components: use any model, any prompt, and any database",
-          "Native connectivity to BioCypher knowledge graphs",
+          "Native connectivity to BioCypher knowledge graphs and semantic search via vector database embeddings",
           "Integrated safeguards to prevent false information and comparison to curated prior knowledge",
           "Confidentiality of the shared data (as opposed to the ChatGPT interface, which allows storage and reuse of the user's prompts by OpenAI)"
         ],
