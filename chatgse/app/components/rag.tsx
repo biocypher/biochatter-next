@@ -59,10 +59,9 @@ export function RAGPage() {
   const [uploading, setUploading] = useState(false);
   const [connected, setConnected] = useState(false);
   const [isReconnecting, setIsReconnecting] = useState(false);
-  // const [ragConfig, setRagConfig] = useState({...ragStore.currentRAGConfig(), connectionArgs: {...ragStore.currentRAGConfig().connectionArgs}});
   const ragConfig = ragStore.currentRAGConfig();
-  const [host, setHost] = useState("local");
-  const [port, setPort] = useState("19530");
+  const [host, setHost] = useState(ragConfig.connectionArgs?.host??"local");
+  const [port, setPort] = useState(ragConfig.connectionArgs?.port??"19530");
 
   const updateDocuments = useDebouncedCallback(async () => {
     const RAG_URL = ApiPath.RAG;
@@ -74,7 +73,6 @@ export function RAGPage() {
     const theConfig = ragStore.currentRAGConfig();
     console.log(`[updateDocuments] ${theConfig.connectionArgs.host}`);
     console.log(`[updateDocuments] ${ragConfig.connectionArgs.host}`);
-    // console.dir(ragConfig);
     fetchUrl += 'alldocuments';
     try {
       const res = await fetch(fetchUrl, {
@@ -129,7 +127,7 @@ export function RAGPage() {
       console.error(e);
       setIsReconnecting(false);
     }
-    updateDocuments();
+    setTimeout(updateDocuments, 1000);
   });
 
   useEffect(() => {

@@ -158,12 +158,12 @@ def remove_conversation(sessionId: str):
     finally:
         rlock.release()
 
-def chat(sessionId: str, messages: List[str], authKey: str, ragConfig: dict):
+def chat(sessionId: str, messages: List[str], authKey: str, ragConfig: dict, useRAG: bool):
     rlock.acquire()
     try:
         conversation = get_conversation(sessionId=sessionId)
         logger.info(f"get conversation for session id {sessionId}, type of conversation is SessionData {isinstance(conversation, SessionData)}")
-        return conversation.chat(messages=messages, authKey=authKey, ragConfig=ragConfig)
+        return conversation.chat(messages=messages, authKey=authKey, ragConfig=ragConfig, useRAG=useRAG)
     except Exception as e:
         logger.error(e)
         raise e
