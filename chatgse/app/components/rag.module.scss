@@ -15,12 +15,11 @@
     .rag-description {
       flex-grow: 0;
       font-size: 0.8rem;
-      max-height: var(--description-height);
       overflow: auto;
+      padding: 10px;
     }
     .rag-page-content {
       flex-grow: 10;
-      min-height: calc(60vh - var(--modal-padding) - var(--description-height));
       width: 100%;
       display: flex;
       flex-direction: row;
@@ -86,7 +85,7 @@
           .feature-hints {
             flex-grow: 0;
             margin-bottom: 5px;
-            padding: 5px 0;
+            padding: 10px;
           }
           .uploading-prompts {
             flex-grow: 0;

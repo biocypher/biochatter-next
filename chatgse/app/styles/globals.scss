@@ -22,6 +22,17 @@
   --alert-bg: rgb(255, 245, 245);
   --alert-fg: rgb(138, 0, 0);
 
+  --ui-default-foreground: 0 0% 0%;
+  --ui-default-50: 0 0% 98%;
+  --ui-default: 240 5% 84%;
+  --ui-text-opacity: 1;
+  --ui-primary: 212 100% 47%;
+  --ui-secondary: 270 67% 47%;
+  --ui-success: 146 79% 44%;
+  --ui-warning-600: 37 74% 44%;
+  --ui-warning: 37 91% 55%;
+  --ui-danger: 339 90% 51%;
+
   /* shadow */
   --shadow: 50px 50px 100px 10px rgb(0, 0, 0, 0.1);
   --card-shadow: 0px 2px 4px 0px rgb(0, 0, 0, 0.05);
@@ -48,6 +59,17 @@
   --alert-fg: rgb(246, 159, 159);
 
   --bar-color: rgba(255, 255, 255, 0.1);
+
+  --ui-default-foreground: 0 0% 0%;
+  --ui-default-50: 0 0% 98%;
+  --ui-default: 240 5% 84%;
+  --ui-text-opacity: 1;
+  --ui-primary: 212 100% 47%;
+  --ui-secondary: 270 67% 47%;
+  --ui-success: 146 79% 44%;
+  --ui-warning-600: 37 74% 44%;
+  --ui-warning: 37 91% 55%;
+  --ui-danger: 339 90% 51%;
 
   /* shadow */
   --card-shadow: 0px 2px 4px 0px rgba(0, 0, 0, 0.255);
@@ -385,4 +407,29 @@ pre {
 
 .copyable {
   user-select: text;
+}
+
+.snippet.default {
+  color: hsl(var(--ui-default-foreground) / var(--ui-text-opacity));
+  background-color: hsl(var(--ui-default) / 0.4);
+}
+.snippet.primary {
+  color: hsl(var(--ui-primary) / var(--ui-text-opacity));
+  background-color: hsl(var(--ui-primary) / 0.2);
+}
+.snippet.secondary {
+  color: hsl(var(--ui-secondary) / var(--ui-text-opacity));
+  background-color: hsl(var(--ui-secondary) / 0.2);
+}
+.snippet.success {
+  color: hsl(var(--ui-success) / var(--ui-text-opacity));
+  background-color: hsl(var(--ui-success) / 0.2);
+}
+.snippet.warning {
+  color: hsl(var(--ui-warning-600) / var(--ui-text-opacity));
+  background-color: hsl(var(--ui-warning) / 0.2);
+}
+.snippet.danger {
+  color: hsl(var(--ui-danger) / var(--ui-text-opacity));
+  background-color: hsl(var(--ui-danger) / 0.2);
 }

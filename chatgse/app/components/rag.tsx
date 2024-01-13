@@ -247,10 +247,10 @@ export function RAGPage() {
                     <div className={styles["column-label"]}>{Locale.RAG.Documents.Label}</div>
                   </div>
                   <div className={styles["column-body"]}>
-                    {!ragStore.useRAG? (<div className={styles["feature-hints"]}>
+                    {!ragStore.useRAG? (<div className={`${styles["feature-hints"]} snippet warning`}>
                       {Locale.RAG.Documents.DocumentsHints}         
                     </div>) : (<div />)}
-                    <div className={styles["feature-hints"]}>
+                    <div className={`${styles["feature-hints"]} snippet primary`}>
                       {Locale.RAG.Documents.DocumentsPrompts}
                     </div>
                     <div className={styles["feature-hints"]}>
