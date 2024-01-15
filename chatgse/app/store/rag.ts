@@ -14,20 +14,28 @@ export interface RAGConfig {
   chunkSize: number;
   overlapSize: number,
   resultNum: number;
-  docIds?: Array<string>;
+  docIds: Array<string>;
   selectedDocIds?: Array<string>;
 }
 
 export const createEmptyRAGConfig = (
   host?: string, 
-  port?: string
+  port?: string,
+  user?: string,
+  password?: string
 ): RAGConfig => 
 ({
-  connectionArgs: {host: host??"local", port: port??"19530"},
+  connectionArgs: {
+    host: host??"local", 
+    port: port??"19530",
+    user,
+    password
+  },
   splitByChar: true,
   chunkSize: 1000,
   overlapSize: 0,
   resultNum: 3,
+  docIds: []
 });
 
 export const DEFAULT_RAG_STATE = {
@@ -40,7 +48,13 @@ export type RagState = typeof DEFAULT_RAG_STATE;
 
 export const useRAGStore = createPersistStore(
   { ...DEFAULT_RAG_STATE },
-  (set, get) => {
+  (set, _get) => {
+    function get() {
+      return {
+        ..._get(),
+        ...methods,
+      };
+    }
     const methods = {
       getUseRAG() {
         return get().useRAG;
@@ -56,24 +70,28 @@ export const useRAGStore = createPersistStore(
           currentConfigIndex: 0
         }));
       },
-      selectRAGConfig(host: string, port: string) {
+      selectRAGConfig(connectionArgs: DbConnectionArgs) {
+        const { host, port, user, password } = connectionArgs;
         const configs = get().configs;
         const index = configs.findIndex(
           (config) => (host === config.connectionArgs.host && port === config.connectionArgs.port)
         );
         console.log(`[selectRAGConfig] ${host} is ${index}`);
         if (index < 0) {
-          const config = createEmptyRAGConfig(host, port);
+          const config = createEmptyRAGConfig(host, port, user, password);
           set({
             currentConfigIndex: 0,
             configs: [config].concat(configs)
           })
         } else {
-          set((state) =>({
-            currentConfigIndex: index,
-            configs: [...state.configs],
-            useRAG: state.useRAG,
-          }))
+          set((state) => {
+            state.configs[index].connectionArgs = { ...connectionArgs };
+            return {
+              currentConfigIndex: index,
+              configs: [...state.configs],
+              useRAG: state.useRAG
+            };
+          })
           console.log(`[selectRAGConfig] ${get().currentConfigIndex}`);
         }
       },
@@ -97,6 +115,14 @@ export const useRAGStore = createPersistStore(
         const index = get().currentConfigIndex;
         updater(configs[index]);
         set(() => ({configs}));
+      },
+      isHostInRAGConfigs(host: string, port: string): boolean {
+        return get().getRAGConfig(host, port) !== undefined;
+      },
+      getRAGConfig(host: string, port: string): RAGConfig | undefined {
+        const configs = get().configs;
+        const ix = configs.findIndex((config) => (config.connectionArgs.host === host && config.connectionArgs.port === port))
+        return ix >= 0 ? configs[ix] : undefined;
       }
     }
     return methods;

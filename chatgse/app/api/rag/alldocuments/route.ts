@@ -19,7 +19,7 @@ async function handle(request: NextRequest) {
           [AUTHORIZATION]: authValue,
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({connectionArgs: data.connectionArgs})
+        body: JSON.stringify(data)
       }
     );
     const v = (await res.json()) as BioChatterServerResponse;

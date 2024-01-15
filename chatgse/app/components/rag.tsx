@@ -60,8 +60,7 @@ export function RAGPage() {
   const [connected, setConnected] = useState(false);
   const [isReconnecting, setIsReconnecting] = useState(false);
   const ragConfig = ragStore.currentRAGConfig();
-  const [host, setHost] = useState(ragConfig.connectionArgs?.host??"local");
-  const [port, setPort] = useState(ragConfig.connectionArgs?.port??"19530");
+  const [connectionArgs, setConnectionArgs] = useState(ragConfig.connectionArgs);
 
   const updateDocuments = useDebouncedCallback(async () => {
     const RAG_URL = ApiPath.RAG;
@@ -81,7 +80,7 @@ export function RAGPage() {
           ...getAuthHeader(),
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({connectionArgs: theConfig.connectionArgs}),
+        body: JSON.stringify({connectionArgs: theConfig.connectionArgs, docIds: theConfig.docIds}),
       });
       const value = await res.json();
       if (value.documents) {
@@ -102,7 +101,7 @@ export function RAGPage() {
     if (!fetchUrl.endsWith('/')) {
       fetchUrl += '/';
     }
-    const connectionStatusUrl = fetchUrl + "connectionstatus"
+    const connectionStatusUrl = fetchUrl + "connectionstatus";
     setIsReconnecting(true);
     try {
       const res = await fetch(connectionStatusUrl, {
@@ -111,13 +110,13 @@ export function RAGPage() {
           ...getAuthHeader(),
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({connectionArgs: {host, port}}),
+        body: JSON.stringify({connectionArgs}),
       });
       const value = await res.json();
       if (value?.code === ERROR_BIOSERVER_OK && value.status) {
         if (value.status === "connected") {
           setConnected(true);
-          ragStore.selectRAGConfig(host, port);
+          ragStore.selectRAGConfig(connectionArgs);
         } else {
           setConnected(false);
         }
@@ -159,6 +158,14 @@ export function RAGPage() {
       if (!res.ok) {
         throw new Error(await res.text())
       }
+      const result = await res.json();
+      if (result.id !== undefined) {
+        ragStore.updateCurrentRAGConfig(
+          (config) => (
+            config.docIds = config.docIds ? [result.id].concat(config.docIds) : [result.id]
+          )
+        )
+      }
     } catch (e: any) {
       console.log(e);
     } finally {
@@ -184,7 +191,7 @@ export function RAGPage() {
     try {
       const res = await fetch(delPath, {
         method: "DELETE",
-        body: JSON.stringify({docId, connectionArgs: ragConfig.connectionArgs}),
+        body: JSON.stringify({docId, connectionArgs: ragConfig.connectionArgs, docIds: ragConfig.docIds}),
         headers: {
           ...getAuthHeader()
         }
@@ -192,6 +199,15 @@ export function RAGPage() {
       if (!res.ok) {
         throw new Error(await res.text());
       }
+      ragStore.updateCurrentRAGConfig(
+        (config) => {
+          const ix = config.docIds?.indexOf(docId);
+          if (ix === undefined || ix < 0) {
+            return;
+          }
+          config.docIds = config.docIds!.slice(ix);
+        }
+      )
     } catch (e: any) {
       console.error(e);
     }
@@ -337,9 +353,23 @@ export function RAGPage() {
                         <input
                           disabled={!ragStore.useRAG}
                           type="text"
-                          value={host}
+                          value={connectionArgs.host}
                           onChange={(e) => {
-                            setHost(e.currentTarget?.value??"local")
+                            setConnectionArgs({
+                              ...connectionArgs,
+                              host: e.currentTarget?.value??"local"});
+                            if (
+                              e.currentTarget?.value === undefined || 
+                              e.currentTarget?.value.length === 0
+                            ) {
+                              return;
+                            }
+                            const host = e.currentTarget.value;  
+                            const theConfig = ragStore.getRAGConfig(host, connectionArgs.port);
+                            if (!theConfig) {
+                              return;
+                            }
+                            ragStore.selectRAGConfig({...theConfig.connectionArgs})
                           }}
                         ></input>
                       </ListItem>
@@ -349,39 +379,27 @@ export function RAGPage() {
                         <input
                           disabled={!ragStore.useRAG}
                           type="text"
-                          value={port}
+                          value={connectionArgs.port}
                           onChange={(e) => {
-                            setPort(e.currentTarget?.value??"19530")
+                            setConnectionArgs({
+                              ...connectionArgs,
+                              port: e.currentTarget?.value??"19530"
+                            });
+                            if (
+                              e.currentTarget?.value === undefined || 
+                              e.currentTarget?.value.length === 0
+                            ) {
+                              return;
+                            }
+                            const port = e.currentTarget.value;  
+                            const theConfig = ragStore.getRAGConfig(connectionArgs.host, port);
+                            if (!theConfig) {
+                              return;
+                            }
+                            ragStore.selectRAGConfig({...theConfig.connectionArgs})
                           }}
                         ></input>
                       </ListItem>
-                      <ListItem
-                        title={Locale.RAG.Settings.DatabaseUser}
-                      >
-                        <input
-                          disabled
-                          type="text"
-                          onChange={(e) => {
-                            ragStore.updateCurrentRAGConfig(
-                              (config) => (config.connectionArgs.user = e.currentTarget.value)
-                            )
-                          }}
-                        ></input>
-                      </ListItem>
-                      <ListItem
-                        title={Locale.RAG.Settings.DatabasePassword}
-                      >
-                        <input
-                          disabled
-                          type="password"
-                          onChange={(e) => {
-                            ragStore.updateCurrentRAGConfig(
-                              (config) => (config.connectionArgs.password = e.currentTarget.value)
-                            )
-                          }}
-                        ></input>
-                      </ListItem>
-
                     </List>
                     <List>
                       <ListItem

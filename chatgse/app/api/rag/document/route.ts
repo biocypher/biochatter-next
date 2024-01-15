@@ -11,8 +11,6 @@ async function handle(request: NextRequest) {
   const url = `${baseUrl}/${path}`;
   try {
     const data = await request.json();
-    const docId = data.docId;
-    const connectionArgs = data.connectionArgs;
     const res = await fetch(
       url,
       {
@@ -21,7 +19,7 @@ async function handle(request: NextRequest) {
           [AUTHORIZATION]: authValue,
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({docId, connectionArgs})
+        body: JSON.stringify(data)
       }
     );
     const jsonBody = await res.json();

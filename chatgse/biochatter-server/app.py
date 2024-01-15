@@ -71,12 +71,10 @@ def _process_connection_args(name: str, value: Any) -> Any:
     return value
 
 
-def extract_and_process_params_from_json_body(json: Optional[Any], name: str, defaultVal: Optional[Any]) -> Optional[Any]:
+def extract_and_process_params_from_json_body(json: Optional[dict], name: str, defaultVal: Optional[Any]) -> Optional[Any]:
     if not json:
         return defaultVal
-    if not name in json:
-        return defaultVal
-    val = json[name]
+    val = json.get(name, defaultVal)
     val = _process_connection_args(name, val)
     return val
 

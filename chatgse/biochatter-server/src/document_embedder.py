@@ -32,7 +32,7 @@ def get_all_documents(authKey: str, connection_args: Dict, doc_ids: Optional[Lis
     rag_agent = DocumentEmbedder(
         api_key=api_key,
         connection_args=connection_args,
-        # doc_ids=doc_ids
+        documentids_workspace=doc_ids
     )
     rag_agent.connect()
     return rag_agent.get_all_documents()
@@ -42,7 +42,7 @@ def remove_document(docId: str, authKey: str, connection_args, doc_ids: Optional
     rag_agent = DocumentEmbedder(
         api_key=api_key,
         connection_args=connection_args,
-        # doc_ids=doc_ids
+        documentids_workspace=doc_ids
     )
     rag_agent.connect()
     rag_agent.remove_document(doc_id=docId)
