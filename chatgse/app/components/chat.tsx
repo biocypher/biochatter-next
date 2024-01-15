@@ -91,6 +91,7 @@ import { prettyObject } from "../utils/format";
 import { ExportMessageModal } from "./exporter";
 import { getClientConfig } from "../config/client";
 import { useAllModels } from "../utils/hooks";
+import { useRAGStore } from "../store/rag";
 
 const Markdown = dynamic(async () => (await import("./markdown")).Markdown, {
   loading: () => <LoadingIcon />,
@@ -417,6 +418,7 @@ export function ChatActions(props: {
   const config = useAppConfig();
   const navigate = useNavigate();
   const chatStore = useChatStore();
+  const ragStore = useRAGStore();
 
   // switch themes
   const theme = config.theme;
@@ -456,6 +458,7 @@ export function ChatActions(props: {
 
   return (
     <div className={styles["chat-input-actions"]}>
+      <div className={styles["chat-input-action-group"]}>
       {couldStop && (
         <ChatAction
           onClick={stopAll}
@@ -547,6 +550,19 @@ export function ChatActions(props: {
           }}
         />
       )}
+      </div>
+      <div className={styles["chat-toggle-group"]}>
+        <div className={styles["chat-toggle"]}>
+          <label>rag</label>
+          <input 
+            type="checkbox" 
+            checked={ragStore.useRAG}
+            onChange={(e) => (
+              ragStore.setUseRAG(e.currentTarget.checked)
+            )}
+          />
+        </div>
+      </div>
     </div>
   );
 }
