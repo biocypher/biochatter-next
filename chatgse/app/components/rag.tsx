@@ -80,7 +80,7 @@ export function RAGPage() {
           ...getAuthHeader(),
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({connectionArgs: theConfig.connectionArgs, docIds: theConfig.docIds}),
+        body: JSON.stringify({connectionArgs: theConfig.connectionArgs, docIds: theConfig.docIdsWorkspace}),
       });
       const value = await res.json();
       if (value.documents) {
@@ -162,7 +162,7 @@ export function RAGPage() {
       if (result.id !== undefined) {
         ragStore.updateCurrentRAGConfig(
           (config) => (
-            config.docIds = config.docIds ? [result.id].concat(config.docIds) : [result.id]
+            config.docIdsWorkspace = config.docIdsWorkspace ? [result.id].concat(config.docIdsWorkspace) : [result.id]
           )
         )
       }
@@ -191,7 +191,7 @@ export function RAGPage() {
     try {
       const res = await fetch(delPath, {
         method: "DELETE",
-        body: JSON.stringify({docId, connectionArgs: ragConfig.connectionArgs, docIds: ragConfig.docIds}),
+        body: JSON.stringify({docId, connectionArgs: ragConfig.connectionArgs, docIds: ragConfig.docIdsWorkspace}),
         headers: {
           ...getAuthHeader()
         }
@@ -201,11 +201,11 @@ export function RAGPage() {
       }
       ragStore.updateCurrentRAGConfig(
         (config) => {
-          const ix = config.docIds?.indexOf(docId);
+          const ix = config.docIdsWorkspace?.indexOf(docId);
           if (ix === undefined || ix < 0) {
             return;
           }
-          config.docIds = config.docIds!.slice(ix);
+          config.docIdsWorkspace!.splice(ix, 1);
         }
       )
     } catch (e: any) {

@@ -14,7 +14,7 @@ export interface RAGConfig {
   chunkSize: number;
   overlapSize: number,
   resultNum: number;
-  docIds: Array<string>;
+  docIdsWorkspace: Array<string>;
   selectedDocIds?: Array<string>;
 }
 
@@ -35,7 +35,7 @@ export const createEmptyRAGConfig = (
   chunkSize: 1000,
   overlapSize: 0,
   resultNum: 3,
-  docIds: []
+  docIdsWorkspace: []
 });
 
 export const DEFAULT_RAG_STATE = {
