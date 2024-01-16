@@ -10,9 +10,22 @@ import { Path } from "../constant";
 import { showConfirm } from "./ui-lib";
 import { useAppConfig } from "../store";
 
+import React, { useState } from 'react';
+
 export function Welcome() {
   const config = useAppConfig();
   const navigate = useNavigate();
+
+  const [currentWhatMessageIndex, setCurrentWhatMessageIndex] = useState(0);
+  const [currentHowMessageIndex, setCurrentHowMessageIndex] = useState(0);
+
+  const handleWhatClick = () => {
+    setCurrentWhatMessageIndex((prevIndex) => (prevIndex + 1) % Locale.Welcome.Page.WhatMessages.length);
+  };
+
+  const handleHowClick = () => {
+    setCurrentHowMessageIndex((prevIndex) => (prevIndex + 1) % Locale.Welcome.Page.HowMessages.length);
+  };
 
   return (
     <ErrorBoundary>
@@ -26,15 +39,15 @@ export function Welcome() {
           <div className="window-actions">
             <div className="window-action-button">
               <IconButton
-              text={Locale.Welcome.Page.NotShow}
-              onClick={async () => {
-                if (await showConfirm(Locale.NewChat.ConfirmNoShow)) {
-                  config.update(
-                    (config) => (config.dontShowWelcomeSplashScreen = true),
-                  );
-                  navigate(Path.NewChat)
-                }
-              }} />
+                text={Locale.Welcome.Page.NotShow}
+                onClick={async () => {
+                  if (await showConfirm(Locale.NewChat.ConfirmNoShow)) {
+                    config.update(
+                      (config) => (config.dontShowWelcomeSplashScreen = true),
+                    );
+                    navigate(Path.NewChat)
+                  }
+                }} />
             </div>
             <div className="window-action-button">
               <IconButton
@@ -46,33 +59,6 @@ export function Welcome() {
           </div>
         </div>
         <div className={styles["welcome-page-body"]}>
-          <section>
-            <p>
-              <MarkdownContent content={Locale.Welcome.Page.About.Heading1}/>
-            </p>
-            <div className={styles["what-how-messages"]}>
-              <div className={styles["message-column"]}>
-                <h2 className={styles["message-column-title"]}>{Locale.Welcome.Page.What}</h2>
-                <div className={styles["message-list"]}>
-                  {Locale.Welcome.Page.WhatMessages.map((message, messageIndex) => (
-                    <div key={messageIndex} className={styles["message-text"]}>
-                      <MarkdownContent content={message}/>
-                    </div>
-                  ))}
-                </div>
-              </div>
-              <div className={styles["message-column"]}>
-                <h2 className={styles["message-column-title"]}>{Locale.Welcome.Page.How}</h2>
-                <div className={styles["message-list"]}>
-                  {Locale.Welcome.Page.HowMessages.map((message, messageIndex) => (
-                    <div key={messageIndex} className={styles["message-text"]}>
-                      <MarkdownContent content={message}/>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </div>
-          </section>
           <section>
             <div className={styles["alert"]}>
               <MarkdownContent content={Locale.Welcome.Page.Disclaimer} />
@@ -91,7 +77,30 @@ export function Welcome() {
               </p>
             </div>
             <h2>{Locale.Welcome.Page.About.Heading2}</h2>
-            <MarkdownContent content={Locale.Welcome.Page.About.Models}/>
+            <MarkdownContent content={Locale.Welcome.Page.About.Models} />
+            <p>
+              <MarkdownContent content={Locale.Welcome.Page.About.Citation} />
+            </p>
+          </section>
+          <section>
+            <div className={styles["what-how-messages"]}>
+              <div className={styles["message-column"]}>
+                <h2 className={styles["message-column-title"]}>{Locale.Welcome.Page.What}</h2>
+                <div className={styles["message-list"]} onClick={handleWhatClick}>
+                  <div className={styles["message-text"]}>
+                    <MarkdownContent content={Locale.Welcome.Page.WhatMessages[currentWhatMessageIndex]} />
+                  </div>
+                </div>
+              </div>
+              <div className={styles["message-column"]}>
+                <h2 className={styles["message-column-title"]}>{Locale.Welcome.Page.How}</h2>
+                <div className={styles["message-list"]} onClick={handleHowClick}>
+                  <div className={styles["message-text"]}>
+                    <MarkdownContent content={Locale.Welcome.Page.HowMessages[currentHowMessageIndex]} />
+                  </div>
+                </div>
+              </div>
+            </div>
           </section>
         </div>
       </div>

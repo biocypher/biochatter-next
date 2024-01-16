@@ -2,7 +2,7 @@ import * as React from "react";
 
 import styles from "./button.module.scss";
 
-export type ButtonType = "primary" | "danger" | null;
+export type ButtonType = "primary" | "danger" | "informative" | null;
 
 export function IconButton(props: {
   onClick?: () => void;

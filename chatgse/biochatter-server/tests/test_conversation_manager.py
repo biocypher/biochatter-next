@@ -22,7 +22,7 @@ def test_remove_conversation():
     sessionId = "test"
     assert not has_conversation(sessionId)
     initialize_conversation(
-        session=sessionId,
+        sessionId=sessionId,
         modelConfig={
             "model": "gpt-3.5-turbo",
             "temperature": 0.7,

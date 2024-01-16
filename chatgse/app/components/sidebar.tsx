@@ -15,6 +15,7 @@ import DeleteIcon from "../icons/delete.svg";
 import MaskIcon from "../icons/mask.svg";
 import PluginIcon from "../icons/plugin.svg";
 import DragIcon from "../icons/drag.svg";
+import RagIcon from "../icons/rag.svg"
 
 import Locale from "../locales";
 
@@ -223,6 +224,18 @@ export function SideBar(props: { className?: string }) {
         <ChatList narrow={shouldNarrow} />
       </div>
 
+      <div className={styles["sidebar-tail"]}>
+        <div className={styles["sidebar-actions"]}>
+          <div className={styles["sidebar-action"]}>
+            <Link to={Path.RAG}>
+              <IconButton
+                icon={<RagIcon />}
+                title="RAG settings"
+              />
+            </Link>
+          </div>
+        </div>
+      </div>
       <div className={styles["sidebar-tail"]}>
         <div className={styles["sidebar-actions"]}>
           <div className={styles["sidebar-action"] + " " + styles.mobile}>

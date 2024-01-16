@@ -13,6 +13,7 @@ export const DOCS_URL = 'https://biocypher.org'
 export const DEFAULT_CORS_HOST = "https://a.nextweb.fun";
 export const DEFAULT_API_HOST = `${DEFAULT_CORS_HOST}/api/proxy`;
 export const OPENAI_BASE_URL = "https://api.openai.com";
+export const LOCAL_BASE_URL = "http://localhost:5000"
 
 export enum Path {
   Home = "/",
@@ -22,11 +23,13 @@ export enum Path {
   Welcome = "/welcome",
   Masks = "/masks",
   Auth = "/auth",
+  RAG = "/rag"
 }
 
 export enum ApiPath {
   Cors = "/api/cors",
   OpenAI = "/api/openai",
+  RAG = "/api/rag"
 }
 
 export enum SlotID {
@@ -40,13 +43,14 @@ export enum FileName {
 }
 
 export enum StoreKey {
-  Chat = "chat-next-web-store",
+  Chat = "chatgse-next",
   Access = "access-control",
   Config = "app-config",
   Mask = "mask-store",
   Prompt = "prompt-store",
   Update = "chat-update",
   Sync = "sync",
+  RAG = "rag-store",
 }
 
 export const DEFAULT_SIDEBAR_WIDTH = 300;
@@ -76,6 +80,14 @@ export const OpenaiPath = {
   SubsPath: "dashboard/billing/subscription",
   ListModelPath: "v1/models",
 };
+
+export const BiochatterPath = {
+  ChatPath: "v1/chat/completions",
+  NewDocument: "v1/rag/newdocument",
+  AllDocuments: "v1/rag/alldocuments",
+  Document: "v1/rag/document",
+  ConnectionStatus: "v1/rag/connectionstatus",
+}
 
 export const Azure = {
   ExampleEndpoint: "https://{resource-url}/openai/deployments/{deploy-id}",
@@ -160,3 +172,9 @@ export const DEFAULT_MODELS = [
 
 export const CHAT_PAGE_SIZE = 15;
 export const MAX_RENDER_MSG_COUNT = 45;
+
+// biochatter-server error
+export const ERROR_BIOSERVER_OK = 0
+export const ERROR_BIOSERVER_UNKNOW = 5000
+export const ERROR_BIOSERVER_MILVUS_UNKNOWN = 5101
+export const ERROR_BIOSERVER_MILVUS_CONNECT_FAILED = 5102
