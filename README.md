@@ -35,21 +35,13 @@ is a template with the ending `.template`). For using the regular OpenAI API
 
 ### Back-end: BioChatter Server
 
-The client requires a server that runs BioChatter, which is found in
-`chatgse/biochatter-server`.  To run the server, you need to have
-[Docker](https://www.docker.com/) installed.  Then, you can run the following
-code in the `chatgse/biochatter-server` subdirectory:
+The client requires a server (Flask app) that runs BioChatter, which you can
+find at https://github.com/biocypher/biochatter-server. To start it locally,
+please follow the instructions there. You can also run the Docker image
+available at `biocypher/biochatter-server`.
 
 ```console
-docker build -t biochatter-server .
-docker run -p 5000:5000 biochatter-server
-```
-
-Or from the root directory of the project:
-
-```console
-docker build -t biochatter-server -f chatgse/biochatter-server/Dockerfile ./chatgse/biochatter-server
-docker run -p 5000:5000 biochatter-server
+docker run -p 5000:5000 biocypher/biochatter-server
 ```
 
 ## Development
