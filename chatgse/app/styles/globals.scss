@@ -7,12 +7,31 @@
   /* color */
   --white: white;
   --black: rgb(48, 48, 48);
-  --gray: rgb(250, 250, 250);
-  --primary: rgb(29, 147, 171);
-  --second: rgb(231, 248, 255);
+  --gray: rgb(216, 216, 216);
+  --primary: rgb(64, 168, 189);
+  --second: rgba(231, 248, 255, 0.417);
   --hover-color: #f3f3f3;
   --bar-color: rgba(0, 0, 0, 0.1);
+  --gray2: rgb(240, 242, 246);
   --theme-color: var(--gray);
+  --slate500: rgb(100, 116, 139);
+
+  --link: rgb(90, 91, 169);
+  --link-visited: rgb(123, 123, 169);
+
+  --alert-bg: rgb(255, 245, 245);
+  --alert-fg: rgb(138, 0, 0);
+
+  --ui-default-foreground: 0 0% 0%;
+  --ui-default-50: 0 0% 98%;
+  --ui-default: 240 5% 84%;
+  --ui-text-opacity: 1;
+  --ui-primary: 212 100% 47%;
+  --ui-secondary: 270 67% 47%;
+  --ui-success: 146 79% 44%;
+  --ui-warning-600: 37 74% 44%;
+  --ui-warning: 37 91% 55%;
+  --ui-danger: 339 90% 51%;
 
   /* shadow */
   --shadow: 50px 50px 100px 10px rgb(0, 0, 0, 0.1);
@@ -26,21 +45,43 @@
   --theme: dark;
 
   /* color */
-  --white: rgb(30, 30, 30);
-  --black: rgb(187, 187, 187);
-  --gray: rgb(21, 21, 21);
-  --primary: rgb(29, 147, 171);
-  --second: rgb(27 38 42);
-  --hover-color: #323232;
+  --white: rgb(32, 37, 44);
+  --black: rgb(230, 237, 243);
+  --gray: rgb(1, 4, 9);
+  --primary: rgb(53, 83, 115);
+  --second: rgba(33, 52, 73, 0.266);
+  --hover-color: rgb(49, 55, 61);
+
+  --link: rgb(147, 148, 221);
+  --link-visited: rgb(168, 122, 184);
+
+  --alert-bg: rgb(82, 48, 48);
+  --alert-fg: rgb(246, 159, 159);
 
   --bar-color: rgba(255, 255, 255, 0.1);
 
-  --border-in-light: 1px solid rgba(255, 255, 255, 0.192);
+  --ui-default-foreground: 0 0% 0%;
+  --ui-default-50: 0 0% 98%;
+  --ui-default: 240 5% 84%;
+  --ui-text-opacity: 1;
+  --ui-primary: 212 100% 47%;
+  --ui-secondary: 270 67% 47%;
+  --ui-success: 146 79% 44%;
+  --ui-warning-600: 37 74% 44%;
+  --ui-warning: 37 91% 55%;
+  --ui-danger: 339 90% 51%;
+
+  /* shadow */
+  --card-shadow: 0px 2px 4px 0px rgba(0, 0, 0, 0.255);
+
+  --border-in-light: 1px solid rgba(255, 255, 255, 0.218);
 
   --theme-color: var(--gray);
+  --gray2: rgb(96, 96, 96);
+  --slate500: rgb(203, 213, 225);
 
-  div:not(.no-dark) > svg {
-    filter: invert(0.5);
+  div:not(.no-dark)>svg {
+    filter: invert(0.7);
   }
 }
 
@@ -86,6 +127,7 @@
     @include dark;
   }
 }
+
 html {
   height: var(--full-height);
 
@@ -255,13 +297,17 @@ div.math {
   }
 }
 
-.link {
+a {
   font-size: 12px;
-  color: var(--primary);
+  color: var(--link);
   text-decoration: none;
 
   &:hover {
     text-decoration: underline;
+  }
+
+  &:visited {
+    color: var(--link-visited);
   }
 }
 
@@ -305,6 +351,7 @@ pre {
   &:hover {
     filter: brightness(0.9);
   }
+
   &:focus {
     filter: brightness(0.95);
   }
@@ -360,4 +407,29 @@ pre {
 
 .copyable {
   user-select: text;
+}
+
+.snippet.default {
+  color: hsl(var(--ui-default-foreground) / var(--ui-text-opacity));
+  background-color: hsl(var(--ui-default) / 0.4);
+}
+.snippet.primary {
+  color: hsl(var(--ui-primary) / var(--ui-text-opacity));
+  background-color: hsl(var(--ui-primary) / 0.2);
+}
+.snippet.secondary {
+  color: hsl(var(--ui-secondary) / var(--ui-text-opacity));
+  background-color: hsl(var(--ui-secondary) / 0.2);
+}
+.snippet.success {
+  color: hsl(var(--ui-success) / var(--ui-text-opacity));
+  background-color: hsl(var(--ui-success) / 0.2);
+}
+.snippet.warning {
+  color: hsl(var(--ui-warning-600) / var(--ui-text-opacity));
+  background-color: hsl(var(--ui-warning) / 0.2);
+}
+.snippet.danger {
+  color: hsl(var(--ui-danger) / var(--ui-text-opacity));
+  background-color: hsl(var(--ui-danger) / 0.2);
 }

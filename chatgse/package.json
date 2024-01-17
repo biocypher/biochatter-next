@@ -12,7 +12,7 @@
     "app:dev": "yarn tauri dev",
     "app:build": "yarn tauri build",
     "prompts": "node ./scripts/fetch-prompts.mjs",
-    "prepare": "husky install",
+    "prepare": "cd .. && husky install chatgse/.husky",
     "proxy-dev": "sh ./scripts/init-proxy.sh && proxychains -f ./scripts/proxychains.conf yarn dev"
   },
   "dependencies": {
@@ -21,6 +21,7 @@
     "@svgr/webpack": "^6.5.1",
     "@vercel/analytics": "^0.1.11",
     "emoji-picker-react": "^4.5.15",
+    "emoji-regex": "^10.3.0",
     "fuse.js": "^6.6.2",
     "html-to-image": "^1.11.11",
     "mermaid": "^10.6.1",
@@ -29,6 +30,7 @@
     "node-fetch": "^3.3.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "react-dropzone": "^14.2.3",
     "react-markdown": "^8.0.7",
     "react-router-dom": "^6.15.0",
     "rehype-highlight": "^6.0.0",
@@ -44,6 +46,7 @@
   },
   "devDependencies": {
     "@tauri-apps/cli": "^1.4.0",
+    "@types/emoji-regex": "^9.2.0",
     "@types/node": "^20.9.0",
     "@types/react": "^18.2.14",
     "@types/react-dom": "^18.2.7",

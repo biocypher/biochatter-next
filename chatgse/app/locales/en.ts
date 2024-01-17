@@ -81,6 +81,41 @@ const en: LocaleType = {
       SaveAs: "Save as Persona",
     },
     IsContext: "Contextual Prompt",
+    RAG: {
+      Description: "While Large Language Models have access to vast amounts of knowledge, this knowledge only includes what was present in their training set, and thus excludes very current research as well as research articles that are not open access. To fill in the gaps of the model's knowledge, we include a document summarisation approach that stores knowledge from user-provided documents in a vector database, which can be used to supplement the model prompt by retrieving the most relevant contents of the provided documents. This process builds on the unique functionality of vector databases to perform similarity search on the embeddings of the documents' contents.",
+      OK: "OK",
+      Reset: "Reset",
+      Documents: {
+        Label: "Documents",
+        DocumentsHints: "To use the feature, please enable it in the settings panel. →",
+        DocumentsPrompts: "Upload documents one at a time. Upon upload, the document is split according to the settings and the embeddings are stored in the connected vector database.",
+        UploadingMessage: "Embedding and Saving",
+      },
+      Settings: {
+        Label: "Settings",
+        ConnectionStatus: "Connection status",
+        Refresh: "reconnect",
+        Reconnect: "reconnect",
+        DatabaseURL: "Database URL",
+        DatabasePort: "Database port",
+        DatabaseUser: "Database user",
+        DatabasePassword: "Database password",
+        UseRAG: "Use Retrieval Augmented Generation",
+        SplitByChar: "Split by characters (instead of tokens)",
+        ChunkSize: {
+          Label: "Chunk size",
+          subLabel: "How large should the embedded text fragments be?"
+        },
+        Overlap: {
+          Label: "Overlap",
+          subLabel: "Should the chunks overlap, and by how much?",
+        },
+        ResultsNum: {
+          Label: "Number of results",
+          subLabel: "How many chunks should be used to supplement the prompts",
+        }
+      }
+    },
   },
   Export: {
     Title: "Export Messages",
@@ -156,20 +191,21 @@ const en: LocaleType = {
         "Being modular and extensible.",
         "Injecting prior knowledge into LLM queries.",
       ],
-      Disclaimer: "This app is still in development; you are seeing a preview with limited functionality.\nFor more information on our vision of the platform, please see our [preprint](https://arxiv.org/abs/2305.06488)!\nIf you'd like to contribute to the project, please find us on [GitHub](https://github.com/biocypher/ChatGSE) or [Zulip](https://biocypher.zulipchat.com/). We'd love to hear from you!",
+      Disclaimer: "For more information on the platform, please see our [preprint](https://arxiv.org/abs/2305.06488)!\nIf you'd like to contribute to the project, please find us on [GitHub](https://github.com/biocypher/ChatGSE) or [Zulip](https://biocypher.zulipchat.com/). We'd love to hear from you!",
       About: {
         Name: "About",
         Title: "About",
-        Heading1: "BioChatter is developed by [Sebastian Lobentanzer](https://slobentanzer.github.io/); you can find the source code on [GitHub](https://github.com/biocypher/chatgse).",
-        ListTitle: "BioChatter is a tool to rapidly contextualise common end results of biomedical analyses. It works by setting up a topic-constrained conversation with a pre-trained language model. The main benefits of this approach are:",
+        Citation: "BioChatter is developed by a multicultural team over on [GitHub](https://github.com/biocypher) ([BioChatter](https://github.com/biocypher/biochatter), [BioChatter Server](https://github.com/biocypher/biochatter-server), [ChatGSE](https://github.com/biocypher/chatgse), [ChatGSE Next](https://github.com/biocypher/chatgse-next)), led by [Sebastian Lobentanzer](https://slobentanzer.github.io/).",
+        ListTitle: "BioChatter is a tool to integrate biomedical research with current developments in Large Language Models in a user-friendly package. It works by setting up a topic-constrained conversation with a pre-trained language model. Optionally, auxiliary technologies such as knowledge graphs and vector databases can be seamlessly integrated into the conversations. The main benefits of this approach are:",
         ListItems: [
-          "Integration with the low-dimensional outputs of popular bioinformatics tools (e.g. gsea, progeny, decoupler)",
-          "Prompts tuned to biomedical research and your specific queries",
+          "Transparency to increase trust in the framework and LLM-driven insights",
+          "Modularity of components: use any model, any prompt, and any database",
+          "Native connectivity to BioCypher knowledge graphs and semantic search via vector database embeddings",
           "Integrated safeguards to prevent false information and comparison to curated prior knowledge",
           "Confidentiality of the shared data (as opposed to the ChatGPT interface, which allows storage and reuse of the user's prompts by OpenAI)"
         ],
         Heading2: "About the models",
-        Models: "The default model loaded is `OpenAIs gpt-3.5-turbo` model, which in the standard version has a token limit of 4000 per conversation. This model currently comes in two versions, `0301` and `0613`. The latter is the more recent one with improved interpretation of system messages and capabilities to handle functions (returning attribute values of a given function as JSON). Additionally, OpenAI provide a `gpt-3.5-turbo-16k` model with increased token limit of 16000 per conversation. This model is slightly more expensive, but can be useful for longer conversations, particularly when including the document summarisation `/prompt` injection feature."
+        Models: "We offer support of proprietary models via the OpenAI API, as well as open source models via deployment mechanisms such as the Xorbits Inference framework. We also allow running models fully browser based using web assembly integration. You can select models in the settings panel.",
       },
     }
   },
@@ -431,6 +467,44 @@ const en: LocaleType = {
   FineTuned: {
     Sysmessage: "You are an assistant that",
   },
+  RAG: {
+    Page: {
+      Title: "RAG Settings",
+    },
+    Description: "While Large Language Models have access to vast amounts of knowledge, this knowledge only includes what was present in their training set, and thus excludes very current research as well as research articles that are not open access. To fill in the gaps of the model's knowledge, we include a document summarisation approach that stores knowledge from user-provided documents in a vector database, which can be used to supplement the model prompt by retrieving the most relevant contents of the provided documents. This process builds on the unique functionality of vector databases to perform similarity search on the embeddings of the documents' contents.",
+    OK: "OK",
+    Reset: "Reset",
+    Documents: {
+      Label: "Documents",
+      DocumentsHints: "To use the feature, please enable it in the settings panel. →",
+      DocumentsPrompts: "Upload documents one at a time. Upon upload, the document is split according to the settings and the embeddings are stored in the connected vector database.",
+      UploadingMessage: "Embedding and Saving",
+    },
+    Settings: {
+      Label: "Settings",
+      ConnectionStatus: "Connection status",
+      Refresh: "reconnect",
+      Reconnect: "reconnect",
+      DatabaseURL: "Database URL",
+      DatabasePort: "Database port",
+      DatabaseUser: "Database user",
+      DatabasePassword: "Database password",
+      UseRAG: "Use Retrieval Augmented Generation",
+      SplitByChar: "Split by characters (instead of tokens)",
+      ChunkSize: {
+        Label: "Chunk size",
+        subLabel: "How large should the embedded text fragments be?"
+      },
+      Overlap: {
+        Label: "Overlap",
+        subLabel: "Should the chunks overlap, and by how much?",
+      },
+      ResultsNum: {
+        Label: "Number of results",
+        subLabel: "How many chunks should be used to supplement the prompts",
+      }
+    }
+  },
   Mask: {
     Name: "Persona",
     Page: {
@@ -492,6 +566,17 @@ const en: LocaleType = {
     Import: "Import",
     Sync: "Sync",
     Config: "Config",
+    DorpZone: {
+      FileWarning: "File must be 50MB or smaller",
+      UploadPrompts: "Drag and drop file here",
+      UploadHints: "Limit 50MB per file • TXT, PDF",
+      BrowseButton: {
+        Label: "Browse files",
+      },
+      UploadButton: {
+        Label: "Upload"
+      }
+    }
   },
   Exporter: {
     Description: {
