@@ -21,40 +21,33 @@ The client can be accessed in the browser at http://localhost:3000.
 If you want or need to install and run the two services locally and separately,
 you need to have [Node.js](https://nodejs.org/en/) and
 [yarn](https://yarnpkg.com/) installed. Then, you can run the following code in
-the root directory of this repository:
+the `chatgse` directory of this repository:
 
 ```console
+cd chatgse
 yarn install
-yarn --cwd chatgse/ dev
+yarn dev
 ```
 
-Note that for this current version, you need to have present the `.env` and
-`.bioserver.env` environment files present (there are templates for both with
-the ending `.template`). For using the regular OpenAI API (the easiest case),
-you have to supply a valid API key in `.bioserver.env`.
+Note that you need to have the `.bioserver.env` environment file present (there
+is a template with the ending `.template`). For using the regular OpenAI API
+(the easiest case), you have to supply a valid API key in `.bioserver.env`.
 
 ### Back-end: BioChatter Server
 
-The client requires a server that runs BioChatter, which is found in
-`chatgse/biochatter-server`.  To run the server, you need to have
-[Docker](https://www.docker.com/) installed.  Then, you can run the following
-code in the `chatgse/biochatter-server` subdirectory:
+The client requires a server (Flask app) that runs BioChatter, which you can
+find at https://github.com/biocypher/biochatter-server. To start it locally,
+please follow the instructions there. You can also run the Docker image
+available at `biocypher/biochatter-server`.
 
 ```console
-docker build -t biochatter-server .
-docker run -p 5000:5000 biochatter-server
-```
-
-Or from the root directory of the project:
-
-```console
-docker build -t biochatter-server -f chatgse/biochatter-server/Dockerfile ./chatgse/biochatter-server
-docker run -p 5000:5000 biochatter-server
+docker run -p 5000:5000 biocypher/biochatter-server
 ```
 
 ## Development
 
-The front-end has been built as a [Vercel Next.js](https://nextjs.org/docs) application:
+The front-end has been built as a [Vercel Next.js](https://nextjs.org/docs)
+application:
 
 > Next.js is a React framework for building full-stack web applications. You use React Components to build user interfaces, and Next.js for additional features and optimizations.
 

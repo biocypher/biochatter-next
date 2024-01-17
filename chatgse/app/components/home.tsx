@@ -33,12 +33,12 @@ import { useAccessStore } from "../store";
 export function Loading(props: { noLogo?: boolean }) {
   return (
     <div className={styles["loading-content"] + " no-dark"}>
-      {!props.noLogo && <BotIcon width={32} height={32}/>}
+      {!props.noLogo && <BotIcon width={32} height={32} />}
       <LoadingIcon />
-      
+
 
     </div>
-    
+
   );
 }
 const Webllm = dynamic(async () => (await import("./webllm")).Webllm, {
@@ -65,7 +65,9 @@ const MaskPage = dynamic(async () => (await import("./mask")).MaskPage, {
   loading: () => <Loading noLogo />,
 });
 
-
+const RAGPage = dynamic(async () => (await import("./rag")).RAGPage, {
+  loading: () => <Loading noLogo />,
+});
 
 export function useSwitchTheme() {
   const config = useAppConfig();
@@ -152,40 +154,39 @@ function Screen() {
     <div
       className={
         styles.container +
-        ` ${shouldTightBorder ? styles["tight-container"] : styles.container} ${
-          getLang() === "ar" ? styles["rtl-screen"] : ""
+        ` ${shouldTightBorder ? styles["tight-container"] : styles.container} ${getLang() === "ar" ? styles["rtl-screen"] : ""
         }`
       }
-    > 
-    <div className={styles['chatui-hide']}
-      id={`chatui-chat`} >
-    </div>
-    <textarea className={styles['chatui-hide']}
-      
-      id={`chatui-input`} >
-    </textarea>
-    <div className={styles['chatui-hide']}
-      id={"chatui-info-label"} 
-      >
-      send
-      </div>  
-    
-    <select id="chatui-select" className={styles['chatui-hide']}>
-    </select>
+    >
+      <div className={styles['chatui-hide']}
+        id={`chatui-chat`} >
+      </div>
+      <textarea className={styles['chatui-hide']}
 
-    <button
-    className={styles['chatui-hide']}
-      id={"chatui-send-btn"} 
-      
+        id={`chatui-input`} >
+      </textarea>
+      <div className={styles['chatui-hide']}
+        id={"chatui-info-label"}
       >
-      send
-    </button>
+        send
+      </div>
 
-    <button
-      id={"chatui-reset-btn"} 
-      className={styles['chatui-hide']}>
-      reset
-    </button>
+      <select id="chatui-select" className={styles['chatui-hide']}>
+      </select>
+
+      <button
+        className={styles['chatui-hide']}
+        id={"chatui-send-btn"}
+
+      >
+        send
+      </button>
+
+      <button
+        id={"chatui-reset-btn"}
+        className={styles['chatui-hide']}>
+        reset
+      </button>
 
       {isAuth ? (
         <>
@@ -204,11 +205,13 @@ function Screen() {
               <Route path={Path.Chat} element={<Chat />} />
               <Route path={Path.Settings} element={<Settings />} />
               <Route path={Path.Webllm} element={<Webllm />} />
-            </Routes>
-          </div>
+              <Route path={Path.RAG} element={<RAGPage />} />
+            </Routes >
+          </div >
         </>
-      )}
-    </div>
+      )
+      }
+    </div >
   );
 }
 

@@ -1,4 +1,5 @@
 /* eslint-disable @next/next/no-img-element */
+import { useDropzone } from "react-dropzone";
 import styles from "./ui-lib.module.scss";
 import LoadingIcon from "../icons/three-dots.svg";
 import CloseIcon from "../icons/close.svg";
@@ -9,6 +10,8 @@ import ConfirmIcon from "../icons/confirm.svg";
 import CancelIcon from "../icons/cancel.svg";
 import MaxIcon from "../icons/max.svg";
 import MinIcon from "../icons/min.svg";
+import UploadIcon from "../icons/cloud-upload.svg";
+import WarningIcon from "../icons/warning.svg"
 
 import Locale from "../locales";
 
@@ -89,6 +92,15 @@ export function Loading() {
         justifyContent: "center",
       }}
     >
+      <LoadingIcon />
+    </div>
+  );
+}
+
+export function LoadingComponent(props: { noLogo?: boolean, width?: number, height?: 32 }) {
+  return (
+    <div className={styles["loading-content"] + " no-dark"}>
+      {!props.noLogo && <LoadingIcon width={props.width ?? 32} height={props.height ?? 32} />}
       <LoadingIcon />
     </div>
   );
@@ -481,6 +493,92 @@ export function Selector<T>(props: {
             );
           })}
         </List>
+      </div>
+    </div>
+  );
+}
+
+const MAX_FILE_SIZE = 50 * 1024 * 1024; // 50MB
+export function ReactDropZone({ accept, open, disabled, onUpload }: {
+  accept: Record<string, Array<string>>;
+  open?: () => void;
+  disabled?: boolean
+  onUpload: (_: File, done: () => void) => Promise<void>;
+}) {
+  const [fileToUpload, setFileToUpload] = useState<File | undefined>();
+  function onFileDrop(acceptedFiles: Array<File>) {
+    const file = acceptedFiles.length > 0 ? acceptedFiles[0] : undefined;
+    if (file === undefined) {
+      return;
+    }
+    setFileToUpload(acceptedFiles.length > 0 ? acceptedFiles[0] : undefined);
+  }
+  function onRemoveFile() {
+    setFileToUpload(undefined)
+  }
+  async function onUploadFile() {
+    if (fileToUpload === undefined) {
+      return;
+    }
+    await onUpload(fileToUpload, () => {
+      setFileToUpload(undefined);
+    });
+  }
+
+  const { getRootProps, getInputProps, isDragActive, acceptedFiles } =
+    useDropzone({
+      accept,
+      onDrop: onFileDrop,
+      multiple: false,
+      disabled,
+      onDragEnter: undefined,
+      onDragLeave: undefined,
+      onDragOver: undefined,
+    });
+
+  const files = (fileToUpload === undefined ? [] : [fileToUpload]).map((file: any) => (
+    <li key={file.path} className={styles["file-item"]}>
+      <div className={styles["file-info"]}>{file.path} - {file.size} bytes </div>
+      <div className={styles["file-warning"]}>
+        {file.size > MAX_FILE_SIZE ? (
+          <>
+            <div>File must be 50MB or smaller</div>
+            <div className={styles["warning-icon"]}><WarningIcon /></div>
+          </>
+        ) : (<div />)}
+      </div>
+      <div
+        className={`${styles["file-remove-icon"]}`}
+        onClick={onRemoveFile}
+      ><CloseIcon /></div>
+    </li>
+  ));
+
+  return (
+    <div className={styles["dropzone-container"]}>
+      <div {...getRootProps({ className: styles["dropzone"] })} >
+        <input className="input-zone" {...getInputProps()} />
+        <div className={styles["text-area"]}>
+          <div className={styles["upload-icon"]}>
+            <UploadIcon />
+          </div>
+          <div className={styles["upload-prompts"]} aria-disabled={disabled ?? false}>
+            <div>Drag and drop file here</div>
+            <div className={styles["upload-hints"]}>Limit 50MB per file • TXT, PDF</div>
+          </div>
+          <div className={styles["stretch-area"]} />
+          <button type="button" disabled={disabled ?? false} onClick={open} className={styles["browse-btn"]}>
+            Browse files
+          </button>
+        </div>
+      </div>
+      <aside>
+        <ul>{files}</ul>
+      </aside>
+      <div>
+        <button disabled={disabled ?? false} className={styles["upload-btn"]} onClick={onUploadFile}>
+          Upload
+        </button>
       </div>
     </div>
   );

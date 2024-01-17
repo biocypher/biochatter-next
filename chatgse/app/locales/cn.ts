@@ -79,6 +79,41 @@ const cn = {
       SaveAs: "存为面具",
     },
     IsContext: "预设提示词",
+    RAG: {
+      Description: "",
+      OK: "",
+      Reset: "",
+      Documents: {
+        Label: "",
+        DocumentsHints: "",
+        DocumentsPrompts: "",
+        UploadingMessage: "",
+      },
+      Settings: {
+        Label: "",
+        ConnectionStatus: "",
+        Refresh: "",
+        Reconnect: "",
+        DatabaseURL: "",
+        DatabasePort: "",
+        DatabaseUser: "",
+        DatabasePassword: "",
+        UseRAG: "",
+        SplitByChar: "",
+        ChunkSize: {
+          Label: "",
+          subLabel: ""
+        },
+        Overlap: {
+          Label: "",
+          subLabel: "",
+        },
+        ResultsNum: {
+          Label: "",
+          subLabel: "",
+        }
+      }
+    },
   },
   Export: {
     Title: "分享聊天记录",
@@ -157,7 +192,7 @@ const cn = {
       About: {
         Name: "关于",
         Title: "关于",
-        Heading1: "BioChatter 由 [Sebastian Lobentanzer](https://slobentanzer.github.io/) 开发； 你可以在 [GitHub](https://github.com/biocypher/chatgse) 上找到源代码",
+        Citation: "BioChatter 由 [Sebastian Lobentanzer](https://slobentanzer.github.io/) 开发； 你可以在 [GitHub](https://github.com/biocypher/chatgse) 上找到源代码",
         ListTitle: "BioChatter 是一种快速将生物医学分析的常见结果置于背景中的工具。 它的工作原理是使用预先训练的语言模型建立主题受限的对话。 这种方法的主要好处是:",
         ListItems: [
           "与流行生物信息学工具（例如 gsea、progeny、de Coupler) 的低维输出集成",
@@ -425,6 +460,44 @@ const cn = {
   FineTuned: {
     Sysmessage: "你是一个助手",
   },
+  RAG: {
+    Page: {
+      Title: "",
+    },
+    Description: "",
+    OK: "",
+    Reset: "",
+    Documents: {
+      Label: "",
+      DocumentsHints: "",
+      DocumentsPrompts: "",
+      UploadingMessage: "",
+    },
+    Settings: {
+      Label: "",
+      ConnectionStatus: "",
+      Refresh: "",
+      Reconnect: "",
+      DatabaseURL: "",
+      DatabasePort: "",
+      DatabaseUser: "",
+      DatabasePassword: "",
+      UseRAG: "",
+      SplitByChar: "",
+      ChunkSize: {
+        Label: "",
+        subLabel: ""
+      },
+      Overlap: {
+        Label: "",
+        subLabel: "",
+      },
+      ResultsNum: {
+        Label: "",
+        subLabel: "",
+      }
+    }
+  },
   Mask: {
     Name: "面具",
     Page: {
@@ -491,6 +564,17 @@ const cn = {
     Import: "导入",
     Sync: "同步",
     Config: "配置",
+    DorpZone: {
+      FileWarning: "",
+      UploadPrompts: "",
+      UploadHints: "",
+      BrowseButton: {
+        Label: "",
+      },
+      UploadButton: {
+        Label: ""
+      }
+    }
   },
   Exporter: {
     Description: {
@@ -514,8 +598,8 @@ const cn = {
 
 type DeepPartial<T> = T extends object
   ? {
-      [P in keyof T]?: DeepPartial<T[P]>;
-    }
+    [P in keyof T]?: DeepPartial<T[P]>;
+  }
   : T;
 
 export type LocaleType = typeof cn;

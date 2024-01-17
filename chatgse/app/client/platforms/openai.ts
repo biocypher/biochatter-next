@@ -17,6 +17,7 @@ import { prettyObject } from "@/app/utils/format";
 import { getClientConfig } from "@/app/config/client";
 import { makeAzurePath } from "@/app/azure";
 import { EnvironmentPlugin } from "webpack";
+import { useRAGStore } from "@/app/store/rag";
 
 export interface OpenAIListModelResponse {
   object: string;
@@ -79,6 +80,8 @@ export class ChatGPTApi implements LLMApi {
         model: options.config.model,
       },
     };
+    const ragConfig = useRAGStore.getState().currentRAGConfig();
+    const useRAG = useRAGStore.getState().useRAG;
 
     const requestPayload = {
       messages,
@@ -90,6 +93,9 @@ export class ChatGPTApi implements LLMApi {
       top_p: modelConfig.top_p,
       // max_tokens: Math.max(modelConfig.max_tokens, 1024),
       // Please do not ask me why not send max_tokens, no reason, this param is just shit, I dont want to explain anymore.
+      session_id: useChatStore.getState().currentSession().id,
+      useRAG,
+      ragConfig,
     };
 
     console.log("[Request] openai payload: ", requestPayload);
@@ -176,7 +182,7 @@ export class ChatGPTApi implements LLMApi {
               try {
                 const resJson = await res.clone().json();
                 extraInfo = prettyObject(resJson);
-              } catch {}
+              } catch { }
 
               if (res.status === 401) {
                 responseTexts.push(Locale.Error.Unauthorized);
@@ -223,11 +229,11 @@ export class ChatGPTApi implements LLMApi {
         });
       } else {
         const res = await fetch(chatPath, chatPayload);
-        
 
-        
-        if (options.config.model=="mistral-wasm"){
-          
+
+
+        if (options.config.model == "mistral-wasm") {
+
           const resJson = await res.json();
           let message = this.extractMessage(resJson);
           const question = message.split("\n").slice(-1);
@@ -235,67 +241,67 @@ export class ChatGPTApi implements LLMApi {
           input1.value = question;
           let sendbutton = document.getElementById("chatui-send-btn");
           sendbutton.click();
-          
+
           let label = document.getElementById("chatui-info-label");
           const observerOptions = {
             childList: true,
             subtree: true,
             characterData: true
           };
-          const updatemsgs = ( mutationList,observer) =>{
-            for (const mutation of mutationList){
-              if (mutation.type === "childList"){
+          const updatemsgs = (mutationList, observer) => {
+            for (const mutation of mutationList) {
+              if (mutation.type === "childList") {
                 let output = document.getElementById("chatui-chat");
                 const outputText = Array.from(output.childNodes).slice(-2)[0].innerText;
                 const reformedtext = outputText.replaceAll("\n", "").replaceAll("  ", "")
                 const message = reformedtext;
-                
+
                 options.onFinish(message);
                 clearTimeout(requestTimeoutId);
                 console.log("mutation type is subtree")
                 observer.disconnect();
-              }else{
+              } else {
 
                 let output = document.getElementById("chatui-chat");
-                const outputText =  document.getElementById("chatui-status").innerText;
+                const outputText = document.getElementById("chatui-status").innerText;
                 const reformedtext = outputText.replaceAll("\n", "").replaceAll("  ", "")
                 const message = reformedtext;
-                
-                options.onFinish("\'"+message+"\'");
+
+                options.onFinish("\'" + message + "\'");
                 clearTimeout(requestTimeoutId);
-                console.log("mutation type is not subtree but "+ mutation.type)
+                console.log("mutation type is not subtree but " + mutation.type)
                 observer.disconnect();
               }
 
             }
-            
+
           }
-          
-          
+
+
           const observer = new MutationObserver(updatemsgs);
 
           observer.observe(label, observerOptions);
           //observer.disconnect();
-          
-          
 
-          
 
-        }else{
-          
+
+
+
+        } else {
+
           clearTimeout(requestTimeoutId);
           const resJson = await res.json();
           const message = this.extractMessage(resJson);
           options.onFinish(message);
 
         }
-        
 
 
-        
 
 
-        
+
+
+
       }
     } catch (e) {
       console.log("[Request] failed to make a chat request", e);
