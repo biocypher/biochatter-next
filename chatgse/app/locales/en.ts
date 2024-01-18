@@ -506,7 +506,7 @@ const en: LocaleType = {
     }
   },
   Mask: {
-    Name: "Persona",
+    Name: "New Persona",
     Page: {
       Title: "Prompt Template",
       SubTitle: (count: number) => `${count} prompt templates`,
