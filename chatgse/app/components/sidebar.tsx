@@ -216,17 +216,25 @@ export function SideBar(props: { className?: string }) {
         <ChatList narrow={shouldNarrow} />
       </div>
 
-      <div className={styles["sidebar-tail"]}>
-        <div className={styles["sidebar-actions"]}>
-          <div className={styles["sidebar-action"]}>
-            <Link to={Path.RAG}>
-              <IconButton
-                icon={<RagIcon />}
-                title="RAG settings"
-              />
-            </Link>
-          </div>
-        </div>
+      <div className={styles["sidebar-header-bar"]}>
+        <IconButton
+          icon={<RagIcon width={16} height={16} />}
+          text={shouldNarrow ? undefined : 'RAG Settings'}
+          className={styles["sidebar-bar-button"]}
+          onClick={() => {
+            navigate(Path.RAG, { state: { fromHome: true } });
+          }}
+          shadow
+        />
+        <IconButton
+          icon={<RagIcon />}
+          text={shouldNarrow ? undefined : 'KG Settings'}
+          className={styles["sidebar-bar-button"]}
+          onClick={() => {
+            navigate(Path.KG, { state: { fromHome: true } });
+          }}
+          shadow
+        />
       </div>
       <div className={styles["sidebar-tail"]}>
         <div className={styles["sidebar-actions"]}>

@@ -23,7 +23,8 @@ export enum Path {
   Welcome = "/welcome",
   Masks = "/masks",
   Auth = "/auth",
-  RAG = "/rag"
+  RAG = "/rag",
+  KG = "/kg"
 }
 
 export enum ApiPath {
