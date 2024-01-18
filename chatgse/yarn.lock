@@ -1131,6 +1131,11 @@
     "@jridgewell/resolve-uri" "3.1.0"
     "@jridgewell/sourcemap-codec" "1.4.14"
 
+"@mlc-ai/web-llm@^0.2.14":
+  version "0.2.16"
+  resolved "https://registry.yarnpkg.com/@mlc-ai/web-llm/-/web-llm-0.2.16.tgz#e5d64704487411e253695e4ce4a2e36510c9e171"
+  integrity sha512-G49+MJiplFDV9HXSqz/EUou0POcHj8Jv24ttFFKmDJsO6TkLb3NanngZJl/pBkK+qdIi0HIkwGe5BFtYzRCK9A==
+
 "@next/env@13.4.9":
   version "13.4.9"
   resolved "https://registry.yarnpkg.com/@next/env/-/env-13.4.9.tgz#b77759514dd56bfa9791770755a2482f4d6ca93e"
