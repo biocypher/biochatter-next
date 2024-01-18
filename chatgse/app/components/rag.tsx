@@ -403,18 +403,26 @@ export function RAGPage() {
                     </ListItem>
                   </List>
                   <List>
-                    <ListItem
-                      title={Locale.RAG.Settings.SplitByChar}
-                    >
-                      <input
-                        type="checkbox"
-                        checked={ragConfig.splitByChar}
-                        onChange={(e) => {
-                          ragStore.updateCurrentRAGConfig(
-                            (config) => (config.splitByChar = e.currentTarget.checked)
-                          )
-                        }}
-                      ></input>
+                    <ListItem title={Locale.RAG.Settings.SplitByChar}>
+                      <div onChange={(e) => {
+                        const target = e.target as HTMLInputElement;
+                        ragStore.updateCurrentRAGConfig(
+                          (config) => (config.splitByChar = target.value === 'character')
+                        )
+                      }}>
+                        <input
+                          type="radio"
+                          value="character"
+                          checked={ragConfig.splitByChar}
+                          name="split"
+                        /> Character
+                        <input
+                          type="radio"
+                          value="token"
+                          checked={!ragConfig.splitByChar}
+                          name="split"
+                        /> Token
+                      </div>
                     </ListItem>
                     <ListItem
                       title={Locale.RAG.Settings.ChunkSize.Label}

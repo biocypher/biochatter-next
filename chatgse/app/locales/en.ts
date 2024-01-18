@@ -490,7 +490,7 @@ const en: LocaleType = {
       DatabaseUser: "Database user",
       DatabasePassword: "Database password",
       UseRAG: "Use Retrieval Augmented Generation",
-      SplitByChar: "Split by characters (instead of tokens)",
+      SplitByChar: "Split by:",
       ChunkSize: {
         Label: "Chunk size",
         subLabel: "How large should the embedded text fragments be?"
