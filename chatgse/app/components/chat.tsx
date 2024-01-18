@@ -1208,6 +1208,7 @@ function _Chat() {
                     {showActions && (
                       <div className={styles["chat-message-actions"]}>
                         <div className={styles["chat-input-actions"]}>
+                          <div className={styles["chat-input-action-group"]}>
                           {message.streaming ? (
                             <ChatAction
                               text={Locale.Chat.Actions.Stop}
@@ -1240,6 +1241,7 @@ function _Chat() {
                               />
                             </>
                           )}
+                          </div>
                         </div>
                       </div>
                     )}
