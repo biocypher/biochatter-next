@@ -482,22 +482,6 @@ export function ChatActions(props: {
         )}
 
         <ChatAction
-          onClick={nextTheme}
-          text={Locale.Chat.InputActions.Theme[theme]}
-          icon={
-            <>
-              {theme === Theme.Auto ? (
-                <AutoIcon />
-              ) : theme === Theme.Light ? (
-                <LightIcon />
-              ) : theme === Theme.Dark ? (
-                <DarkIcon />
-              ) : null}
-            </>
-          }
-        />
-
-        <ChatAction
           onClick={props.showPromptHints}
           text={Locale.Chat.InputActions.Prompt}
           icon={<PromptIcon />}

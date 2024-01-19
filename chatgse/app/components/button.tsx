@@ -21,8 +21,7 @@ export function IconButton(props: {
     <button
       className={
         styles["icon-button"] +
-        ` ${props.bordered && styles.border} ${props.shadow && styles.shadow} ${
-          props.className ?? ""
+        ` ${props.bordered && styles.border} ${props.shadow && styles.shadow} ${props.className ?? ""
         } clickable ${styles[props.type ?? ""]}`
       }
       onClick={props.onClick}
