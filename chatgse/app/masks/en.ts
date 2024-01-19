@@ -144,7 +144,7 @@ export const EN_MASKS: BuiltinMask[] = [
       {
         id: "biochatter-help-2",
         role: "system",
-        content: "These functionalities include a knowledge graph from the BioCypher framework, which can be queried to provide additional discrete information, and a vector database, in which the user can store embeddings of documents. Both accessories can be configured in the respective settings, including URLs, authentication, and specific settings (in the lower left corner), and switched on or off for every individual prompt using the button in the lower right, above the send button.",
+        content: "These functionalities include a knowledge graph from the BioCypher framework, which can be queried to provide additional discrete information, using the native connection between a BioCypher graph and BioChatter via the schema configuration file; and a vector database, in which the user can store embeddings of documents. Both accessories can be configured in the respective settings, including URLs, authentication, and specific settings (in the lower left corner), and switched on or off for every individual prompt using the button in the lower right, above the send button.",
         date: "",
       },
       {
