@@ -209,7 +209,7 @@ export function SideBar(props: { className?: string }) {
           className={styles["sidebar-bar-button"]}
           onClick={() => {
             if (config.dontShowMaskSplashScreen !== true) {
-              navigate(Path.NewChat, { state: { fromHome: true } });
+              navigate(Path.NewChat);
             } else {
               navigate(Path.Masks, { state: { fromHome: true } });
             }
