@@ -21,7 +21,7 @@ services:
     env_file:
       - .bioserver.env
     ports:
-      - 5000:5000
+      - 5001:5000
     volumes:
       - ./logs:/app/logs
       - ./tmp:/tmp
