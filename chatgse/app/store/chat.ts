@@ -57,6 +57,7 @@ export interface ChatSession {
   clearContextIndex?: number;
 
   mask: Mask;
+  useRAGSession: boolean;
 }
 
 export const DEFAULT_TOPIC = Locale.Store.DefaultTopic;
@@ -80,6 +81,7 @@ function createEmptySession(): ChatSession {
     lastSummarizeIndex: 0,
 
     mask: createEmptyMask(),
+    useRAGSession: false,
   };
 }
 

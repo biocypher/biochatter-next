@@ -532,9 +532,11 @@ export function ChatActions(props: {
           <label>rag</label>
           <input
             type="checkbox"
-            checked={ragStore.useRAG}
+            checked={chatStore.currentSession().useRAGSession}
             onChange={(e) => (
-              ragStore.setUseRAG(e.currentTarget.checked)
+              chatStore.updateCurrentSession(
+                (session) => (session.useRAGSession = e.currentTarget.checked)
+              )
             )}
           />
         </div>
