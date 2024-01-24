@@ -60,7 +60,10 @@ export class ChatGPTApi implements LLMApi {
       path = makeAzurePath(path, accessStore.azureApiVersion);
     }
 
-    return [baseUrl, path].join("/");
+    const subPath = accessStore.subPath;
+    return subPath.length > 0 ? 
+    (['/' + subPath, baseUrl, path].join("/")) :
+    ([baseUrl, path].join("/"));
   }
 
   extractMessage(res: any) {

@@ -1,14 +1,11 @@
 import { useNavigate } from "react-router-dom";
 import { useRAGStore } from "../store/rag";
-import { useChatStore } from "../store";
 import { ErrorBoundary } from "./error";
 import Locale from "../locales";
 
 import { List, ListItem, LoadingComponent, Modal, ReactDropZone, showConfirm } from "./ui-lib";
 
 import CloseIcon from "../icons/close.svg";
-import ResetIcon from "../icons/reload.svg";
-import OKIcon from "../icons/config.svg";
 import SettingsIcon from "../icons/rag-settings.svg";
 import RAGDocumentsIcon from "../icons/rag-documents.svg";
 import ConnectionIcon from "../icons/connection.svg";
@@ -21,6 +18,7 @@ import { IconButton } from "./button";
 import { useEffect, useState } from "react";
 import { getHeaders } from "../client/api";
 import { ApiPath, ERROR_BIOSERVER_MILVUS_CONNECT_FAILED, ERROR_BIOSERVER_OK } from "../constant";
+import { getFetchPath } from "../utils/utils";
 import { InputRange } from "./input-range";
 import { useDebouncedCallback } from "use-debounce";
 
@@ -62,9 +60,10 @@ export function RAGPage() {
   const ragConfig = ragStore.currentRAGConfig();
   const [connectionArgs, setConnectionArgs] = useState(ragConfig.connectionArgs);
 
-  const updateDocuments = useDebouncedCallback(async () => {
-    const RAG_URL = ApiPath.RAG;
-    let fetchUrl = RAG_URL as string;
+    const updateDocuments = useDebouncedCallback(async () => {
+    
+    const RAG_URL = ApiPath.RAG as string;
+    let fetchUrl = getFetchPath(RAG_URL);
     if (!fetchUrl.endsWith('/')) {
       fetchUrl += '/';
     }
@@ -97,7 +96,7 @@ export function RAGPage() {
   });
   const updateConnectionStatus = useDebouncedCallback(async () => {
     const RAG_URL = ApiPath.RAG;
-    let fetchUrl = RAG_URL as string;
+    let fetchUrl = getFetchPath(RAG_URL as string);
     if (!fetchUrl.endsWith('/')) {
       fetchUrl += '/';
     }
@@ -136,7 +135,7 @@ export function RAGPage() {
   async function onUpload(file: File, done: ()=>void) {
     const RAG_URL = ApiPath.RAG;
     const path = "newdocument";
-    let uploadPath = RAG_URL as string;
+    let uploadPath = getFetchPath(RAG_URL as string);
     if (!uploadPath.endsWith('/')) {
       uploadPath += '/';
     }
@@ -183,7 +182,7 @@ export function RAGPage() {
     }
     const RAG_URL = ApiPath.RAG;
     const path = "document";
-    let delPath = RAG_URL as string;
+    let delPath = getFetchPath(RAG_URL as string);
     if (!delPath.endsWith('/')) {
       delPath += '/';
     }
