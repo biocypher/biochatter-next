@@ -16,10 +16,13 @@ import MaskIcon from "../icons/mask.svg";
 import PluginIcon from "../icons/plugin.svg";
 import DragIcon from "../icons/drag.svg";
 import RagIcon from "../icons/rag.svg"
+import LightIcon from "../icons/light.svg";
+import DarkIcon from "../icons/dark.svg";
+import AutoIcon from "../icons/auto.svg";
 
 import Locale from "../locales";
 
-import { useAppConfig, useChatStore } from "../store";
+import { useAppConfig, useChatStore, Theme } from "../store";
 
 import {
   DEFAULT_SIDEBAR_WIDTH,
@@ -140,6 +143,7 @@ export function SideBar(props: { className?: string }) {
   const { onDragStart, shouldNarrow } = useDragSideBar();
   const navigate = useNavigate();
   const config = useAppConfig();
+  const theme = config.theme;
   const isMobileScreen = useMobileScreen();
   const isIOSMobile = useMemo(
     () => isIOS() && isMobileScreen,
@@ -147,6 +151,15 @@ export function SideBar(props: { className?: string }) {
   );
 
   useHotKey();
+
+  // switch themes
+  function nextTheme() {
+    const themes = [Theme.Auto, Theme.Light, Theme.Dark];
+    const themeIndex = themes.indexOf(theme);
+    const nextIndex = (themeIndex + 1) % themes.length;
+    const nextTheme = themes[nextIndex];
+    config.update((config) => (config.theme = nextTheme));
+  }
 
   return (
     <div
@@ -196,7 +209,7 @@ export function SideBar(props: { className?: string }) {
           className={styles["sidebar-bar-button"]}
           onClick={() => {
             if (config.dontShowMaskSplashScreen !== true) {
-              navigate(Path.NewChat, { state: { fromHome: true } });
+              navigate(Path.NewChat);
             } else {
               navigate(Path.Masks, { state: { fromHome: true } });
             }
@@ -216,17 +229,25 @@ export function SideBar(props: { className?: string }) {
         <ChatList narrow={shouldNarrow} />
       </div>
 
-      <div className={styles["sidebar-tail"]}>
-        <div className={styles["sidebar-actions"]}>
-          <div className={styles["sidebar-action"]}>
-            <Link to={Path.RAG}>
-              <IconButton
-                icon={<RagIcon />}
-                title="RAG settings"
-              />
-            </Link>
-          </div>
-        </div>
+      <div className={styles["sidebar-header-bar"]}>
+        <IconButton
+          icon={<RagIcon width={16} height={16} />}
+          text={shouldNarrow ? undefined : 'RAG Settings'}
+          className={styles["sidebar-bar-button"]}
+          onClick={() => {
+            navigate(Path.RAG, { state: { fromHome: true } });
+          }}
+          shadow
+        />
+        <IconButton
+          icon={<RagIcon />}
+          text={shouldNarrow ? undefined : 'KG Settings'}
+          className={styles["sidebar-bar-button"]}
+          onClick={() => {
+            navigate(Path.KG, { state: { fromHome: true } });
+          }}
+          shadow
+        />
       </div>
       <div className={styles["sidebar-tail"]}>
         <div className={styles["sidebar-actions"]}>
@@ -256,19 +277,20 @@ export function SideBar(props: { className?: string }) {
             </a>
           </div>
         </div>
-        <div>
+        <div className={styles["sidebar-action"]}>
           <IconButton
-            icon={<AddIcon />}
-            text={shouldNarrow ? undefined : Locale.Home.NewChat}
-            onClick={() => {
-              if (config.dontShowMaskSplashScreen) {
-                chatStore.newSession();
-                navigate(Path.Chat);
-              } else {
-                navigate(Path.NewChat);
-              }
-            }}
-            shadow
+            icon={
+              <>
+                {theme === Theme.Auto ? (
+                  <AutoIcon />
+                ) : theme === Theme.Light ? (
+                  <LightIcon />
+                ) : theme === Theme.Dark ? (
+                  <DarkIcon />
+                ) : null}
+              </>
+            }
+            onClick={nextTheme}
           />
         </div>
       </div>

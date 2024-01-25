@@ -81,7 +81,7 @@ export class ChatGPTApi implements LLMApi {
       },
     };
     const ragConfig = useRAGStore.getState().currentRAGConfig();
-    const useRAG = useRAGStore.getState().useRAG;
+    const useRAG = useChatStore.getState().currentSession().useRAGSession;
 
     const requestPayload = {
       messages,
