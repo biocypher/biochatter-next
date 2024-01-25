@@ -12,6 +12,7 @@ services:
       - ./tmp:/tmp
     environment:
       - BASE_URL=http://flask-app:5000
+      - SUBPATH=/chatgse
     depends_on:
       - flask-app
  

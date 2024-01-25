@@ -18,6 +18,7 @@ import { prettyObject } from "@/app/utils/format";
 import { getClientConfig } from "@/app/config/client";
 import { makeAzurePath } from "@/app/azure";
 import { useRAGStore } from "@/app/store/rag";
+import { getFetchUrl } from "@/app/utils/utils";
 
 export interface OpenAIListModelResponse {
   object: string;
@@ -60,10 +61,8 @@ export class ChatGPTApi implements LLMApi {
       path = makeAzurePath(path, accessStore.azureApiVersion);
     }
 
-    const subPath = accessStore.subPath;
-    return subPath.length > 0 ? 
-    (['/' + subPath, baseUrl, path].join("/")) :
-    ([baseUrl, path].join("/"));
+    const url = [baseUrl, path].join("/");
+    return getFetchUrl(accessStore.subPath, url);
   }
 
   extractMessage(res: any) {

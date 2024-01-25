@@ -189,14 +189,14 @@ export function useLoadData() {
   }, []);
 }
 
-export function Home() {
+export function Home({subPath}: {subPath: string}) {
   useSwitchTheme();
   useLoadData();
   useHtmlLang();
 
   useEffect(() => {
     console.log("[Config] got config from build time", getClientConfig());
-    useAccessStore.getState().fetch();
+    useAccessStore.getState().fetch(subPath);
   }, []);
 
   if (!useHasHydrated()) {

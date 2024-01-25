@@ -1,11 +1,5 @@
 
-import { useAccessStore } from "../store";
+export const getFetchUrl = (subPath: string, path: string) => (
+  subPath.length > 0 ? subPath + path : path
+);
 
-export const getFetchPath = (path: string) => {
-  const subPath = useAccessStore().subPath;
-  return (
-    subPath && subPath.length > 0 ? 
-    ["/" + subPath, path].join("/") : 
-    path
-  )
-};

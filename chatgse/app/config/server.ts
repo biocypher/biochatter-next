@@ -11,6 +11,7 @@ declare global {
 
       BASE_URL?: string;
       OPENAI_ORG_ID?: string; // openai only
+      subPath: string;
 
       VERCEL?: string;
       BUILD_MODE?: "standalone" | "export";

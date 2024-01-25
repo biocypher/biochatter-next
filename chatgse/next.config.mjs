@@ -85,4 +85,6 @@ if (mode !== "export") {
   };
 }
 
+nextConfig.basePath = "/chatgse";
+
 export default nextConfig;
