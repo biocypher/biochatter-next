@@ -33,11 +33,17 @@ import { useAccessStore } from "../store";
 export function Loading(props: { noLogo?: boolean }) {
   return (
     <div className={styles["loading-content"] + " no-dark"}>
-      {!props.noLogo && <BotIcon width={32} height={32}/>}
+      {!props.noLogo && <BotIcon width={32} height={32} />}
       <LoadingIcon />
+
+
     </div>
+
   );
 }
+const Webllm = dynamic(async () => (await import("./webllm")).Webllm, {
+  loading: () => <Loading noLogo />,
+});
 
 const Settings = dynamic(async () => (await import("./settings")).Settings, {
   loading: () => <Loading noLogo />,
@@ -136,6 +142,7 @@ function Screen() {
   const isHome = location.pathname === Path.Home;
   const isAuth = location.pathname === Path.Auth;
   const isMobileScreen = useMobileScreen();
+
   const shouldTightBorder =
     getClientConfig()?.isApp || (config.tightBorder && !isMobileScreen);
 
@@ -147,11 +154,40 @@ function Screen() {
     <div
       className={
         styles.container +
-        ` ${shouldTightBorder ? styles["tight-container"] : styles.container} ${
-          getLang() === "ar" ? styles["rtl-screen"] : ""
+        ` ${shouldTightBorder ? styles["tight-container"] : styles.container} ${getLang() === "ar" ? styles["rtl-screen"] : ""
         }`
       }
     >
+      <div className={styles['chatui-hide']}
+        id={`chatui-chat`} >
+      </div>
+      <textarea className={styles['chatui-hide']}
+
+        id={`chatui-input`} >
+      </textarea>
+      <div className={styles['chatui-hide']}
+        id={"chatui-info-label"}
+      >
+        send
+      </div>
+
+      <select id="chatui-select" className={styles['chatui-hide']}>
+      </select>
+
+      <button
+        className={styles['chatui-hide']}
+        id={"chatui-send-btn"}
+
+      >
+        send
+      </button>
+
+      <button
+        id={"chatui-reset-btn"}
+        className={styles['chatui-hide']}>
+        reset
+      </button>
+
       {isAuth ? (
         <>
           <AuthPage />
@@ -168,12 +204,14 @@ function Screen() {
               <Route path={Path.Masks} element={<MaskPage />} />
               <Route path={Path.Chat} element={<Chat />} />
               <Route path={Path.Settings} element={<Settings />} />
+              <Route path={Path.Webllm} element={<Webllm />} />
               <Route path={Path.RAG} element={<RAGPage />} />
-            </Routes>
-          </div>
+            </Routes >
+          </div >
         </>
-      )}
-    </div>
+      )
+      }
+    </div >
   );
 }
 

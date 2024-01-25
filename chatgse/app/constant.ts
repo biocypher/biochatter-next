@@ -23,6 +23,7 @@ export enum Path {
   Welcome = "/welcome",
   Masks = "/masks",
   Auth = "/auth",
+  Webllm = "/webllm",
   RAG = "/rag"
 }
 
@@ -114,6 +115,10 @@ export const KnowledgeCutOffDate: Record<string, string> = {
 export const DEFAULT_MODELS = [
   {
     name: "gpt-4",
+    available: true,
+  },
+  {
+    name: "mistral-wasm",
     available: true,
   },
   {

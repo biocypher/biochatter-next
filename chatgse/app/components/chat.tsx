@@ -1247,7 +1247,7 @@ function _Chat() {
                     )}
                   </div>
                   {showTyping && (
-                    <div className={styles["chat-message-status"]}>
+                    <div className={styles["chat-message-status"]} id={`chatui-status`} >
                       {Locale.Chat.Typing}
                     </div>
                   )}

@@ -16,6 +16,7 @@ export function AuthPage() {
 
   const goHome = () => navigate(Path.Home);
   const goChat = () => navigate(Path.Chat);
+  const goWebllm = () => navigate(Path.Webllm);
   const resetAccessCode = () => {
     accessStore.update((access) => {
       access.openaiApiKey = "";

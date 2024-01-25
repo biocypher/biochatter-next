@@ -192,6 +192,9 @@
   overflow-x: hidden;
 }
 
+.chatui-hide {
+  display: none;
+}
 .chat-item {
   padding: 10px 14px;
   background-color: var(--white);
@@ -213,6 +216,7 @@
 .chat-item-selected {
   border-color: var(--primary);
 }
+
 
 .chat-item-title {
   font-size: 14px;

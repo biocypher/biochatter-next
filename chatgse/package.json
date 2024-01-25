@@ -16,6 +16,7 @@
     "proxy-dev": "sh ./scripts/init-proxy.sh && proxychains -f ./scripts/proxychains.conf yarn dev"
   },
   "dependencies": {
+    "@mlc-ai/web-llm": "^0.2.14",
     "@fortaine/fetch-event-source": "^3.0.6",
     "@hello-pangea/dnd": "^16.3.0",
     "@svgr/webpack": "^6.5.1",
