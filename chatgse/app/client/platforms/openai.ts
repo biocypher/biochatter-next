@@ -237,39 +237,60 @@ export class ChatGPTApi implements LLMApi {
           const resJson = await res.json();
           let message = this.extractMessage(resJson);
           const question = message.split("\n").slice(-1);
-          let input1 = document.getElementById("chatui-input");
-          input1.value = question;
-          let sendbutton = document.getElementById("chatui-send-btn");
-          sendbutton.click();
+          
+          let inputValue = (<HTMLInputElement>document.getElementById("chatui-input"));
+          //inputValue = question; 
+          message = JSON.parse(chatPayload.body);
+          inputValue.value = JSON.parse(chatPayload.body)["messages"].slice(-1)[0].content;
+          //console.log("chat input is "+ inputValue.value);
+          
+         
+          
+          let sendbutton : HTMLElement | null = document.getElementById("chatui-send-btn");
+          if (sendbutton){
+            sendbutton.click();
+           // console.log("send button clicked");
+          }
+          
 
-          let label = document.getElementById("chatui-info-label");
+          let label = <HTMLElement> document.getElementById("chatui-info-label");
+          //console.log("got chatui info label");
           const observerOptions = {
             childList: true,
             subtree: true,
             characterData: true
           };
-          const updatemsgs = (mutationList, observer) => {
+          const updatemsgs = (mutationList:any, observer:any) => {
+            //console.log("mutation observer is on");
             for (const mutation of mutationList) {
               if (mutation.type === "childList") {
+                //console.log("mutation childList")
                 let output = document.getElementById("chatui-chat");
-                const outputText = Array.from(output.childNodes).slice(-2)[0].innerText;
-                const reformedtext = outputText.replaceAll("\n", "").replaceAll("  ", "")
-                const message = reformedtext;
+                if (output){
+                  var outputText =<HTMLElement> (Array.from(output.childNodes).slice(-2)[0]);
+                  if (outputText instanceof HTMLElement){
+                    var Text = (outputText).innerText;
+                    const reformedtext = Text.replaceAll("\n", "").replaceAll("  ", "")
+                    const message = reformedtext;
 
-                options.onFinish(message);
-                clearTimeout(requestTimeoutId);
-                console.log("mutation type is subtree")
-                observer.disconnect();
+                    options.onFinish(message);
+                    clearTimeout(requestTimeoutId);
+                   // console.log("mutation type is subtree")
+                    observer.disconnect();
+                  }
+                }
+                
+                
               } else {
-
+                //console.log("mutation others")
                 let output = document.getElementById("chatui-chat");
-                const outputText = document.getElementById("chatui-status").innerText;
-                const reformedtext = outputText.replaceAll("\n", "").replaceAll("  ", "")
+                const outputText =<HTMLElement> document.getElementById("chatui-status");
+                const reformedtext = outputText.innerHTML.replaceAll("\n", "").replaceAll("  ", "")
                 const message = reformedtext;
 
                 options.onFinish("\'" + message + "\'");
                 clearTimeout(requestTimeoutId);
-                console.log("mutation type is not subtree but " + mutation.type)
+                //console.log("mutation type is not subtree but " + mutation.type)
                 observer.disconnect();
               }
 
@@ -279,8 +300,8 @@ export class ChatGPTApi implements LLMApi {
 
 
           const observer = new MutationObserver(updatemsgs);
-
-          observer.observe(label, observerOptions);
+          //console.log("mutation main");
+          observer.observe(label  , observerOptions);
           //observer.disconnect();
 
 
