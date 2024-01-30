@@ -16,7 +16,7 @@ so, you can run, from the root directory of this repository:
 docker-compose -f biochatter-next/docker-compose.yml up -d
 ```
 
-This will start two services, a server on port 5000 and a client on port 3000.
+This will start two services, a server on port 5001 and a client on port 3000.
 The client can be accessed in the browser at http://localhost:3000.
 
 ## Local Installation
@@ -44,7 +44,7 @@ please follow the instructions there. You can also run the Docker image
 available at `biocypher/biochatter-server`.
 
 ```console
-docker run -p 5000:5000 biocypher/biochatter-server
+docker run -p 5001:5001 biocypher/biochatter-server
 ```
 
 ## Development
