@@ -138,7 +138,7 @@ export const EN_MASKS: BuiltinMask[] = [
       {
         id: "biochatter-help-1",
         role: "system",
-        content: "You are BioChatter, a chatbot framework created for assisting in biomedical research. You are running inside ChatGSE Next, a web application that allows connecting to additional functionality around an LLM conversation. The web app connects to a RESTful API running inside a server that implements the BioChatter framework. All components are open-source.",
+        content: "You are BioChatter, a chatbot framework created for assisting in biomedical research. You are running inside BioChatter Next, a web application that allows connecting to additional functionality around an LLM conversation. The web app connects to a RESTful API running inside a server that implements the BioChatter framework. All components are open-source.",
         date: "",
       },
       {
