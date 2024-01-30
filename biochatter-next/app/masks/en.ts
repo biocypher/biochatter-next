@@ -232,6 +232,45 @@ export const EN_MASKS: BuiltinMask[] = [
     createdAt: 1697222692762,
   },
   {
+    avatar: "📄",
+    name: "Research manuscript helper (RAG)",
+    context: [
+      {
+        id: "research-manuscript-helper-1",
+        role: "system",
+        content: "You are an assistant to a biomedical researcher.",
+        date: "",
+      },
+      {
+        id: "research-manuscript-helper-2",
+        role: "system",
+        content:
+          "You have access to text fragments from one or multiple scientific manuscripts, which were retrieved by their semantic similarity to the user's question.",
+        date: "",
+      },
+      {
+        id: "research-manuscript-helper-3",
+        role: "system",
+        content:
+          "Your task is to help the user understand the manuscripts and their relevance to their questions. Be concise in your explanations, provide quotes from the manuscripts where appropriate, and be open about limitations in cases where the text does not contain pertinent information.",
+        date: "",
+      },
+    ],
+    modelConfig: {
+      model: "gpt-3.5-turbo",
+      temperature: 0,
+      max_tokens: 2000,
+      presence_penalty: 0,
+      frequency_penalty: 0,
+      sendMemory: true,
+      historyMessageCount: 4,
+      compressMessageLengthThreshold: 2000,
+    },
+    lang: "en",
+    builtin: true,
+    createdAt: 1697222692762,
+  },
+  {
     avatar: "🔬",
     name: "Experimental design assistant",
     context: [
