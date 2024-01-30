@@ -1,5 +1,5 @@
 export const OWNER = "biocypher";
-export const REPO = "chatgse-next";
+export const REPO = "biochatter-next";
 export const REPO_URL = `https://github.com/${OWNER}/${REPO}`;
 export const ISSUE_URL = `https://github.com/${OWNER}/${REPO}/issues`;
 export const UPDATE_URL = `${REPO_URL}#keep-updated`;
@@ -44,7 +44,7 @@ export enum FileName {
 }
 
 export enum StoreKey {
-  Chat = "chatgse-next",
+  Chat = "biochatter-next",
   Access = "access-control",
   Config = "app-config",
   Mask = "mask-store",

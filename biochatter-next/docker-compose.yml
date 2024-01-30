@@ -1,6 +1,6 @@
 version: "3.9"
 services:
-  chatgse:
+  biochatter-next:
     build:
       context: ./
       dockerfile: Dockerfile
