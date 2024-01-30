@@ -10,10 +10,11 @@ fully featured chat experience.
 
 The client-server combination can be run using Docker Compose. You need to have
 Docker and Docker Compose installed to use this way of building the app. To do
-so, you can run, from the root directory of this repository:
+so, you can run, from the `biochatter-next` directory of this repository:
 
 ```
-docker-compose -f biochatter-next/docker-compose.yml up -d
+cd biochatter-next
+docker-compose up -d
 ```
 
 This will start two services, a server on port 5001 and a client on port 3000.
