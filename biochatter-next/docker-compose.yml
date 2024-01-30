@@ -11,7 +11,7 @@ services:
     volumes:
       - ./tmp:/tmp
     environment:
-      - BASE_URL=http://flask-app:5000
+      - BASE_URL=http://flask-app:5001
     depends_on:
       - flask-app
  
@@ -21,7 +21,7 @@ services:
     env_file:
       - .bioserver.env
     ports:
-      - 5001:5000
+      - 5001:5001
     volumes:
       - ./logs:/app/logs
       - ./tmp:/tmp

@@ -13,7 +13,7 @@ export const DOCS_URL = 'https://biocypher.org'
 export const DEFAULT_CORS_HOST = "https://a.nextweb.fun";
 export const DEFAULT_API_HOST = `${DEFAULT_CORS_HOST}/api/proxy`;
 export const OPENAI_BASE_URL = "https://api.openai.com";
-export const LOCAL_BASE_URL = "http://localhost:5000"
+export const LOCAL_BASE_URL = "http://localhost:5001"
 
 export enum Path {
   Home = "/",
