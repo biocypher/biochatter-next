@@ -1,7 +1,10 @@
-# ChatGSE Next
+# BioChatter Next
 
-This repository contains an adaptation of 
-https://github.com/Yidadaa/ChatGPT-Next-Web. 
+This repository contains the advanced web client of BioChatter, as an 
+adaptation of https://github.com/Yidadaa/ChatGPT-Next-Web. It works in
+conjunction with the [BioChatter
+server](https://github.com/biocypher/biochatter-server) to provide a modern,
+fully featured chat experience.
 
 ## Docker Compose
 
