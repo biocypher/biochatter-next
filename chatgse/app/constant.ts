@@ -52,6 +52,7 @@ export enum StoreKey {
   Update = "chat-update",
   Sync = "sync",
   RAG = "rag-store",
+  KG = "kg-store",
 }
 
 export const DEFAULT_SIDEBAR_WIDTH = 300;

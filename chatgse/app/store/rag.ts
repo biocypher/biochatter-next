@@ -1,13 +1,8 @@
 import { nanoid } from "nanoid";
 import { createPersistStore } from "../utils/store";
 import { StoreKey } from "../constant";
+import { DbConnectionArgs } from "../utils/datatypes";
 
-export interface DbConnectionArgs {
-  host: string;
-  port: string;
-  user?: string;
-  password?: string
-}
 export interface RAGConfig {
   connectionArgs: DbConnectionArgs;
   splitByChar: boolean;
