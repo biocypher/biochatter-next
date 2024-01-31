@@ -1,5 +1,5 @@
 export const OWNER = "biocypher";
-export const REPO = "chatgse-next";
+export const REPO = "biochatter-next";
 export const REPO_URL = `https://github.com/${OWNER}/${REPO}`;
 export const ISSUE_URL = `https://github.com/${OWNER}/${REPO}/issues`;
 export const UPDATE_URL = `${REPO_URL}#keep-updated`;
@@ -13,7 +13,7 @@ export const DOCS_URL = 'https://biocypher.org'
 export const DEFAULT_CORS_HOST = "https://a.nextweb.fun";
 export const DEFAULT_API_HOST = `${DEFAULT_CORS_HOST}/api/proxy`;
 export const OPENAI_BASE_URL = "https://api.openai.com";
-export const LOCAL_BASE_URL = "http://localhost:5000"
+export const LOCAL_BASE_URL = "http://localhost:5001"
 
 export enum Path {
   Home = "/",
@@ -44,7 +44,7 @@ export enum FileName {
 }
 
 export enum StoreKey {
-  Chat = "chatgse-next",
+  Chat = "biochatter-next",
   Access = "access-control",
   Config = "app-config",
   Mask = "mask-store",
