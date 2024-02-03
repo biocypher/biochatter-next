@@ -18,6 +18,7 @@ import styles from "./kg.module.scss";
 import { List, ListItem, LoadingComponent, ReactDropZone } from "./ui-lib";
 import { useDebouncedCallback } from "use-debounce";
 import { ApiPath, ERROR_BIOSERVER_OK, HDR_APPLICATION_JSON, HDR_CONTENT_TYPE } from "../constant";
+import { InputRange } from "./input-range";
 
 const DEFAULT_PORT = "7687";
 const DEFAULT_HOST = "local";
@@ -116,50 +117,6 @@ export function KGPage() {
               <div className={styles["column-container"]}>
                 <div className={styles["column-title"]}>
                   <div className={styles["column-icon"]}>
-                    <DocumentIcon />
-                  </div>
-                  <div className={styles["column-label"]}>{Locale.KG.SchemaConfiguration.Label}</div>
-                </div>
-                <div className={styles["column-body"]}>
-                  {!kgStore.useKG ? (<div className={`${styles["feature-hints"]} snippet warning`}>
-                    {Locale.KG.SchemaConfiguration.DocumentsHints}
-                  </div>) : (<div />)}
-                  <div className={`${styles["feature-hints"]} snippet primary`}>
-                    {Locale.KG.SchemaConfiguration.DocumentsPrompts}
-                  </div>
-                  <div className={styles["feature-hints"]}>
-                    <ReactDropZone
-                      disabled={!kgStore.useKG}
-                      accept={{ "text/yaml": [".yml", ".yaml"] }}
-                      onUpload={onUpload}
-                      fileLabel="YAML, YML"
-                    />
-                  </div>
-                  {(uploading) ? (
-                    <div className={styles["uploading-prompts"]}>
-                      <div style={{ marginLeft: 5, marginRight: 5 }}>
-                        <p>{Locale.KG.SchemaConfiguration.UploadingMessage}
-                        </p>
-                      </div>
-                      <div><LoadingComponent noLogo /></div>
-                    </div>
-                  ) : (<></>)}
-                  <div className={styles["documents"]}>
-                    <ul>
-                      { document && [document].map((doc) => (
-                        <li key={doc ?? ""}>
-                          <DocumentComponent doc={doc} />
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div className={styles["kg-column"]}>
-              <div className={styles["column-container"]}>
-                <div className={styles["column-title"]}>
-                  <div className={styles["column-icon"]}>
                     <SettingsIcon />
                   </div>
                   <div className={styles["column-label"]}>{Locale.KG.Settings.Label}</div>
@@ -229,6 +186,23 @@ export function KGPage() {
                           connectionArgs.port = e.currentTarget?.value??DEFAULT_PORT;
                         }}
                       ></input>
+                    </ListItem>
+                    <ListItem
+                      title={Locale.KG.Settings.ResultsNum.Label}
+                      subTitle={Locale.KG.Settings.ResultsNum.subLabel}
+                    >
+                      <InputRange
+                        disabled={!kgStore.useKG}
+                        value={kgConfig.resultNum}
+                        min="0"
+                        max="20"
+                        step="1"
+                        onChange={(e) => {
+                          kgStore.updateConfig(
+                            (config) => (config.resultNum = Number(e.currentTarget.value))
+                          )
+                        }}
+                      ></InputRange>
                     </ListItem>
                   </List>
                 </div>

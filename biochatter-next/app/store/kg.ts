@@ -32,6 +32,11 @@ export const useKGStore = createPersistStore(
           useKG
         })
       },
+      updateConfig(updater: (config: KGConfig) => void) {
+        const config = get().config;
+        updater(config);
+        set(() => ({config}))
+      }
     };
     return methods;
   },
