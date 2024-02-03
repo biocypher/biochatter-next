@@ -4,13 +4,17 @@ import { DbConnectionArgs } from "../utils/datatypes";
 
 export interface KGConfig {
   connectionArgs: DbConnectionArgs;
+  resultNum: number;
 }
 
 export const createEmptyKGConfig = (): KGConfig => ({
   connectionArgs: {
     host: "local",
     port: "7687",
-  }
+    user: "neo4j",
+    password: "neo4j",
+  },
+  resultNum: 3,
 });
 
 export const DEFAULT_KG_STATE = {

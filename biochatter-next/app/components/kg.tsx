@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router-dom"
 import { useKGStore } from "../store/kg";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { IconButton } from "./button";
 import CloseIcon from "../icons/close.svg";
 import SettingsIcon from "../icons/rag-settings.svg";
@@ -15,9 +15,9 @@ import Locale from "../locales";
 import {Markdown} from "./markdown";
 import { ErrorBoundary } from "./error";
 import styles from "./kg.module.scss";
-import { InputRange } from "./input-range";
 import { List, ListItem, LoadingComponent, ReactDropZone } from "./ui-lib";
 import { useDebouncedCallback } from "use-debounce";
+import { ApiPath, ERROR_BIOSERVER_OK, HDR_APPLICATION_JSON, HDR_CONTENT_TYPE } from "../constant";
 
 const DEFAULT_PORT = "7687";
 const DEFAULT_HOST = "local";
@@ -34,7 +34,30 @@ export function KGPage() {
   const [isReconnecting, setIsReconnecting] = useState(false);
 
   const updateConnectionStatus = useDebouncedCallback(async () => {
-
+    const KG_UAL = ApiPath.KG;
+    let fetchUrl = KG_UAL as string;
+    if (!fetchUrl.endsWith('/')) {
+      fetchUrl += '/';
+    }
+    const connectionStatusUrl = fetchUrl + 'connectionstatus';
+    setIsReconnecting(true);
+    try {
+      const res = await fetch(connectionStatusUrl, {
+        method: "POST",
+        headers: {
+          [HDR_CONTENT_TYPE]: HDR_APPLICATION_JSON,
+        },
+        body: JSON.stringify({connectionArgs})
+      });
+      const value = await res.json();
+      if(value?.code === ERROR_BIOSERVER_OK && value.status) {
+        setConnected(value.status === 'connected');
+      }
+      setIsReconnecting(false);
+    } catch (e: any) {
+      console.error(e);
+      setIsReconnecting(false);
+    }
   });
   async function onUpload(f: File, done: () => void) {}
 
@@ -44,6 +67,10 @@ export function KGPage() {
       onRemoveDocument(doc);
     }
   }
+
+  useEffect(() => {
+    updateConnectionStatus();
+  }, []);
   
   function DocumentComponent({doc}: {doc: string}) {
     return (

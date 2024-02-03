@@ -58,6 +58,7 @@ export interface ChatSession {
 
   mask: Mask;
   useRAGSession: boolean;
+  useKGSession: boolean
 }
 
 export const DEFAULT_TOPIC = Locale.Store.DefaultTopic;
@@ -82,6 +83,7 @@ function createEmptySession(): ChatSession {
 
     mask: createEmptyMask(),
     useRAGSession: false,
+    useKGSession: false,
   };
 }
 

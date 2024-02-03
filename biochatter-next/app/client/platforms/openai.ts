@@ -18,6 +18,7 @@ import { prettyObject } from "@/app/utils/format";
 import { getClientConfig } from "@/app/config/client";
 import { makeAzurePath } from "@/app/azure";
 import { useRAGStore } from "@/app/store/rag";
+import { useKGStore } from "@/app/store/kg";
 
 export interface OpenAIListModelResponse {
   object: string;
@@ -82,6 +83,8 @@ export class ChatGPTApi implements LLMApi {
     };
     const ragConfig = useRAGStore.getState().currentRAGConfig();
     const useRAG = useChatStore.getState().currentSession().useRAGSession;
+    const useKG = useChatStore.getState().currentSession().useKGSession;
+    const kgConfig = useKGStore.getState().config;
 
     const requestPayload = {
       messages,
@@ -95,7 +98,9 @@ export class ChatGPTApi implements LLMApi {
       // Please do not ask me why not send max_tokens, no reason, this param is just shit, I dont want to explain anymore.
       session_id: useChatStore.getState().currentSession().id,
       useRAG,
+      useKG,
       ragConfig,
+      kgConfig,
     };
 
     console.log("[Request] openai payload: ", requestPayload);
