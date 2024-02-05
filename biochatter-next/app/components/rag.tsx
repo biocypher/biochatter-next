@@ -1,14 +1,11 @@
 import { useNavigate } from "react-router-dom";
 import { useRAGStore } from "../store/rag";
-import { useChatStore } from "../store";
 import { ErrorBoundary } from "./error";
 import Locale from "../locales";
 
 import { List, ListItem, LoadingComponent, Modal, ReactDropZone, showConfirm } from "./ui-lib";
 
 import CloseIcon from "../icons/close.svg";
-import ResetIcon from "../icons/reload.svg";
-import OKIcon from "../icons/config.svg";
 import SettingsIcon from "../icons/rag-settings.svg";
 import RAGDocumentsIcon from "../icons/rag-documents.svg";
 import ConnectionIcon from "../icons/connection.svg";
@@ -19,20 +16,11 @@ import styles from "./rag.module.scss";
 
 import { IconButton } from "./button";
 import { useEffect, useState } from "react";
-import { getHeaders } from "../client/api";
 import { ApiPath, ERROR_BIOSERVER_MILVUS_CONNECT_FAILED, ERROR_BIOSERVER_OK } from "../constant";
 import { InputRange } from "./input-range";
 import { useDebouncedCallback } from "use-debounce";
+import { requestAllVSDocuments, requestRemoveDocument, requestUploadFile, requestVSConnectionStatus } from "../client/datarequest";
 
-const AUTHORIZATION = "Authorization";
-const APIKEY = "api-key";
-function getAuthHeader(): Record<string, string> {
-  const jsonHeaders = getHeaders();
-  if (jsonHeaders[AUTHORIZATION]) {
-    return { [AUTHORIZATION]: jsonHeaders[AUTHORIZATION] };
-  }
-  return { [APIKEY]: jsonHeaders[APIKEY] };
-}
 
 function getDocumentName(doc: any) {
   if (!doc) {
@@ -63,25 +51,14 @@ export function RAGPage() {
   const [connectionArgs, setConnectionArgs] = useState(ragConfig.connectionArgs);
 
   const updateDocuments = useDebouncedCallback(async () => {
-    const RAG_URL = ApiPath.RAG;
-    let fetchUrl = RAG_URL as string;
-    if (!fetchUrl.endsWith('/')) {
-      fetchUrl += '/';
-    }
-
     const theConfig = ragStore.currentRAGConfig();
     console.log(`[updateDocuments] ${theConfig.connectionArgs.host}`);
     console.log(`[updateDocuments] ${ragConfig.connectionArgs.host}`);
-    fetchUrl += 'alldocuments';
+    
     try {
-      const res = await fetch(fetchUrl, {
-        method: 'POST',
-        headers: {
-          ...getAuthHeader(),
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ connectionArgs: theConfig.connectionArgs, docIds: theConfig.docIdsWorkspace }),
-      });
+      const res = await requestAllVSDocuments(
+        theConfig.connectionArgs, theConfig.docIdsWorkspace
+      );
       const value = await res.json();
       if (value.documents) {
         setDocuments(value.documents);
@@ -104,14 +81,7 @@ export function RAGPage() {
     const connectionStatusUrl = fetchUrl + "connectionstatus";
     setIsReconnecting(true);
     try {
-      const res = await fetch(connectionStatusUrl, {
-        method: 'POST',
-        headers: {
-          ...getAuthHeader(),
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ connectionArgs }),
-      });
+      const res = await requestVSConnectionStatus(connectionArgs);
       const value = await res.json();
       if (value?.code === ERROR_BIOSERVER_OK && value.status) {
         if (value.status === "connected") {
@@ -134,27 +104,11 @@ export function RAGPage() {
   }, []);
 
   async function onUpload(file: File, done: () => void) {
-    const RAG_URL = ApiPath.RAG;
-    const path = "newdocument";
-    let uploadPath = RAG_URL as string;
-    if (!uploadPath.endsWith('/')) {
-      uploadPath += '/';
-    }
-    uploadPath += path;
-    const data = new FormData();
-    data.set('file', file);
-    data.set('ragConfig', JSON.stringify(ragConfig));
-    data.set('useRAG', useRAGStore.getState().useRAG as unknown as string);
-
     try {
       setUploading(true);
-      const res = await fetch(uploadPath, {
-        method: "POST",
-        body: data,
-        headers: {
-          ...getAuthHeader(),
-        },
-      });
+      const res = await requestUploadFile(
+        file, ragConfig, useRAGStore.getState().useRAG
+      );
       if (!res.ok) {
         throw new Error(await res.text())
       }
@@ -181,21 +135,12 @@ export function RAGPage() {
     if (!await showConfirm(`Are you sure to remove the document?`)) {
       return;
     }
-    const RAG_URL = ApiPath.RAG;
-    const path = "document";
-    let delPath = RAG_URL as string;
-    if (!delPath.endsWith('/')) {
-      delPath += '/';
-    }
-    delPath += path;
     try {
-      const res = await fetch(delPath, {
-        method: "DELETE",
-        body: JSON.stringify({ docId, connectionArgs: ragConfig.connectionArgs, docIds: ragConfig.docIdsWorkspace }),
-        headers: {
-          ...getAuthHeader()
-        }
-      });
+      const res = await requestRemoveDocument(
+        ragConfig.connectionArgs,
+        docId,
+        ragConfig.docIdsWorkspace
+      )      
       if (!res.ok) {
         throw new Error(await res.text());
       }

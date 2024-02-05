@@ -19,9 +19,10 @@ import { List, ListItem, LoadingComponent, ReactDropZone } from "./ui-lib";
 import { useDebouncedCallback } from "use-debounce";
 import { ApiPath, ERROR_BIOSERVER_OK, HDR_APPLICATION_JSON, HDR_CONTENT_TYPE } from "../constant";
 import { InputRange } from "./input-range";
+import { requestKGConnectionStatus } from "../client/datarequest";
 
 const DEFAULT_PORT = "7687";
-const DEFAULT_HOST = "local";
+const DEFAULT_HOST = "";
 
 export function KGPage() {
   const navigate = useNavigate();
@@ -34,22 +35,11 @@ export function KGPage() {
   const [connected, setConnected] = useState(false);
   const [isReconnecting, setIsReconnecting] = useState(false);
 
-  const updateConnectionStatus = useDebouncedCallback(async () => {
-    const KG_UAL = ApiPath.KG;
-    let fetchUrl = KG_UAL as string;
-    if (!fetchUrl.endsWith('/')) {
-      fetchUrl += '/';
-    }
-    const connectionStatusUrl = fetchUrl + 'connectionstatus';
+
+  const updateConnectionStatus = useDebouncedCallback(async () => {    
     setIsReconnecting(true);
     try {
-      const res = await fetch(connectionStatusUrl, {
-        method: "POST",
-        headers: {
-          [HDR_CONTENT_TYPE]: HDR_APPLICATION_JSON,
-        },
-        body: JSON.stringify({connectionArgs})
-      });
+      const res = await requestKGConnectionStatus(connectionArgs);
       const value = await res.json();
       if(value?.code === ERROR_BIOSERVER_OK && value.status) {
         setConnected(value.status === 'connected');
@@ -60,7 +50,6 @@ export function KGPage() {
       setIsReconnecting(false);
     }
   });
-  async function onUpload(f: File, done: () => void) {}
 
   async function onRemoveDocument(doc: string) {}
   const make_remove_function = (doc: string) => {
@@ -171,7 +160,15 @@ export function KGPage() {
                         type="text"
                         value={connectionArgs.host}
                         onChange={(e) => {
-                          connectionArgs.host = e.currentTarget?.value ?? DEFAULT_HOST;
+                          setConnectionArgs({
+                            ...connectionArgs,
+                            host:e.currentTarget?.value??DEFAULT_HOST
+                          });
+                          kgStore.updateConfig(
+                            (config) => (
+                              config.connectionArgs.host = e.currentTarget?.value??DEFAULT_HOST
+                            )
+                          )
                         }}
                       ></input>
                     </ListItem>
@@ -183,7 +180,15 @@ export function KGPage() {
                         type="text"
                         value={connectionArgs.port}
                         onChange={(e) => {
-                          connectionArgs.port = e.currentTarget?.value??DEFAULT_PORT;
+                          setConnectionArgs({
+                            ...connectionArgs,
+                            port: e.currentTarget?.value??DEFAULT_PORT
+                          });
+                          kgStore.updateConfig(
+                            (config) => (
+                              config.connectionArgs.port = e.currentTarget?.value??DEFAULT_PORT
+                            )
+                          )
                         }}
                       ></input>
                     </ListItem>
