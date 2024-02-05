@@ -1,25 +1,25 @@
 import { useNavigate } from "react-router-dom"
-import { useKGStore } from "../store/kg";
+import { useDebouncedCallback } from "use-debounce";
 import { useEffect, useState } from "react";
+import { useKGStore } from "../store/kg";
 import { IconButton } from "./button";
 import CloseIcon from "../icons/close.svg";
 import SettingsIcon from "../icons/rag-settings.svg";
-import DocumentIcon from "../icons/rag-documents.svg";
 import ClearIcon from "../icons/clear.svg";
 import ReloadingIcon from "../icons/three-dots.svg";
 import ConnectionIcon from "../icons/connection.svg";
 
-
 import Locale from "../locales";
 
+import { ERROR_BIOSERVER_OK } from "../constant";
+import { requestKGConnectionStatus } from "../client/datarequest";
 import {Markdown} from "./markdown";
 import { ErrorBoundary } from "./error";
 import styles from "./kg.module.scss";
-import { List, ListItem, LoadingComponent, ReactDropZone } from "./ui-lib";
-import { useDebouncedCallback } from "use-debounce";
-import { ApiPath, ERROR_BIOSERVER_OK, HDR_APPLICATION_JSON, HDR_CONTENT_TYPE } from "../constant";
+import { List, ListItem } from "./ui-lib";
+
 import { InputRange } from "./input-range";
-import { requestKGConnectionStatus } from "../client/datarequest";
+
 
 const DEFAULT_PORT = "7687";
 const DEFAULT_HOST = "";

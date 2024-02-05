@@ -6,13 +6,13 @@ import { getHeaders } from "./api";
 const AUTHORIZATION = "Authorization";
 const APIKEY = "api-key";
 function get_auth_header(): Record<string, string> {
-    const jsonHeaders = getHeaders();
-    if (jsonHeaders[AUTHORIZATION]) {
-      return { [AUTHORIZATION]: jsonHeaders[AUTHORIZATION] };
-    }
-    return { [APIKEY]: jsonHeaders[APIKEY] };
+  const jsonHeaders = getHeaders();
+  if (jsonHeaders[AUTHORIZATION]) {
+    return { [AUTHORIZATION]: jsonHeaders[AUTHORIZATION] };
   }
-  
+  return { [APIKEY]: jsonHeaders[APIKEY] };
+}
+
 export const requestKGConnectionStatus = async (
   connectionArgs: DbConnectionArgs
 ) => {
