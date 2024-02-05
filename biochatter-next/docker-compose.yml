@@ -28,8 +28,11 @@ services:
     environment:
       - HOST=standalone
       - PORT=19530
+      - KGHOST=pole
+      - KGPORT=7687
     depends_on:
       - "standalone"
+      - "pole"
 
   etcd:
     container_name: milvus-etcd
@@ -73,6 +76,18 @@ services:
     depends_on:
       - "etcd"
       - "minio"
+
+  pole:
+    container_name: neo4j-pole
+    image: biocypher/neo4j-pole:0.1.0
+    environment:
+      NEO4J_dbms_security_auth__enabled: "false"
+      NEO4J_dbms_databases_default__to__read__only: "false"
+      NEO4J_ACCEPT_LICENSE_AGREEMENT: "yes"
+    ports:
+      - "0.0.0.0:7474:7474"
+      - "0.0.0.0:7687:7687"
+
 
 networks:
   default:
