@@ -460,6 +460,33 @@ const cn = {
   FineTuned: {
     Sysmessage: "你是一个助手",
   },
+  KG: {
+    Page: {
+      Title: ""
+    },
+    Description: "",
+    SchemaConfiguration: {
+      Label: "",
+      DocumentsHints: "",
+      DocumentsPrompts: "",
+      UploadingMessage: "",
+    },
+    Settings: {
+      Label: "",
+      ConnectionStatus: "",
+      Refresh: "",
+      Reconnect: "",
+      DatabaseURL: "",
+      DatabasePort: "",
+      DatabaseUser: "",
+      DatabasePassword: "",
+      useKG: "",
+      ResultsNum: {
+        Label: "",
+        subLabel: "",
+      }
+    }
+  },
   RAG: {
     Page: {
       Title: "",

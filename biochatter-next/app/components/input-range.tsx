@@ -9,6 +9,7 @@ interface InputRangeProps {
   min: string;
   max: string;
   step: string;
+  disabled?: boolean
 }
 
 export function InputRange({
@@ -19,11 +20,13 @@ export function InputRange({
   min,
   max,
   step,
+  disabled,
 }: InputRangeProps) {
   return (
     <div className={styles["input-range"] + ` ${className ?? ""}`}>
       {title || value}
       <input
+        disabled={disabled??false}
         type="range"
         title={title}
         value={value}

@@ -92,6 +92,7 @@ import { ExportMessageModal } from "./exporter";
 import { getClientConfig } from "../config/client";
 import { useAllModels } from "../utils/hooks";
 import { useRAGStore } from "../store/rag";
+import { useKGStore } from "../store/kg";
 
 const Markdown = dynamic(async () => (await import("./markdown")).Markdown, {
   loading: () => <LoadingIcon />,
@@ -419,6 +420,7 @@ export function ChatActions(props: {
   const navigate = useNavigate();
   const chatStore = useChatStore();
   const ragStore = useRAGStore();
+  const kgStore = useKGStore();
 
   // switch themes
   const theme = config.theme;
@@ -536,6 +538,18 @@ export function ChatActions(props: {
             onChange={(e) => (
               chatStore.updateCurrentSession(
                 (session) => (session.useRAGSession = e.currentTarget.checked)
+              )
+            )}
+          />
+        </div>
+        <div className={styles["chat-toggle"]}>
+          <label>kg</label>
+          <input
+            type="checkbox"
+            checked={chatStore.currentSession().useKGSession}
+            onChange={(e) => (
+              chatStore.updateCurrentSession(
+                (session) => (session.useKGSession = e.currentTarget.checked)
               )
             )}
           />

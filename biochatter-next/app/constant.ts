@@ -30,7 +30,8 @@ export enum Path {
 export enum ApiPath {
   Cors = "/api/cors",
   OpenAI = "/api/openai",
-  RAG = "/api/rag"
+  RAG = "/api/rag",
+  KG = "/api/kg",
 }
 
 export enum SlotID {
@@ -52,6 +53,7 @@ export enum StoreKey {
   Update = "chat-update",
   Sync = "sync",
   RAG = "rag-store",
+  KG = "kg-store",
 }
 
 export const DEFAULT_SIDEBAR_WIDTH = 300;
@@ -66,7 +68,7 @@ export const UNFINISHED_INPUT = (id: string) => "unfinished-input-" + id;
 
 export const STORAGE_KEY = "chatgpt-next-web";
 
-export const REQUEST_TIMEOUT_MS = 60000;
+export const REQUEST_TIMEOUT_MS = 60000 * 3; // 3 mins
 
 export const EXPORT_MESSAGE_CLASS_NAME = "export-markdown";
 
@@ -87,7 +89,8 @@ export const BiochatterPath = {
   NewDocument: "v1/rag/newdocument",
   AllDocuments: "v1/rag/alldocuments",
   Document: "v1/rag/document",
-  ConnectionStatus: "v1/rag/connectionstatus",
+  RAGConnectionStatus: "v1/rag/connectionstatus",
+  KGConnectionStatus: "v1/kg/connectionstatus",
 }
 
 export const Azure = {
@@ -179,3 +182,6 @@ export const ERROR_BIOSERVER_OK = 0
 export const ERROR_BIOSERVER_UNKNOW = 5000
 export const ERROR_BIOSERVER_MILVUS_UNKNOWN = 5101
 export const ERROR_BIOSERVER_MILVUS_CONNECT_FAILED = 5102
+ 
+export const HDR_CONTENT_TYPE = "Content-Type";
+export const HDR_APPLICATION_JSON = "application/json";

@@ -4,11 +4,9 @@ import { BiochatterPath, ERROR_BIOSERVER_MILVUS_CONNECT_FAILED, ERROR_BIOSERVER_
 import { prettyObject } from "@/app/utils/format";
 
 async function handle(request: NextRequest) {
-  const AUTHORIZATION = "Authorization"
-  const authValue = request.headers.get(AUTHORIZATION) ?? "";
   const baseUrl = getBaseUrl();
   const data = await request.json();
-  const path = BiochatterPath.RAGConnectionStatus;
+  const path = BiochatterPath.KGConnectionStatus;
   const url = `${baseUrl}/${path}`;
   try {
     const res = await fetch(
@@ -16,7 +14,6 @@ async function handle(request: NextRequest) {
       {
         method: "POST",
         headers: {
-          [AUTHORIZATION]: authValue,
           "Content-Type": "application/json",
         },
         body: JSON.stringify({connectionArgs: data.connectionArgs}),
