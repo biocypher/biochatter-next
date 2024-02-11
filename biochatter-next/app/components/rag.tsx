@@ -123,7 +123,7 @@ export function RAGPage() {
         throw new Error(await res.text())
       }
       const result = await res.json();
-      if (result.id !== undefined) {
+      if (result.id !== undefined && result.id !== null) {
         ragStore.updateCurrentRAGConfig(
           (config) => (
             config.docIdsWorkspace = config.docIdsWorkspace ? [result.id].concat(config.docIdsWorkspace) : [result.id]
