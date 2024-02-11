@@ -498,7 +498,7 @@ export function Selector<T>(props: {
   );
 }
 
-const MAX_FILE_SIZE = 50 * 1024 * 1024; // 50MB
+const MAX_FILE_SIZE = 10 * 1024 * 1024; // 10MB
 export function ReactDropZone({ accept, open, disabled, onUpload, fileLabel }: {
   accept: Record<string, Array<string>>;
   open?: () => void;
@@ -544,7 +544,7 @@ export function ReactDropZone({ accept, open, disabled, onUpload, fileLabel }: {
       <div className={styles["file-warning"]}>
         {file.size > MAX_FILE_SIZE ? (
           <>
-            <div>File must be 50MB or smaller</div>
+            <div>{Locale.UI.DorpZone.FileWarning}</div>
             <div className={styles["warning-icon"]}><WarningIcon /></div>
           </>
         ) : (<div />)}
@@ -566,7 +566,7 @@ export function ReactDropZone({ accept, open, disabled, onUpload, fileLabel }: {
           </div>
           <div className={styles["upload-prompts"]} aria-disabled={disabled ?? false}>
             <div>Drag and drop file here</div>
-            <div className={styles["upload-hints"]}>{`Limit 50MB per file • ${theFileLabel}`}</div>
+            <div className={styles["upload-hints"]}>{`${Locale.UI.DorpZone.UploadHints} ${theFileLabel}`}</div>
           </div>
           <div className={styles["stretch-area"]} />
           <button type="button" disabled={disabled ?? false} onClick={open} className={styles["browse-btn"]}>

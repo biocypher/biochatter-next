@@ -594,9 +594,9 @@ const en: LocaleType = {
     Sync: "Sync",
     Config: "Config",
     DorpZone: {
-      FileWarning: "File must be 50MB or smaller",
+      FileWarning: "File must be 10MB or smaller",
       UploadPrompts: "Drag and drop file here",
-      UploadHints: "Limit 50MB per file • TXT, PDF",
+      UploadHints: "Limit 10MB per file • ",
       BrowseButton: {
         Label: "Browse files",
       },
