@@ -12,7 +12,7 @@ services:
       - ./tmp:/tmp
     environment:
       - BASE_URL=http://flask-app:5001
-      - SUBPATH=/chatgse
+      - SUBPATH=/biochatter-next
     depends_on:
       - flask-app
  

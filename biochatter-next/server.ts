@@ -17,8 +17,8 @@ app.prepare().then(() => {
       const parsedUrl = parse(req.url, true)
       const { pathname, query } = parsedUrl
  
-      if (pathname === '/chatgse') {
-        await app.render(req, res, '/chatgse', query)
+      if (pathname === '/biochatter-next') {
+        await app.render(req, res, '/biochatter-next', query)
       } else {
         await handle(req, res, parsedUrl)
       }

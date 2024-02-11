@@ -195,7 +195,7 @@ const en: LocaleType = {
       About: {
         Name: "About",
         Title: "About",
-        Citation: "BioChatter is developed by a multicultural team over on [GitHub](https://github.com/biocypher) ([BioChatter](https://github.com/biocypher/biochatter), [BioChatter Server](https://github.com/biocypher/biochatter-server), [BioChatter Next](https://github.com/biocypher/biochatter-next), [BioChatter Light](https://github.com/biocypher/biochatter-light)), led by [Sebastian Lobentanzer](https://slobentanzer.github.io/).",
+        Citation: "BioChatter is developed by a multicultural team over on [GitHub](https://github.com/biocypher) ([BioChatter](https://github.com/biocypher/biochatter), [BioChatter Server](https://github.com/biocypher/biochatter-server), [BioChatter Next](https://github.com/biocypher/biochatter-next), [BioChatter Light](https://github.com/biocypher/biochatter-light)), led by [Sebastian Lobentanzer](https://slobentanzer.github.io/). Biochatter Next was developed by Shaohong Feng and Cankun Wang, and is hosted by [BMBL](https://u.osu.edu/bmbl).",
         ListTitle: "BioChatter is a tool to integrate biomedical research with current developments in Large Language Models in a user-friendly package. It works by setting up a topic-constrained conversation with a pre-trained language model. Optionally, auxiliary technologies such as knowledge graphs and vector databases can be seamlessly integrated into the conversations. The main benefits of this approach are:",
         ListItems: [
           "Transparency to increase trust in the framework and LLM-driven insights",
