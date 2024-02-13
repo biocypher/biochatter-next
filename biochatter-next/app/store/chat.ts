@@ -45,6 +45,11 @@ export interface ChatStat {
   charCount: number;
 }
 
+export interface RagContext {
+  mode: string;
+  context: Array<[any, any]>;
+}
+
 export interface ChatSession {
   id: string;
   topic: string;
@@ -58,7 +63,8 @@ export interface ChatSession {
 
   mask: Mask;
   useRAGSession: boolean;
-  useKGSession: boolean
+  useKGSession: boolean;
+  contextualPrompts: RagContext[];
 }
 
 export const DEFAULT_TOPIC = Locale.Store.DefaultTopic;
@@ -84,6 +90,7 @@ function createEmptySession(): ChatSession {
     mask: createEmptyMask(),
     useRAGSession: false,
     useKGSession: false,
+    contextualPrompts: []
   };
 }
 
@@ -321,8 +328,11 @@ export const useChatStore = createPersistStore(
               session.messages = session.messages.concat();
             });
           },
-          onFinish(message) {
+          onFinish(message, context) {
             botMessage.streaming = false;
+            get().updateCurrentSession((session) => {
+              session.contextualPrompts = context??[];
+            })
             if (message) {
               botMessage.content = message;
               get().onNewMessage(botMessage);

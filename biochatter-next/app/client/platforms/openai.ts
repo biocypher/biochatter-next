@@ -6,7 +6,7 @@ import {
   REQUEST_TIMEOUT_MS,
   ServiceProvider,
 } from "@/app/constant";
-import { useAccessStore, useAppConfig, useChatStore } from "@/app/store";
+import { ChatSession, useAccessStore, useAppConfig, useChatStore } from "@/app/store";
 
 import { ChatOptions, getHeaders, LLMApi, LLMModel, LLMUsage } from "../api";
 import Locale from "../../locales";
@@ -238,7 +238,7 @@ export class ChatGPTApi implements LLMApi {
 
         const resJson = await res.json();
         const message = this.extractMessage(resJson);
-        options.onFinish(message);
+        options.onFinish(message, resJson.contexts);
       }
     } catch (e) {
       console.log("[Request] failed to make a chat request", e);

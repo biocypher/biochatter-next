@@ -1,0 +1,27 @@
+
+.rag-mode {
+  font-size: 24px;
+  margin-top: 5px;
+  margin-bottom: 5px;
+
+  .rag-context-item {
+    font-size: 0.9rem;
+    padding: 5px;
+    max-height: 72px;
+    overflow: auto;
+    margin-bottom: 5px;
+    margin-top: 10px;
+    border: 1px solid var(--gray);
+    border-radius: 12px;
+  }
+  .rag-context-meta {
+    font-size: 0.7rem;
+    padding: 5px;
+    max-height: 72px;
+    overflow: auto;
+    margin-top: 5px;
+    margin-bottom: 20px;
+    border: 1px solid var(--gray);
+    border-radius: 12px;
+  }
+}

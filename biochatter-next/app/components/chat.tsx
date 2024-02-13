@@ -97,6 +97,9 @@ import { useKGStore } from "../store/kg";
 const Markdown = dynamic(async () => (await import("./markdown")).Markdown, {
   loading: () => <LoadingIcon />,
 });
+const RagContextualModal = dynamic(async () => (await import("./rag-contextual-prompts-modal")).RagContextualPromptsModal, {
+  loading: () => <LoadingIcon />,
+});
 
 export function SessionConfigModel(props: { onClose: () => void }) {
   const chatStore = useChatStore();
@@ -169,7 +172,9 @@ function PromptToast(props: {
 }) {
   const chatStore = useChatStore();
   const session = chatStore.currentSession();
-  const context = session.mask.context;
+  // const context = session.mask.context;
+  const contexts = session.contextualPrompts;
+  const total_contexts = contexts.reduce((prev, cur) => (prev + cur.context.length), 0);
 
   return (
     <div className={styles["prompt-toast"]} key="prompt-toast">
@@ -180,13 +185,22 @@ function PromptToast(props: {
           onClick={() => props.setShowModal(true)}
         >
           <BrainIcon />
-          <span className={styles["prompt-toast-content"]}>
-            {Locale.Context.Toast(context.length)}
-          </span>
+          {contexts && total_contexts > 0 ? (
+            contexts.map(ctx => (
+              ctx.context.length > 0 ? (
+                <span className={styles["prompt-toast-content"]}>
+                  {Locale.RagContext.Toast(ctx.context.length, ctx.mode)}
+                </span>
+              ) : (<></>)
+            ))
+          ) : (<span className={styles["prompt-toast-content"]}>
+            {Locale.Context.Toast(0, "")}
+          </span>)
+          }
         </div>
       )}
       {props.showModal && (
-        <SessionConfigModel onClose={() => props.setShowModal(false)} />
+        <RagContextualModal contexts={contexts} onClose={() => props.setShowModal(false)} />
       )}
     </div>
   );
