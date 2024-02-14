@@ -464,6 +464,7 @@ const en: LocaleType = {
   RagContext: {
     Toast: (x: any, y: any) => `With ${x} ${y} contextual prompts`,
     Edit: "Current Rag Context Prompts",
+    ModeType: "RAG Type",
   },
   Plugin: {
     Name: "Plugin",

@@ -19,17 +19,17 @@ export function RagContextualPromptsModal(
       <>
         {props.contexts.map((ctx) => (
           ctx.context.length === 0 ? (<></>) : (
-            <div className={styles["rag-mode"]}>{ctx.mode}
+            <div className={styles["rag-mode"]}>{`${Locale.RagContext.ModeType}: ${ctx.mode}`}
               {ctx.context.map(ctxItem => (
                 (ctx.mode === "kg") ? (
                   <>
-                    <div className={styles["rag-context-item"]}>{ctxItem[0]}</div>
-                    <div className={styles["rag-context-meta"]}>{`cypher_query: ${ctxItem[1].cypher_query}`}</div>
+                    <div className={styles["rag-context-kg-item"]}>{ctxItem[0]}</div>
+                    <div className={styles["rag-context-kg-meta"]}>{`cypher_query: ${ctxItem[1].cypher_query}`}</div>
                   </>
                 ) : (
                   <>
-                    <div className={styles["rag-context-item"]}>{ctxItem[0]}</div> 
-                    <div className={styles["rag-context-meta"]}>{` source: ${ctxItem[1].source}`}</div>
+                    <div className={styles["rag-context-vs-item"]}>{ctxItem[0]}</div> 
+                    <div className={styles["rag-context-vs-meta"]}>{` source: ${ctxItem[1].source}`}</div>
                   </>
                 )
               ))}

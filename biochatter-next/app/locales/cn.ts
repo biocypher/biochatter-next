@@ -457,6 +457,7 @@ const cn = {
   RagContext: {
     Toast: (x: any, y: any) => `包含 ${x} 条 ${y} 预设提示词`,
     Edit: "当前RAG上下文",
+    ModeType: "RAG 类型"
   },
   Plugin: {
     Name: "插件",
