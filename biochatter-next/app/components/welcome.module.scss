@@ -11,21 +11,21 @@
     .welcome-page-body {
         padding: 20px;
         overflow-y: auto;
+        display: flex;
+        flex-direction: column;
+        height: 100vh;
 
         .what-how-messages {
             display: flex;
             justify-content: space-between;
             align-items: stretch;
-            /* Add this line */
         }
 
         .message-column {
             flex: 1 0 50%;
             box-sizing: border-box;
             display: flex;
-            /* Add this line */
             flex-direction: column;
-            /* Add this line */
         }
 
         .message-column-title {
@@ -69,6 +69,14 @@
             p {
                 margin: 0px;
             }
+        }
+
+        .version-info {
+            display: flex;
+            justify-content: flex-end;
+            align-items: flex-end;
+            font-size: .75em;
+            margin-top: auto;
         }
 
 
