@@ -207,7 +207,7 @@ const en: LocaleType = {
         Heading2: "About the models",
         Models: "We offer support of proprietary models via the OpenAI API, as well as open source models via deployment mechanisms such as the Xorbits Inference framework. We also allow running models fully browser based using web assembly integration. You can select models in the settings panel.",
       },
-      VersionInfo: "BioChatter Next, version 0.1.0",
+      VersionInfo: (x: any) => (`BioChatter Next, version ${x}`),
     },
 
   },
