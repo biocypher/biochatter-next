@@ -464,8 +464,8 @@ const en: LocaleType = {
     Revert: "Revert",
   },
   RagContext: {
-    Toast: (x: any, y: any) => `With ${x} ${y} contextual prompts`,
-    Edit: "Current Rag Context Prompts",
+    Toast: (x: any, y: any) => `With ${x} ${(y && y.length > 0) ? y : "RAG"} prompts`,
+    Edit: "Current Rag Contextual Prompts",
     ModeType: "RAG Type",
   },
   Plugin: {

@@ -456,7 +456,7 @@ const cn = {
     Revert: "恢复上下文",
   },
   RagContext: {
-    Toast: (x: any, y: any) => `包含 ${x} 条 ${y} 预设提示词`,
+    Toast: (x: any, y: any) => `包含 ${x} 条 ${(y && y.length > 0) ? y : "RAG"}提示词`,
     Edit: "当前RAG上下文",
     ModeType: "RAG 类型"
   },
