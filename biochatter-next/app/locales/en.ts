@@ -207,7 +207,9 @@ const en: LocaleType = {
         Heading2: "About the models",
         Models: "We offer support of proprietary models via the OpenAI API, as well as open source models via deployment mechanisms such as the Xorbits Inference framework. We also allow running models fully browser based using web assembly integration. You can select models in the settings panel.",
       },
-    }
+      VersionInfo: "BioChatter Next, version 0.1.0",
+    },
+
   },
   Settings: {
     Title: "Settings",
@@ -492,7 +494,7 @@ const en: LocaleType = {
       DatabasePort: "Database port",
       DatabaseUser: "Database user",
       DatabasePassword: "Database password",
-      useKG: "Use Knowledge Graph",      
+      useKG: "Use Knowledge Graph",
       ResultsNum: {
         Label: "Number of results",
         subLabel: "How many results should be used to supplement the prompts",

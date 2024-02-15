@@ -102,6 +102,9 @@ export function Welcome() {
               </div>
             </div>
           </section>
+          <section className={styles["version-info"]}>
+            <MarkdownContent content={Locale.Welcome.Page.VersionInfo} />
+          </section>
         </div>
       </div>
     </ErrorBoundary>
