@@ -172,10 +172,8 @@ function PromptToast(props: {
 }) {
   const chatStore = useChatStore();
   const session = chatStore.currentSession();
-  // const context = session.mask.context;
-  const contexts = session.contextualPrompts;
-  const total_contexts = contexts.reduce((prev, cur) => (prev + cur.context.length), 0);
-
+  const context = session.mask.context;
+  
   return (
     <div className={styles["prompt-toast"]} key="prompt-toast">
       {props.showToast && (
@@ -185,25 +183,31 @@ function PromptToast(props: {
           onClick={() => props.setShowModal(true)}
         >
           <BrainIcon />
-          {contexts && total_contexts > 0 ? (
-            contexts.map((ctx, ix) => (
-              ctx.context.length > 0 ? (
-                <span key={`context-${ix}`} className={styles["prompt-toast-content"]}>
-                  {Locale.RagContext.Toast(ctx.context.length, ctx.mode)}
-                </span>
-              ) : (<></>)
-            ))
-          ) : (<span className={styles["prompt-toast-content"]}>
-            {Locale.Context.Toast(0, "")}
-          </span>)
-          }
+          <span className={styles["prompt-toast-content"]}>
+            {Locale.Context.Toast(context.length)}
+          </span>
         </div>
       )}
       {props.showModal && (
-        <RagContextualModal contexts={contexts} onClose={() => props.setShowModal(false)} />
+        <SessionConfigModel onClose={() => props.setShowModal(false)} />
       )}
     </div>
   );
+}
+
+function RagPromptToast(
+  {showModal, setShowModal}: {showModal: boolean, setShowModal: (_: boolean) => void}
+) {
+  const chatStore = useChatStore();
+  const session = chatStore.currentSession();
+  const contexts = session.contextualPrompts;
+  return (
+    <>
+      {showModal && (
+        <RagContextualModal onClose={() => setShowModal(false)} contexts={contexts} />
+      )}
+    </>
+  )
 }
 
 
@@ -428,13 +432,21 @@ export function ChatActions(props: {
   showPromptModal: () => void;
   scrollToBottom: () => void;
   showPromptHints: () => void;
+  showRagPromptModal: () => void;
   hitBottom: boolean;
 }) {
   const config = useAppConfig();
   const navigate = useNavigate();
   const chatStore = useChatStore();
-  const ragStore = useRAGStore();
-  const kgStore = useKGStore();
+  const session = chatStore.currentSession();
+  const contexts = session.contextualPrompts;
+  const total_rag_prompts_num = contexts.reduce((prev, cur) => (prev + cur.context.length), 0);
+  const rag_prompts_text = (total_rag_prompts_num === 0) ? 
+    (Locale.RagContext.Toast("0", "")) :
+    (contexts.map((ctx) => (ctx.context.length > 0 ? 
+      Locale.RagContext.Toast(ctx.context.length, ctx.mode) :
+      ""
+    ))).join(" ");
 
   // switch themes
   const theme = config.theme;
@@ -523,6 +535,11 @@ export function ChatActions(props: {
           text={currentModel}
           icon={<RobotIcon />}
         />
+        <ChatAction
+          onClick={props.showRagPromptModal}
+          icon={<BrainIcon />}
+          text={rag_prompts_text}
+        ></ChatAction>
 
         {showModelSelector && (
           <Selector
@@ -1000,6 +1017,7 @@ function _Chat() {
       : -1;
 
   const [showPromptModal, setShowPromptModal] = useState(false);
+  const [showRagPromptModal, setShowRagPromptModal] = useState(false);
 
   const clientConfig = useMemo(() => getClientConfig(), []);
 
@@ -1139,6 +1157,10 @@ function _Chat() {
           showToast={!hitBottom}
           showModal={showPromptModal}
           setShowModal={setShowPromptModal}
+        />
+        <RagPromptToast
+          showModal={showRagPromptModal}
+          setShowModal={setShowRagPromptModal}
         />
       </div>
 
@@ -1294,6 +1316,7 @@ function _Chat() {
 
         <ChatActions
           showPromptModal={() => setShowPromptModal(true)}
+          showRagPromptModal={() => setShowRagPromptModal(true)}
           scrollToBottom={scrollToBottom}
           hitBottom={hitBottom}
           showPromptHints={() => {
