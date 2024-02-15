@@ -17,9 +17,9 @@ export function RagContextualPromptsModal(
         onClose={props.onClose}
     >
       <>
-        {props.contexts.map((ctx) => (
+        {props.contexts.map((ctx, ix) => (
           ctx.context.length === 0 ? (<></>) : (
-            <div className={styles["rag-mode"]}>{`${Locale.RagContext.ModeType}: ${ctx.mode}`}
+            <div key={`context-item-${ix}`} className={styles["rag-mode"]}>{`${Locale.RagContext.ModeType}: ${ctx.mode}`}
               {ctx.context.map(ctxItem => (
                 (ctx.mode === "kg") ? (
                   <>

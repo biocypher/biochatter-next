@@ -186,9 +186,9 @@ function PromptToast(props: {
         >
           <BrainIcon />
           {contexts && total_contexts > 0 ? (
-            contexts.map(ctx => (
+            contexts.map((ctx, ix) => (
               ctx.context.length > 0 ? (
-                <span className={styles["prompt-toast-content"]}>
+                <span key={`context-${ix}`} className={styles["prompt-toast-content"]}>
                   {Locale.RagContext.Toast(ctx.context.length, ctx.mode)}
                 </span>
               ) : (<></>)
