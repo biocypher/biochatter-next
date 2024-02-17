@@ -10,13 +10,24 @@ import { Path } from "../constant";
 import { showConfirm } from "./ui-lib";
 import { useAppConfig, useUpdateStore } from "../store";
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 export function Welcome() {
   const config = useAppConfig();
   const navigate = useNavigate();
 
   const updateStore = useUpdateStore();
+
+  function checkUpdate(force = false) {
+    updateStore.getLatestVersion(force).then(() => {
+      console.log("[Update] local version ", updateStore.version);
+      console.log("[Update] remote version ", updateStore.remoteVersion);
+    });
+  }
+
+  useEffect(() => {
+    checkUpdate();
+  }, []);
 
   const [currentWhatMessageIndex, setCurrentWhatMessageIndex] = useState(0);
   const [currentHowMessageIndex, setCurrentHowMessageIndex] = useState(0);
