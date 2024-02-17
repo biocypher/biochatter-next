@@ -203,6 +203,7 @@ const cn = {
         Heading2: "关于型号",
         Models: "加载的默认模型是 OpenAIs gpt-3.5-turbo 模型，在标准版本中，每个会话的令牌限制为 4000。 该模型目前有两个版本：0301 和 0613。后者是更新的版本，改进了系统消息的解释和处理函数的功能（以 JSON 形式返回给定函数的属性值）。 此外，OpenAI 还提供了 gpt-3.5-turbo-16k 模型，每个对话的代币限制增加到 16000 个。 该模型稍微昂贵，但对于较长的对话非常有用，特别是在包含文档摘要/提示注入功能时"
       },
+      VersionInfo: (x: any) => (`BioChatter Next, 版本: ${x}`),
     }
   },
   Settings: {
@@ -453,6 +454,11 @@ const cn = {
     Add: "新增一条对话",
     Clear: "上下文已清除",
     Revert: "恢复上下文",
+  },
+  RagContext: {
+    Toast: (x: any, y: any) => `包含 ${x} 条 ${(y && y.length > 0) ? y : "RAG"}提示词`,
+    Edit: "当前RAG上下文",
+    ModeType: "RAG 类型"
   },
   Plugin: {
     Name: "插件",

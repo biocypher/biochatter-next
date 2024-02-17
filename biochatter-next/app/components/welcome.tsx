@@ -8,13 +8,15 @@ import CloseIcon from "../icons/close.svg";
 import { useNavigate } from "react-router-dom";
 import { Path } from "../constant";
 import { showConfirm } from "./ui-lib";
-import { useAppConfig } from "../store";
+import { useAppConfig, useUpdateStore } from "../store";
 
 import React, { useState } from 'react';
 
 export function Welcome() {
   const config = useAppConfig();
   const navigate = useNavigate();
+
+  const updateStore = useUpdateStore();
 
   const [currentWhatMessageIndex, setCurrentWhatMessageIndex] = useState(0);
   const [currentHowMessageIndex, setCurrentHowMessageIndex] = useState(0);
@@ -101,6 +103,9 @@ export function Welcome() {
                 </div>
               </div>
             </div>
+          </section>
+          <section className={styles["version-info"]}>
+            <MarkdownContent content={Locale.Welcome.Page.VersionInfo(updateStore.version)} />
           </section>
         </div>
       </div>
