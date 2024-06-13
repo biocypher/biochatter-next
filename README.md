@@ -4,16 +4,17 @@ This repository contains the advanced web client of BioChatter, as an
 adaptation of https://github.com/Yidadaa/ChatGPT-Next-Web. It works in
 conjunction with the [BioChatter
 server](https://github.com/biocypher/biochatter-server) to provide a modern,
-fully featured chat experience.
+fully featured chat experience. Use this prototype to test the capabilities of
+the framework, and adapt it to your needs. The software is licensed under MIT,
+allowing free use and modification.
 
 ## Docker Compose
 
 The client-server combination can be run using Docker Compose. You need to have
 Docker and Docker Compose installed to use this way of building the app. To do
-so, you can run, from the `biochatter-next` directory of this repository:
+so, you can run from this repository:
 
 ```
-cd biochatter-next
 docker-compose up -d
 ```
 
@@ -25,10 +26,9 @@ The client can be accessed in the browser at http://localhost:3000.
 If you want or need to install and run the two services locally and separately,
 you need to have [Node.js](https://nodejs.org/en/) and
 [yarn](https://yarnpkg.com/) installed. Then, you can run the following code in
-the `biochatter-next` directory of this repository:
+this repository:
 
 ```console
-cd biochatter-next
 yarn install
 yarn dev
 ```
@@ -57,18 +57,18 @@ application:
 
 The provided project structure is:
 
-- biochatter-next/app: App router
-- biochatter-next/public: Static assets to be served
-- biochatter-next/app/page.tsx: Main Page router
-- biochatter-next/app/components: Code for visual components
+- app/: App router
+- public/: Static assets to be served
+- app/page.tsx: Main Page router
+- app/components/: Code for visual components
 
 
 ### Components
 
-The main component is `Home` (biochatter-next/app/components/home.tsx), while the
-sidebar is defined inside `Sidebar` (biochatter-next/app/components/sidebar.tsx).
+The main component is `Home` (app/components/home.tsx), while the
+sidebar is defined inside `Sidebar` (app/components/sidebar.tsx).
 
-For the Masks, the code is inside `mask.tsx` (biochatter-next/app/components/mask.tsx).
+For the Masks, the code is inside `mask.tsx` (app/components/mask.tsx).
 
 ### Internationalization
 
@@ -78,9 +78,9 @@ provided by Next.JS:
 
 > Next.js enables you to configure the routing and rendering of content to support multiple languages. Making your site adaptive to different locales includes translated content (localization) and internationalized routes.
 
-Add first your text inside [cn.ts](biochatter-next/app/locales/cn.ts) file. Then you can
+Add first your text inside [cn.ts](app/locales/cn.ts) file. Then you can
 add the same key(s) inside the English file
-([en.ts](biochatter-next/app/locales/en.ts)).
+([en.ts](app/locales/en.ts)).
 
 You are ready to use the new key(s) inside your components, for instance:
 
@@ -101,4 +101,4 @@ You are ready to use the new key(s) inside your components, for instance:
 ### Layout metadata
 
 The fields such as the page title are defined inside
-[layout.tsx](biochatter-next/app/layout.tsx).
+[layout.tsx](app/layout.tsx).
