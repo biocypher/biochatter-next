@@ -12,7 +12,7 @@
     "app:dev": "yarn tauri dev",
     "app:build": "yarn tauri build",
     "prompts": "node ./scripts/fetch-prompts.mjs",
-    "prepare": "cd .. && husky install biochatter-next/.husky",
+    "prepare": "husky install biochatter-next/.husky",
     "proxy-dev": "sh ./scripts/init-proxy.sh && proxychains -f ./scripts/proxychains.conf yarn dev"
   },
   "dependencies": {
