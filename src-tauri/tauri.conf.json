@@ -9,7 +9,7 @@
   },
   "package": {
     "productName": "BioChatter-Next",
-    "version": "2.9.12"
+    "version": "1.0.0"
   },
   "tauri": {
     "allowlist": {
