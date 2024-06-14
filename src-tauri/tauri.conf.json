@@ -8,8 +8,8 @@
     "withGlobalTauri": true
   },
   "package": {
-    "productName": "ChatGPT Next Web",
-    "version": "2.9.12"
+    "productName": "BioChatter-Next",
+    "version": "1.0.0"
   },
   "tauri": {
     "allowlist": {

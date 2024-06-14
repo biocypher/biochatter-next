@@ -1,0 +1,12 @@
+{
+  "bumpFiles": [
+    {
+      "filename": "package.json",
+      "type": "json"
+    },
+    {
+      "filename": "./src-tauri/tauri.conf.json",
+      "updater": "./scripts/custom-version-updater.js"
+    }
+  ]
+}

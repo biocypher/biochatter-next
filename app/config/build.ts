@@ -1,4 +1,4 @@
-import tauriConfig from "../../src-tauri/tauri.conf.json";
+import { version } from "../../package.json";
 
 export const getBuildConfig = () => {
   if (typeof process === "undefined") {
@@ -9,7 +9,7 @@ export const getBuildConfig = () => {
 
   const buildMode = process.env.BUILD_MODE ?? "standalone";
   const isApp = !!process.env.BUILD_APP;
-  const version = "v" + tauriConfig.package.version;
+  const theVersion = "v" + version; 
 
   const commitInfo = (() => {
     try {
@@ -34,7 +34,7 @@ export const getBuildConfig = () => {
   })();
 
   return {
-    version,
+    version: theVersion,
     ...commitInfo,
     buildMode,
     isApp,
