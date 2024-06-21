@@ -1,7 +1,9 @@
+"use client"
 import { useNavigate } from "react-router-dom"
 import { useDebouncedCallback } from "use-debounce";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
 import { useKGStore } from "../store/kg";
+import { useAccessStore } from "../store/access";
 import { IconButton } from "./button";
 import CloseIcon from "../icons/close.svg";
 import SettingsIcon from "../icons/rag-settings.svg";
@@ -11,15 +13,14 @@ import ConnectionIcon from "../icons/connection.svg";
 
 import Locale from "../locales";
 
-import { ERROR_BIOSERVER_OK } from "../constant";
+import { DbConfiguration, ERROR_BIOSERVER_OK } from "../constant";
 import { requestKGConnectionStatus } from "../client/datarequest";
 import {Markdown} from "./markdown";
 import { ErrorBoundary } from "./error";
 import styles from "./kg.module.scss";
-import { List, ListItem } from "./ui-lib";
+import { List, ListItem, SelectInput } from "./ui-lib";
 
 import { InputRange } from "./input-range";
-
 
 const DEFAULT_PORT = "7687";
 const DEFAULT_HOST = "";
@@ -27,6 +28,9 @@ const DEFAULT_HOST = "";
 export function KGPage() {
   const navigate = useNavigate();
   const kgStore = useKGStore();
+  const accessStore = useAccessStore();
+  const prodInfo = accessStore.productionInfo === "undefined" ? undefined : JSON.parse(accessStore.productionInfo);
+  let kgProdInfo = (prodInfo?.KnowledgeGraph ?? {servers: []}) as DbConfiguration;
   const kgConfig = kgStore.config;
   const [connectionArgs, setConnectionArgs] 
     = useState(kgConfig.connectionArgs);
@@ -155,22 +159,69 @@ export function KGPage() {
                     <ListItem
                       title={Locale.KG.Settings.DatabaseURL}
                     >
-                      <input
-                        disabled={!kgStore.useKG}
-                        type="text"
-                        value={connectionArgs.host}
-                        onChange={(e) => {
-                          setConnectionArgs({
-                            ...connectionArgs,
-                            host:e.currentTarget?.value??DEFAULT_HOST
-                          });
-                          kgStore.updateConfig(
-                            (config) => (
-                              config.connectionArgs.host = e.currentTarget?.value??DEFAULT_HOST
+                      {kgProdInfo.servers && kgProdInfo.servers.length > 0 ? (
+                        <SelectInput 
+                          disabled={!kgStore.useKG} 
+                          listName="kgservers" 
+                          value={connectionArgs.host}
+                          onChange={(e) => {
+                          const val = e.currentTarget?.value ?? DEFAULT_HOST;
+                          let default_server = false;
+                          for (let kg of kgProdInfo.servers??[]) {
+                            if (kg.server === val) {
+                              default_server = true;
+                              setConnectionArgs({
+                                ...connectionArgs,
+                                host: kg.address,
+                                port: kg.port??"7687",
+                              })
+                              kgStore.updateConfig(
+                                (config) => {
+                                  config.connectionArgs.host = kg.address;
+                                  config.connectionArgs.port = kg.port ?? "7687";
+                                  if (kg.number_of_results !== undefined) {
+                                    config.resultNum = kg.number_of_results;
+                                  }
+                                }
+                              )
+                              break;
+                            }
+                          }
+                          if (!default_server) {
+                            setConnectionArgs({
+                              ...connectionArgs,
+                              host:e.currentTarget?.value??DEFAULT_HOST
+                            });
+                            kgStore.updateConfig(
+                              (config) => (
+                                config.connectionArgs.host = e.currentTarget?.value??DEFAULT_HOST
+                              )
                             )
-                          )
-                        }}
-                      ></input>
+                          }
+                        }}>
+                          {kgProdInfo.servers?.map((kg) => (
+                            <option value={kg.server} />
+                          ))}
+                        </SelectInput>
+                      ) : (
+                        <input
+                         disabled={!kgStore.useKG}
+                         type="text"
+                         value={connectionArgs.host}
+                         onChange={(e) => {
+                           setConnectionArgs({
+                             ...connectionArgs,
+                             host:e.currentTarget?.value??DEFAULT_HOST
+                           });
+                           kgStore.updateConfig(
+                             (config) => (
+                               config.connectionArgs.host = e.currentTarget?.value??DEFAULT_HOST
+                             )
+                           )
+                         }}
+                        ></input>
+                      )}
+                      
                     </ListItem>
                     <ListItem
                       title={Locale.KG.Settings.DatabasePort}

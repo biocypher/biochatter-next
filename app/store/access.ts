@@ -36,6 +36,7 @@ const DEFAULT_ACCESS_STATE = {
   disableGPT4: false,
   disableFastLink: false,
   customModels: "",
+  productionInfo: "undefined",
 };
 
 export const useAccessStore = createPersistStore(
@@ -92,7 +93,7 @@ export const useAccessStore = createPersistStore(
   }),
   {
     name: StoreKey.Access,
-    version: 2,
+    version: 2.1,
     migrate(persistedState, version) {
       if (version < 2) {
         const state = persistedState as {
@@ -102,6 +103,12 @@ export const useAccessStore = createPersistStore(
         };
         state.openaiApiKey = state.token;
         state.azureApiVersion = "2023-08-01-preview";
+      }
+      if (version < 2.1) {
+        const state = persistedState as {
+          productionInfo: string;
+        }
+        state.productionInfo = "undefined";
       }
 
       return persistedState as any;

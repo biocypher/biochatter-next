@@ -304,6 +304,29 @@ export function Select(
   );
 }
 
+export type SelectInputProps = React.HTMLProps<HTMLInputElement> & {
+  listName: string;
+}
+
+export function SelectInput(
+  props: SelectInputProps,
+) {
+  const {listName, children, ...otherProps} = props;
+  return (
+    <div>
+      <input 
+        type="text" 
+        list={listName} 
+        className={styles["select-input"]} 
+        {...otherProps}
+      />
+      <datalist id={listName}>
+        {children}
+      </datalist>
+    </div>
+  )
+}
+
 export function showConfirm(content: any) {
   const div = document.createElement("div");
   div.className = "modal-mask";

@@ -185,3 +185,20 @@ export const ERROR_BIOSERVER_MILVUS_CONNECT_FAILED = 5102
  
 export const HDR_CONTENT_TYPE = "Content-Type";
 export const HDR_APPLICATION_JSON = "application/json";
+
+export interface DbServerSettings {
+  server: string;
+  address: string;
+  port?: string;
+  number_of_results?: number;
+}
+
+export interface DbConfiguration {
+  enabled?: boolean;
+  servers?: Array<DbServerSettings>;
+}
+
+export interface ProductionInfo {
+  KnowledgeGraph?: DbConfiguration;
+  VectorStore?: DbConfiguration;
+}

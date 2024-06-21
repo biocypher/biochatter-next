@@ -1,4 +1,4 @@
-import { version } from "../../package.json";
+import packageInfo from "../../package.json";
 
 export const getBuildConfig = () => {
   if (typeof process === "undefined") {
@@ -9,7 +9,7 @@ export const getBuildConfig = () => {
 
   const buildMode = process.env.BUILD_MODE ?? "standalone";
   const isApp = !!process.env.BUILD_APP;
-  const theVersion = "v" + version; 
+  const version = "v" + packageInfo.version; 
 
   const commitInfo = (() => {
     try {
@@ -34,7 +34,7 @@ export const getBuildConfig = () => {
   })();
 
   return {
-    version: theVersion,
+    version,
     ...commitInfo,
     buildMode,
     isApp,

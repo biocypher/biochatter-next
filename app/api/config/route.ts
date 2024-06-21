@@ -1,6 +1,9 @@
 import { NextResponse } from "next/server";
-
+import * as path from "path";
+import { readFileSync } from "fs";
+import { load } from "js-yaml";
 import { getServerSideConfig } from "../../config/server";
+import { DbConfiguration, DbServerSettings, ProductionInfo } from "@/app/constant";
 
 const serverConfig = getServerSideConfig();
 
@@ -13,17 +16,62 @@ const DANGER_CONFIG = {
   hideBalanceQuery: serverConfig.hideBalanceQuery,
   disableFastLink: serverConfig.disableFastLink,
   customModels: serverConfig.customModels,
+  productionInfo: "undefined",
 };
 
 declare global {
   type DangerConfig = typeof DANGER_CONFIG;
 }
 
+const validate_db_configuration = (prodInfo: ProductionInfo, entry: string): ProductionInfo => {
+  const server_names = {};
+  const dbConfig = ((prodInfo as any)[entry]) as DbConfiguration;
+  if (dbConfig === undefined) {
+    return prodInfo;
+  }
+  dbConfig.enabled = dbConfig.enabled ?? true;
+  dbConfig.servers = dbConfig.servers ?? [];
+  let valid = true;
+  const validated_dbs = dbConfig.servers.map((val: DbServerSettings) => {
+    if (val.server.length === 0 || val.server in server_names) {
+      valid = false;
+      return val;
+    }
+    return {
+      ...val,
+      port: val.port ?? "7687",
+    }
+  });
+  dbConfig.servers = validated_dbs;
+  if (!valid) {
+    console.error(`Invalid ${entry} configuration in yaml`);
+  }
+  return {...prodInfo, [entry]: valid ? dbConfig : undefined};
+}
+
+const validate_configuration = (config: ProductionInfo): ProductionInfo | undefined => {
+  let validated_config = config;
+  validated_config = validate_db_configuration(validated_config, "KnowledgeGraph");
+  validated_config = validate_db_configuration(validated_config, "VectorStore");
+  
+  return validated_config;
+}
+
 async function handle() {
-  return NextResponse.json(DANGER_CONFIG);
+  try {
+    const yaml = load(readFileSync(path.join(__dirname, "../../../../app-config/production.yml"), "utf-8"));
+    const validated_config = validate_configuration(yaml as ProductionInfo);
+    
+    return NextResponse.json({
+      ...DANGER_CONFIG,
+      productionInfo: JSON.stringify(validated_config),
+    });
+  } catch (e: any) {
+    console.error(e);
+    return NextResponse.json(DANGER_CONFIG);
+  }
 }
 
 export const GET = handle;
 export const POST = handle;
 
-export const runtime = "edge";
