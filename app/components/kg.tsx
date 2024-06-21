@@ -13,7 +13,7 @@ import ConnectionIcon from "../icons/connection.svg";
 
 import Locale from "../locales";
 
-import { DbConfiguration, ERROR_BIOSERVER_OK } from "../constant";
+import { DbConfiguration, DbServerSettings, ERROR_BIOSERVER_OK } from "../constant";
 import { requestKGConnectionStatus } from "../client/datarequest";
 import {Markdown} from "./markdown";
 import { ErrorBoundary } from "./error";
@@ -21,9 +21,33 @@ import styles from "./kg.module.scss";
 import { List, ListItem, SelectInput } from "./ui-lib";
 
 import { InputRange } from "./input-range";
+import { DbConnectionArgs } from "../utils/datatypes";
 
 const DEFAULT_PORT = "7687";
 const DEFAULT_HOST = "";
+
+const getConnectionArgs = (
+  connectionArgs: DbConnectionArgs, 
+  kgServers: Array<DbServerSettings>
+): DbConnectionArgs => {
+  for (const server of kgServers) {
+    if (server.server === connectionArgs.host) {
+      return {
+        host: server.address,
+        port: server.port ?? "7687",
+      }
+    }
+    if (server.address === connectionArgs.host 
+      && (server.port === connectionArgs.port || (server.port === undefined && connectionArgs.port === "7687")) ) {
+      return {
+        host: server.server,
+        port: server.port ?? "7687",
+      }
+    }
+  }
+
+  return connectionArgs;
+};
 
 export function KGPage() {
   const navigate = useNavigate();
@@ -33,17 +57,37 @@ export function KGPage() {
   let kgProdInfo = (prodInfo?.KnowledgeGraph ?? {servers: []}) as DbConfiguration;
   const kgConfig = kgStore.config;
   const [connectionArgs, setConnectionArgs] 
-    = useState(kgConfig.connectionArgs);
+    = useState(getConnectionArgs(kgConfig.connectionArgs, kgProdInfo.servers ?? []));
   const [uploading, setUploading] = useState(false);
   const [document, setDocument] = useState<string | undefined>();
   const [connected, setConnected] = useState(false);
   const [isReconnecting, setIsReconnecting] = useState(false);
 
+  useEffect(() => {
+    if (kgConfig.connectionArgs.host === "local") {
+      // default value
+      if (kgProdInfo.servers && kgProdInfo.servers.length > 0) {
+        const server = kgProdInfo.servers[0]
+        setConnectionArgs({
+          host: server.server,
+          port: server.port ?? "7687",
+        });
+        kgStore.updateConfig((config) => {
+          config.connectionArgs.host = server.address;
+          config.connectionArgs.port = server.port ?? "7687";
+          if (server.number_of_results !== undefined) {
+            config.resultNum = server.number_of_results;
+          }
+        })
+      }
+    }
+  }, []);
 
   const updateConnectionStatus = useDebouncedCallback(async () => {    
     setIsReconnecting(true);
     try {
-      const res = await requestKGConnectionStatus(connectionArgs);
+
+      const res = await requestKGConnectionStatus(getConnectionArgs(connectionArgs, kgProdInfo.servers??[]));
       const value = await res.json();
       if(value?.code === ERROR_BIOSERVER_OK && value.status) {
         setConnected(value.status === 'connected');
@@ -172,7 +216,7 @@ export function KGPage() {
                               default_server = true;
                               setConnectionArgs({
                                 ...connectionArgs,
-                                host: kg.address,
+                                host: kg.server,
                                 port: kg.port??"7687",
                               })
                               kgStore.updateConfig(
@@ -200,7 +244,7 @@ export function KGPage() {
                           }
                         }}>
                           {kgProdInfo.servers?.map((kg) => (
-                            <option value={kg.server} />
+                            <option key={kg.server} value={kg.server} />
                           ))}
                         </SelectInput>
                       ) : (
