@@ -3,7 +3,7 @@ import * as path from "path";
 import { readFileSync } from "fs";
 import { load } from "js-yaml";
 import { getServerSideConfig } from "../../config/server";
-import { DbConfiguration, DbServerSettings, ProductionInfo } from "@/app/constant";
+import { DbConfiguration, DbServerSettings, ProductionInfo } from "@/app/utils/datatypes";
 
 const serverConfig = getServerSideConfig();
 

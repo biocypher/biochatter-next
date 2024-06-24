@@ -13,7 +13,8 @@ import ConnectionIcon from "../icons/connection.svg";
 
 import Locale from "../locales";
 
-import { DbConfiguration, DbServerSettings, ERROR_BIOSERVER_OK } from "../constant";
+import { ERROR_BIOSERVER_OK } from "../constant";
+import { DbConfiguration, DbServerSettings, } from "../utils/datatypes";
 import { requestKGConnectionStatus } from "../client/datarequest";
 import {Markdown} from "./markdown";
 import { ErrorBoundary } from "./error";
@@ -22,32 +23,10 @@ import { List, ListItem, SelectInput } from "./ui-lib";
 
 import { InputRange } from "./input-range";
 import { DbConnectionArgs } from "../utils/datatypes";
+import { getConnectionArgsToConnect, getConnectionArgsToDisplay } from "../utils/rag";
 
 const DEFAULT_PORT = "7687";
 const DEFAULT_HOST = "";
-
-const getConnectionArgs = (
-  connectionArgs: DbConnectionArgs, 
-  kgServers: Array<DbServerSettings>
-): DbConnectionArgs => {
-  for (const server of kgServers) {
-    if (server.server === connectionArgs.host) {
-      return {
-        host: server.address,
-        port: server.port ?? "7687",
-      }
-    }
-    if (server.address === connectionArgs.host 
-      && (server.port === connectionArgs.port || (server.port === undefined && connectionArgs.port === "7687")) ) {
-      return {
-        host: server.server,
-        port: server.port ?? "7687",
-      }
-    }
-  }
-
-  return connectionArgs;
-};
 
 export function KGPage() {
   const navigate = useNavigate();
@@ -57,7 +36,7 @@ export function KGPage() {
   let kgProdInfo = (prodInfo?.KnowledgeGraph ?? {servers: []}) as DbConfiguration;
   const kgConfig = kgStore.config;
   const [connectionArgs, setConnectionArgs] 
-    = useState(getConnectionArgs(kgConfig.connectionArgs, kgProdInfo.servers ?? []));
+    = useState(getConnectionArgsToDisplay(kgConfig.connectionArgs, kgProdInfo.servers ?? []));
   const [uploading, setUploading] = useState(false);
   const [document, setDocument] = useState<string | undefined>();
   const [connected, setConnected] = useState(false);
@@ -86,8 +65,8 @@ export function KGPage() {
   const updateConnectionStatus = useDebouncedCallback(async () => {    
     setIsReconnecting(true);
     try {
-
-      const res = await requestKGConnectionStatus(getConnectionArgs(connectionArgs, kgProdInfo.servers??[]));
+      const conn = getConnectionArgsToConnect(connectionArgs, kgProdInfo.servers??[]);
+      const res = await requestKGConnectionStatus(conn);
       const value = await res.json();
       if(value?.code === ERROR_BIOSERVER_OK && value.status) {
         setConnected(value.status === 'connected');

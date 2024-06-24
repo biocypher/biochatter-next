@@ -2,19 +2,15 @@ KnowledgeGraph:
   enabled: true
   servers:
   - server: pole-kg
-    address: 10.95.224.94
+    address: biocypher
     port: 7687
-    number_of_results: 5
-  - server: genomicKB-kg
-    address: 10.95.224.94
-    port: 47687
     number_of_results: 5
 
 VectorStore:
   enabled: true
   servers:
   - server: local
-    address: 10.95.224.94
+    address: standalone
     port: 19530
     
 

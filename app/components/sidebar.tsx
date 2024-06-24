@@ -2,18 +2,16 @@ import { useEffect, useRef, useMemo } from "react";
 
 import styles from "./home.module.scss";
 
+import { useAccessStore } from "../store/access";
 import { IconButton } from "./button";
 import SettingsIcon from "../icons/settings.svg";
 import GithubIcon from "../icons/github.svg";
 import ReadTheDocsIcon from "../icons/read-the-docs.svg";
 // import ChatGptIcon from "../icons/chatgpt.svg";
 import BioChatterIcon from "../icons/biochatter.svg";
-import AddIcon from "../icons/add.svg";
 import AboutIcon from "../icons/about.svg";
-import CloseIcon from "../icons/close.svg";
 import DeleteIcon from "../icons/delete.svg";
 import MaskIcon from "../icons/mask.svg";
-import PluginIcon from "../icons/plugin.svg";
 import DragIcon from "../icons/drag.svg";
 import RagIcon from "../icons/rag.svg"
 import LightIcon from "../icons/light.svg";
@@ -31,13 +29,14 @@ import {
   NARROW_SIDEBAR_WIDTH,
   Path,
   REPO_URL,
-  DOCS_URL
+  DOCS_URL,
 } from "../constant";
 
 import { Link, useNavigate } from "react-router-dom";
 import { isIOS, useMobileScreen } from "../utils";
 import dynamic from "next/dynamic";
 import { showConfirm, showToast } from "./ui-lib";
+import { DbConfiguration } from "../utils/datatypes";
 
 const ChatList = dynamic(async () => (await import("./chat-list")).ChatList, {
   loading: () => null,
@@ -138,6 +137,10 @@ function useDragSideBar() {
 
 export function SideBar(props: { className?: string }) {
   const chatStore = useChatStore();
+  const accessStore = useAccessStore();
+  const prodInfo = accessStore.productionInfo === "undefined" ? undefined : JSON.parse(accessStore.productionInfo);
+  let kgProdInfo = (prodInfo?.KnowledgeGraph ?? {servers: [], enabled: true}) as DbConfiguration;
+  let ragProdInfo = (prodInfo?.VectorStore ?? {servers: [], enabled: true}) as DbConfiguration;
 
   // drag side bar
   const { onDragStart, shouldNarrow } = useDragSideBar();
@@ -231,6 +234,7 @@ export function SideBar(props: { className?: string }) {
 
       <div className={styles["sidebar-header-bar"]}>
         <IconButton
+          disabled={!ragProdInfo.enabled}
           icon={<RagIcon width={16} height={16} />}
           text={shouldNarrow ? undefined : 'RAG Settings'}
           className={styles["sidebar-bar-button"]}
@@ -240,6 +244,7 @@ export function SideBar(props: { className?: string }) {
           shadow
         />
         <IconButton
+          disabled={!kgProdInfo.enabled}
           icon={<RagIcon />}
           text={shouldNarrow ? undefined : 'KG Settings'}
           className={styles["sidebar-bar-button"]}
