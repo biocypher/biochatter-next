@@ -1,3 +1,4 @@
+import { Mask } from "../store/mask";
 
 export interface DbConnectionArgs {
   host: string;
@@ -18,7 +19,23 @@ export interface DbConfiguration {
   servers?: Array<DbServerSettings>;
 }
 
+export interface WelcomeConfiguration {
+  Title: string;
+  Disclaimer: string;
+  About: Record<string, any>;
+  What: string;
+  WhatMessages: Array<string>;
+  How: string;
+  HowMessages: Array<string>;
+}
+
+export interface TextConfiguration {
+  Welcome: WelcomeConfiguration;
+  Masks: Array<Mask>;
+}
+
 export interface ProductionInfo {
   KnowledgeGraph?: DbConfiguration;
   VectorStore?: DbConfiguration;
+  Text: TextConfiguration;
 }

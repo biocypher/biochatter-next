@@ -11,6 +11,71 @@ VectorStore:
   - server: local
     address: standalone
     port: 19530
-    
 
+Text:
+  Welcome:
+    title: Welcome to BioChatter!
+    disclaimer: "For more information on the platform, please see our [preprint](https://arxiv.org/abs/2305.06488)!\nIf you'd like to contribute to the project, please find us on [GitHub](https://github.com/biocypher/biochatter-next) or [Zulip](https://biocypher.zulipchat.com/). We'd love to hear from you!"
+    about:
+      title: About
+      citation: "BioChatter is developed by a multicultural team over on [GitHub](https://github.com/biocypher) ([BioChatter](https://github.com/biocypher/biochatter), [BioChatter Server](https://github.com/biocypher/biochatter-server), [BioChatter Next](https://github.com/biocypher/biochatter-next), [BioChatter Light](https://github.com/biocypher/biochatter-light)), led by [Sebastian Lobentanzer](https://slobentanzer.github.io/). Biochatter Next was developed by Shaohong Feng and Cankun Wang, and is hosted by [BMBL](https://u.osu.edu/bmbl)."
+      listTitle: "BioChatter is a tool to integrate biomedical research with current developments in Large Language Models in a user-friendly package. It works by setting up a topic-constrained conversation with a pre-trained language model. Optionally, auxiliary technologies such as knowledge graphs and vector databases can be seamlessly integrated into the conversations. The main benefits of this approach are:"
+      listItems:
+      - "Transparency to increase trust in the framework and LLM-driven insights"
+      - "Modularity of components: use any model, any prompt, and any database"
+      - "Native connectivity to BioCypher knowledge graphs and semantic search via vector database embeddings"
+      - "Integrated safeguards to prevent false information and comparison to curated prior knowledge"
+      - "Confidentiality of the shared data (as opposed to the ChatGPT interface, which allows storage and reuse of the user's prompts by OpenAI)"
+      heading2: About the models
+      models: We offer support of proprietary models via the OpenAI API, as well as open source models via deployment mechanisms such as the Xorbits Inference framework. We also allow running models fully browser based using web assembly integration. You can select models in the settings panel.
+    what: What?
+    whatMessages:
+    - A platform for the application of Large Language Models (LLMs) in biomedical research.
+    - A way to make LLMs more __useful__ and __trustworthy__.
+    - A means to make biomedical research more reproducible.
+    - A platform for contextualisation of biomedical results.
+    - An interface for the intuitive interaction with current cutting-edge AI.
+    - An __open-source__ project.
+    - A way to make biomedical research more efficient.
+    - A time-saver.
+    how: How?
+    howMessages:
+    - Building wrappers around LLMs to tune their responses and ameliorate their shortcomings.
+    - Connecting to complementary technology, such as (vector) databases and model chaining.
+    - Being playful and experimental, and having fun!
+    - Coming together as a community and being communicative.
+    - Collaborating on the future of biomedical research.
+    - Engineering prompts to make LLMs more useful.
+    - Following open science principles.
+    - Being transparent about the limitations of the technology.
+    - Being modular and extensible.
+    - Injecting prior knowledge into LLM queries.
+  Masks:
+  - name: Biomedical research assistant
+    avatar: "🧑‍🔬"
+    context:
+    - id: "biomedical-research-assistant-1"
+      role: "system"
+      content: "You are an assistant to a biomedical researcher."
+      date: ""
+    - id: "biomedical-research-assistant-2"
+      role: "system"
+      content: "Your role is to contextualise the user's findings with biomedical background knowledge. If provided with a list, please give granular feedback about the individual entities, your knowledge about them, and what they may mean in the context of the research."
+      date: ""
+    - id: "biomedical-research-assistant-3"
+      role: "system"
+      content: "You can ask the user to provide explanations and more background at any time, for instance on the treatment a patient has received, or the experimental background. But for now, wait for the user to ask a question."
+      date: ""
+    modelConfig:
+      model: gpt-3.5-turbo
+      temperature: 0
+      max_tokens: 2000
+      presence_penalty: 0
+      frequency_penalty: 0
+      sendMemory: true
+      historyMessageCount: 4
+      compressMessageLengthThreshold: 2000
+    lang: en
+    builtin: true
+    createdAt: 1697222692762
 
