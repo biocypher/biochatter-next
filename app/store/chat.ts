@@ -4,6 +4,7 @@ import { trimTopic } from "../utils";
 import Locale, { getLang } from "../locales";
 import { showToast } from "../components/ui-lib";
 import { ModelConfig, ModelType, useAppConfig } from "./config";
+import { useAccessStore } from "./access";
 import { createEmptyMask, Mask } from "./mask";
 import {
   DEFAULT_INPUT_TEMPLATE,
@@ -18,6 +19,7 @@ import { prettyObject } from "../utils/format";
 import { estimateTokenLength } from "../utils/token";
 import { nanoid } from "nanoid";
 import { createPersistStore } from "../utils/store";
+import { ProductionInfo } from "../utils/datatypes";
 
 const generateUniqId = () => uuidv4();
 
@@ -73,7 +75,8 @@ export const BOT_HELLO: ChatMessage = createMessage({
   content: Locale.Store.BotHello,
 });
 
-function createEmptySession(): ChatSession {
+function createEmptySession(mask?: Mask): ChatSession {
+  
   return {
     id: generateUniqId(),
     topic: DEFAULT_TOPIC,
@@ -87,7 +90,7 @@ function createEmptySession(): ChatSession {
     lastUpdate: Date.now(),
     lastSummarizeIndex: 0,
 
-    mask: createEmptyMask(),
+    mask: mask ?? createEmptyMask(),
     useRAGSession: false,
     useKGSession: false,
     contextualPrompts: []
@@ -230,8 +233,13 @@ export const useChatStore = createPersistStore(
         );
 
         if (deletingLastSession) {
+          const acessStore = useAccessStore.getState();
+          const prodInfo = acessStore.productionInfo === "undefined" ?
+            undefined : (JSON.parse(acessStore.productionInfo) as any) as ProductionInfo;
           nextIndex = 0;
-          sessions.push(createEmptySession());
+          const mask = prodInfo?.Text.Masks && prodInfo?.Text.Masks.length > 0 ? 
+            prodInfo.Text.Masks[0] : undefined;
+          sessions.push(createEmptySession(mask));
         }
 
         // for undo delete action

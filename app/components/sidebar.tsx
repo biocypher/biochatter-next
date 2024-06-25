@@ -36,7 +36,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { isIOS, useMobileScreen } from "../utils";
 import dynamic from "next/dynamic";
 import { showConfirm, showToast } from "./ui-lib";
-import { DbConfiguration } from "../utils/datatypes";
+import { DbConfiguration, ProductionInfo } from "../utils/datatypes";
 
 const ChatList = dynamic(async () => (await import("./chat-list")).ChatList, {
   loading: () => null,
@@ -138,9 +138,14 @@ function useDragSideBar() {
 export function SideBar(props: { className?: string }) {
   const chatStore = useChatStore();
   const accessStore = useAccessStore();
-  const prodInfo = accessStore.productionInfo === "undefined" ? undefined : JSON.parse(accessStore.productionInfo);
-  let kgProdInfo = (prodInfo?.KnowledgeGraph ?? {servers: [], enabled: true}) as DbConfiguration;
-  let ragProdInfo = (prodInfo?.VectorStore ?? {servers: [], enabled: true}) as DbConfiguration;
+  const prodInfo = 
+    accessStore.productionInfo === "undefined" ? 
+    undefined : 
+    (JSON.parse(accessStore.productionInfo) as any) as ProductionInfo;
+  const kgProdInfo = (prodInfo?.KnowledgeGraph ?? {servers: [], enabled: true}) as DbConfiguration;
+  const ragProdInfo = (prodInfo?.VectorStore ?? {servers: [], enabled: true}) as DbConfiguration;
+  const masks = (prodInfo?.Text.Masks);
+
 
   // drag side bar
   const { onDragStart, shouldNarrow } = useDragSideBar();
@@ -198,11 +203,6 @@ export function SideBar(props: { className?: string }) {
           className={styles["sidebar-bar-button"]}
           onClick={() => {
             navigate(Path.Welcome, { state: { fromHome: true } });
-            // if (config.dontShowMaskSplashScreen !== true) {
-
-            // } else {
-            //   navigate(Path.Welcome, { state: { fromHome: true } });
-            // }
           }}
           shadow
         />
@@ -211,10 +211,15 @@ export function SideBar(props: { className?: string }) {
           text={shouldNarrow ? undefined : Locale.Mask.Name}
           className={styles["sidebar-bar-button"]}
           onClick={() => {
-            if (config.dontShowMaskSplashScreen !== true) {
-              navigate(Path.NewChat);
+            if (masks && masks.length > 0) {
+              chatStore.newSession(masks[0]);
+              navigate(Path.Chat);
             } else {
-              navigate(Path.Masks, { state: { fromHome: true } });
+              if (config.dontShowMaskSplashScreen !== true) {
+                navigate(Path.NewChat);
+              } else {
+                navigate(Path.Masks, { state: { fromHome: true } });
+              }
             }
           }}
           shadow
