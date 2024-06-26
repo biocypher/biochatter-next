@@ -24,6 +24,13 @@ export function Welcome() {
     (JSON.parse(accessStore.productionInfo) as any) as ProductionInfo;
   const welcome = prodInfo?.Text.Welcome ?? Locale.Welcome.Page;
 
+  const what = prodInfo?.Text.Welcome.What ?? Locale.Welcome.Page.What;
+  const whatMessages = prodInfo?.Text.Welcome.WhatMessages ?? Locale.Welcome.Page.WhatMessages;
+  const how = prodInfo?.Text.Welcome.How ?? Locale.Welcome.Page.How;
+  const howMessages = prodInfo?.Text.Welcome.HowMessages ?? Locale.Welcome.Page.HowMessages;
+  const about = prodInfo?.Text.Welcome.About ?? Locale.Welcome.Page.About;
+
+
   function checkUpdate(force = false) {
     updateStore.getLatestVersion(force).then(() => {
       console.log("[Update] local version ", updateStore.version);
@@ -39,11 +46,11 @@ export function Welcome() {
   const [currentHowMessageIndex, setCurrentHowMessageIndex] = useState(0);
 
   const handleWhatClick = () => {
-    setCurrentWhatMessageIndex((prevIndex) => (prevIndex + 1) % welcome.WhatMessages.length);
+    setCurrentWhatMessageIndex((prevIndex) => (prevIndex + 1) % whatMessages.length);
   };
 
   const handleHowClick = () => {
-    setCurrentHowMessageIndex((prevIndex) => (prevIndex + 1) % welcome.HowMessages.length);
+    setCurrentHowMessageIndex((prevIndex) => (prevIndex + 1) % howMessages.length);
   };
 
   return (
@@ -85,9 +92,9 @@ export function Welcome() {
             <h2>About</h2>
             <div>
               <p>
-                {Locale.Welcome.Page.About.ListTitle}
+                {about.ListTitle}
                 <ul>
-                  {welcome.About.ListItems.map((listItem: any, index: any) => (
+                  {about.ListItems.map((listItem: any, index: any) => (
                     <li key={index}>
                       {listItem}
                     </li>
@@ -95,27 +102,27 @@ export function Welcome() {
                 </ul>
               </p>
             </div>
-            <h2>{welcome.About.Heading2}</h2>
-            <MarkdownContent content={welcome.About.Models} />
+            <h2>{about.Heading2}</h2>
+            <MarkdownContent content={about.Models} />
             <p>
-              <MarkdownContent content={welcome.About.Citation} />
+              <MarkdownContent content={about.Citation} />
             </p>
           </section>
           <section>
             <div className={styles["what-how-messages"]}>
               <div className={styles["message-column"]}>
-                <h2 className={styles["message-column-title"]}>{welcome.What}</h2>
+                <h2 className={styles["message-column-title"]}>{what}</h2>
                 <div className={styles["message-list"]} onClick={handleWhatClick}>
                   <div className={styles["message-text"]}>
-                    <MarkdownContent content={welcome.WhatMessages[currentWhatMessageIndex]} />
+                    <MarkdownContent content={whatMessages[currentWhatMessageIndex]} />
                   </div>
                 </div>
               </div>
               <div className={styles["message-column"]}>
-                <h2 className={styles["message-column-title"]}>{welcome.How}</h2>
+                <h2 className={styles["message-column-title"]}>{how}</h2>
                 <div className={styles["message-list"]} onClick={handleHowClick}>
                   <div className={styles["message-text"]}>
-                    <MarkdownContent content={welcome.HowMessages[currentHowMessageIndex]} />
+                    <MarkdownContent content={howMessages[currentHowMessageIndex]} />
                   </div>
                 </div>
               </div>

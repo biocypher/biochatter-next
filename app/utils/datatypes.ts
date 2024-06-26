@@ -23,10 +23,10 @@ export interface WelcomeConfiguration {
   Title: string;
   Disclaimer: string;
   About: Record<string, any>;
-  What: string;
-  WhatMessages: Array<string>;
-  How: string;
-  HowMessages: Array<string>;
+  What?: string;
+  WhatMessages?: Array<string>;
+  How?: string;
+  HowMessages?: Array<string>;
 }
 
 export interface TextConfiguration {
