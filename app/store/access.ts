@@ -37,6 +37,7 @@ const DEFAULT_ACCESS_STATE = {
   disableFastLink: false,
   customModels: "",
   productionInfo: "undefined",
+  customProduct: false,
 };
 
 export const useAccessStore = createPersistStore(
@@ -107,8 +108,10 @@ export const useAccessStore = createPersistStore(
       if (version < 2.1) {
         const state = persistedState as {
           productionInfo: string;
+          customProduct: boolean;
         }
         state.productionInfo = "undefined";
+        state.customProduct = false;
       }
 
       return persistedState as any;

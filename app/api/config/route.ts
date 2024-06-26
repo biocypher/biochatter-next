@@ -17,6 +17,7 @@ const DANGER_CONFIG = {
   disableFastLink: serverConfig.disableFastLink,
   customModels: serverConfig.customModels,
   productionInfo: "undefined",
+  customProduct: serverConfig.customProduct,
 };
 
 declare global {
@@ -61,7 +62,7 @@ async function handle() {
   try {
     const yaml = load(readFileSync(path.join(__dirname, "../../../../app-config/production.yml"), "utf-8"));
     const validated_config = validate_configuration(yaml as ProductionInfo);
-    
+
     return NextResponse.json({
       ...DANGER_CONFIG,
       productionInfo: JSON.stringify(validated_config),

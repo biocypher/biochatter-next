@@ -19,14 +19,19 @@ export function Welcome() {
 
   const updateStore = useUpdateStore();
   const accessStore = useAccessStore();
+  const customProduct = accessStore.customProduct;
   const prodInfo = accessStore.productionInfo === "undefined" ? 
     undefined : 
     (JSON.parse(accessStore.productionInfo) as any) as ProductionInfo;
   const welcome = prodInfo?.Text.Welcome ?? Locale.Welcome.Page;
 
-  const what = prodInfo?.Text.Welcome.What ?? Locale.Welcome.Page.What;
+  const what = customProduct ?
+    prodInfo?.Text.Welcome.What :
+    prodInfo?.Text.Welcome.What ?? Locale.Welcome.Page.What;
   const whatMessages = prodInfo?.Text.Welcome.WhatMessages ?? Locale.Welcome.Page.WhatMessages;
-  const how = prodInfo?.Text.Welcome.How ?? Locale.Welcome.Page.How;
+  const how = customProduct ? 
+    prodInfo?.Text.Welcome.How : 
+    prodInfo?.Text.Welcome.How ?? Locale.Welcome.Page.How;
   const howMessages = prodInfo?.Text.Welcome.HowMessages ?? Locale.Welcome.Page.HowMessages;
   const about = prodInfo?.Text.Welcome.About ?? Locale.Welcome.Page.About;
 
@@ -108,7 +113,7 @@ export function Welcome() {
               <MarkdownContent content={about.Citation} />
             </p>
           </section>
-          <section>
+          {(how && what) && (<section>
             <div className={styles["what-how-messages"]}>
               <div className={styles["message-column"]}>
                 <h2 className={styles["message-column-title"]}>{what}</h2>
@@ -127,7 +132,7 @@ export function Welcome() {
                 </div>
               </div>
             </div>
-          </section>
+          </section>)}
           <section className={styles["version-info"]}>
             <MarkdownContent content={Locale.Welcome.Page.VersionInfo(updateStore.version)} />
           </section>

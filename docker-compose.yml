@@ -12,6 +12,7 @@ services:
       - ./tmp:/tmp
     environment:
       - BASE_URL=http://flask-app:5001
+      - CUSTOM_BIOCHATTER_NEXT=true
     depends_on:
       - flask-app
  
