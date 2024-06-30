@@ -12,6 +12,13 @@ import { useAppConfig, useUpdateStore, useAccessStore } from "../store";
 
 import React, { useState, useEffect } from 'react';
 import { ProductionInfo } from "../utils/datatypes";
+import {
+  getWelcomeAbout,
+  getWelcomeHow,
+  getWelcomeWhatMessages,
+  getWelcomeWhat,
+  getWelcomeHowMessages
+} from "../utils/prodinfo";
 
 export function Welcome() {
   const config = useAppConfig();
@@ -19,22 +26,16 @@ export function Welcome() {
 
   const updateStore = useUpdateStore();
   const accessStore = useAccessStore();
-  const customProduct = accessStore.customProduct;
   const prodInfo = accessStore.productionInfo === "undefined" ? 
     undefined : 
     (JSON.parse(accessStore.productionInfo) as any) as ProductionInfo;
-  const welcome = prodInfo?.Text.Welcome ?? Locale.Welcome.Page;
+  const welcome = prodInfo?.Text?.Welcome ?? Locale.Welcome.Page;
 
-  const what = customProduct ?
-    prodInfo?.Text.Welcome.What :
-    prodInfo?.Text.Welcome.What ?? Locale.Welcome.Page.What;
-  const whatMessages = prodInfo?.Text.Welcome.WhatMessages ?? Locale.Welcome.Page.WhatMessages;
-  const how = customProduct ? 
-    prodInfo?.Text.Welcome.How : 
-    prodInfo?.Text.Welcome.How ?? Locale.Welcome.Page.How;
-  const howMessages = prodInfo?.Text.Welcome.HowMessages ?? Locale.Welcome.Page.HowMessages;
-  const about = prodInfo?.Text.Welcome.About ?? Locale.Welcome.Page.About;
-
+  const what = getWelcomeWhat(prodInfo);
+  const whatMessages = getWelcomeWhatMessages(prodInfo);
+  const how = getWelcomeHow(prodInfo);
+  const howMessages = getWelcomeHowMessages(prodInfo);
+  const about = getWelcomeAbout(prodInfo);
 
   function checkUpdate(force = false) {
     updateStore.getLatestVersion(force).then(() => {
@@ -51,11 +52,11 @@ export function Welcome() {
   const [currentHowMessageIndex, setCurrentHowMessageIndex] = useState(0);
 
   const handleWhatClick = () => {
-    setCurrentWhatMessageIndex((prevIndex) => (prevIndex + 1) % whatMessages.length);
+    setCurrentWhatMessageIndex((prevIndex) => (prevIndex + 1) % (whatMessages?.length ?? 1));
   };
 
   const handleHowClick = () => {
-    setCurrentHowMessageIndex((prevIndex) => (prevIndex + 1) % howMessages.length);
+    setCurrentHowMessageIndex((prevIndex) => (prevIndex + 1) % (howMessages?.length ?? 1));
   };
 
   return (
@@ -97,9 +98,9 @@ export function Welcome() {
             <h2>About</h2>
             <div>
               <p>
-                {about.ListTitle}
+                {about?.ListTitle}
                 <ul>
-                  {about.ListItems.map((listItem: any, index: any) => (
+                  {about?.ListItems.map((listItem: any, index: any) => (
                     <li key={index}>
                       {listItem}
                     </li>
@@ -107,10 +108,10 @@ export function Welcome() {
                 </ul>
               </p>
             </div>
-            <h2>{about.Heading2}</h2>
-            <MarkdownContent content={about.Models} />
+            <h2>{about?.Heading2}</h2>
+            <MarkdownContent content={about?.Models} />
             <p>
-              <MarkdownContent content={about.Citation} />
+              <MarkdownContent content={about?.Citation} />
             </p>
           </section>
           {(how && what) && (<section>
@@ -119,7 +120,9 @@ export function Welcome() {
                 <h2 className={styles["message-column-title"]}>{what}</h2>
                 <div className={styles["message-list"]} onClick={handleWhatClick}>
                   <div className={styles["message-text"]}>
-                    <MarkdownContent content={whatMessages[currentWhatMessageIndex]} />
+                    {whatMessages && 
+                     whatMessages?.length > 0 && 
+                     (<MarkdownContent content={whatMessages[currentWhatMessageIndex]} />)}
                   </div>
                 </div>
               </div>
@@ -127,7 +130,9 @@ export function Welcome() {
                 <h2 className={styles["message-column-title"]}>{how}</h2>
                 <div className={styles["message-list"]} onClick={handleHowClick}>
                   <div className={styles["message-text"]}>
-                    <MarkdownContent content={howMessages[currentHowMessageIndex]} />
+                    {howMessages &&
+                     howMessages.length > 0 &&
+                     (<MarkdownContent content={howMessages[currentHowMessageIndex]} />)}
                   </div>
                 </div>
               </div>

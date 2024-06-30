@@ -26,8 +26,6 @@ declare global {
       AZURE_URL?: string; // https://{azure-url}/openai/deployments/{deploy-name}
       AZURE_API_KEY?: string;
       AZURE_API_VERSION?: string;
-
-      CUSTOM_BIOCHATTER_NEXT?: string;
     }
   }
 }
@@ -72,8 +70,6 @@ export const getServerSideConfig = () => {
   console.log(
     `[Server Config] using ${randomIndex + 1} of ${apiKeys.length} api key`,
   );
-  const customProduct = (!!process.env.CUSTOM_BIOCHATTER_NEXT) &&
-    (process.env.CUSTOM_BIOCHATTER_NEXT === 'true');
 
   return {
     baseUrl: process.env.BASE_URL,
@@ -97,6 +93,5 @@ export const getServerSideConfig = () => {
     hideBalanceQuery: !process.env.ENABLE_BALANCE_QUERY,
     disableFastLink: !!process.env.DISABLE_FAST_LINK,
     customModels,
-    customProduct,
   };
 };

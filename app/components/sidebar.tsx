@@ -37,6 +37,7 @@ import { isIOS, useMobileScreen } from "../utils";
 import dynamic from "next/dynamic";
 import { showConfirm, showToast } from "./ui-lib";
 import { DbConfiguration, ProductionInfo } from "../utils/datatypes";
+import { getKnowledgeGraphInfo, getMaskInfo, getVectorStoreInfo } from "../utils/prodinfo";
 
 const ChatList = dynamic(async () => (await import("./chat-list")).ChatList, {
   loading: () => null,
@@ -142,10 +143,9 @@ export function SideBar(props: { className?: string }) {
     accessStore.productionInfo === "undefined" ? 
     undefined : 
     (JSON.parse(accessStore.productionInfo) as any) as ProductionInfo;
-  const kgProdInfo = (prodInfo?.KnowledgeGraph ?? {servers: [], enabled: true}) as DbConfiguration;
-  const ragProdInfo = (prodInfo?.VectorStore ?? {servers: [], enabled: true}) as DbConfiguration;
-  const masks = (prodInfo?.Text.Masks);
-
+  const kgProdInfo = getKnowledgeGraphInfo(prodInfo); // (prodInfo?.KnowledgeGraph ?? {servers: [], enabled: true}) as DbConfiguration;
+  const ragProdInfo = getVectorStoreInfo(prodInfo); // (prodInfo?.VectorStore ?? {servers: [], enabled: true}) as DbConfiguration;
+  const mask = getMaskInfo(prodInfo);
 
   // drag side bar
   const { onDragStart, shouldNarrow } = useDragSideBar();
@@ -211,8 +211,8 @@ export function SideBar(props: { className?: string }) {
           text={shouldNarrow ? undefined : Locale.Mask.Name}
           className={styles["sidebar-bar-button"]}
           onClick={() => {
-            if (masks && masks.length > 0) {
-              chatStore.newSession(masks[0]);
+            if (mask) {
+              chatStore.newSession(mask);
               navigate(Path.Chat);
             } else {
               if (config.dontShowMaskSplashScreen !== true) {

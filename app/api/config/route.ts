@@ -17,7 +17,6 @@ const DANGER_CONFIG = {
   disableFastLink: serverConfig.disableFastLink,
   customModels: serverConfig.customModels,
   productionInfo: "undefined",
-  customProduct: serverConfig.customProduct,
 };
 
 declare global {
@@ -60,12 +59,19 @@ const validate_configuration = (config: ProductionInfo): ProductionInfo | undefi
 
 async function handle() {
   try {
-    const yaml = load(readFileSync(path.join(__dirname, "../../../../app-config/production.yml"), "utf-8"));
-    const validated_config = validate_configuration(yaml as ProductionInfo);
-
+    const custom_file = process.env.CUSTOM_BIOCHATTER_NEXT_FILE;
+    let custom_config = undefined;
+    if (custom_file) {
+      try {
+        const yaml = load(readFileSync(custom_file, "utf-8"));
+        custom_config = validate_configuration(yaml as ProductionInfo);
+      } catch (err: any) {
+        console.error(err);
+      }
+    }
     return NextResponse.json({
       ...DANGER_CONFIG,
-      productionInfo: JSON.stringify(validated_config),
+      productionInfo: custom_config ? JSON.stringify(custom_config) : "undefined",
     });
   } catch (e: any) {
     console.error(e);

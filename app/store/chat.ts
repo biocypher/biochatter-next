@@ -20,6 +20,7 @@ import { estimateTokenLength } from "../utils/token";
 import { nanoid } from "nanoid";
 import { createPersistStore } from "../utils/store";
 import { ProductionInfo } from "../utils/datatypes";
+import { getMaskInfo } from "../utils/prodinfo";
 
 const generateUniqId = () => uuidv4();
 
@@ -237,8 +238,7 @@ export const useChatStore = createPersistStore(
           const prodInfo = acessStore.productionInfo === "undefined" ?
             undefined : (JSON.parse(acessStore.productionInfo) as any) as ProductionInfo;
           nextIndex = 0;
-          const mask = prodInfo?.Text.Masks && prodInfo?.Text.Masks.length > 0 ? 
-            prodInfo.Text.Masks[0] : undefined;
+          const mask = getMaskInfo(prodInfo)
           sessions.push(createEmptySession(mask));
         }
 

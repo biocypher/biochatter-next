@@ -30,12 +30,12 @@ export interface WelcomeConfiguration {
 }
 
 export interface TextConfiguration {
-  Welcome: WelcomeConfiguration;
-  Masks: Array<Mask>;
+  Welcome?: WelcomeConfiguration;
+  Masks?: Array<Mask>;
 }
 
 export interface ProductionInfo {
   KnowledgeGraph?: DbConfiguration;
   VectorStore?: DbConfiguration;
-  Text: TextConfiguration;
+  Text?: TextConfiguration;
 }
