@@ -25,16 +25,6 @@ const nextConfig = {
       child_process: false,
     };
 
-    if (!isServer) {
-      config.plugins.push(
-          new CopyPlugin({
-              patterns: [
-                  { from: 'app-config/production.yml', to: 'app-config/production.yml' },
-              ],
-          })
-      );
-    }
-
     return config;
   },
   output: mode,

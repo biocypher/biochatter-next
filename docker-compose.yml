@@ -10,9 +10,10 @@ services:
       - .env
     volumes:
       - ./tmp:/tmp
+      - ./config:/config
     environment:
       - BASE_URL=http://flask-app:5001
-      - CUSTOM_BIOCHATTER_NEXT=true
+      - CUSTOM_BIOCHATTER_NEXT_FILE=/config/biochatter-next.yaml
     depends_on:
       - flask-app
  
