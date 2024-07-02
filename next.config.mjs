@@ -1,4 +1,5 @@
 import webpack from "webpack";
+import CopyPlugin from "copy-webpack-plugin";
 
 const mode = process.env.BUILD_MODE ?? "standalone";
 console.log("[Next] build mode", mode);
@@ -8,7 +9,7 @@ console.log("[Next] build with chunk: ", !disableChunk);
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  webpack(config) {
+  webpack(config, {isServer}) {
     config.module.rules.push({
       test: /\.svg$/,
       use: ["@svgr/webpack"],

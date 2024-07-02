@@ -93,6 +93,7 @@ import { getClientConfig } from "../config/client";
 import { useAllModels } from "../utils/hooks";
 import { useRAGStore } from "../store/rag";
 import { useKGStore } from "../store/kg";
+import { DbConfiguration } from "../utils/datatypes";
 
 const Markdown = dynamic(async () => (await import("./markdown")).Markdown, {
   loading: () => <LoadingIcon />,
@@ -438,6 +439,10 @@ export function ChatActions(props: {
   const config = useAppConfig();
   const navigate = useNavigate();
   const chatStore = useChatStore();
+  const accessStore = useAccessStore();
+  const prodInfo = accessStore.productionInfo === "undefined" ? undefined : JSON.parse(accessStore.productionInfo);
+  const kgProdInfo = (prodInfo?.KnowledgeGraph ?? {servers: [], enabled: true}) as DbConfiguration;
+  const ragProdInfo = (prodInfo?.VectorStore ?? {servers: [], enabled: true}) as DbConfiguration;
   const session = chatStore.currentSession();
   const contexts = session.contextualPrompts;
   const total_rag_prompts_num = contexts.reduce((prev, cur) => (prev + cur.context.length), 0);
@@ -561,30 +566,36 @@ export function ChatActions(props: {
         )}
       </div>
       <div className={styles["chat-toggle-group"]}>
-        <div className={styles["chat-toggle"]}>
-          <label>rag</label>
-          <input
-            type="checkbox"
-            checked={chatStore.currentSession().useRAGSession}
-            onChange={(e) => (
-              chatStore.updateCurrentSession(
-                (session) => (session.useRAGSession = e.currentTarget.checked)
-              )
-            )}
-          />
-        </div>
-        <div className={styles["chat-toggle"]}>
-          <label>kg</label>
-          <input
-            type="checkbox"
-            checked={chatStore.currentSession().useKGSession}
-            onChange={(e) => (
-              chatStore.updateCurrentSession(
-                (session) => (session.useKGSession = e.currentTarget.checked)
-              )
-            )}
-          />
-        </div>
+        {ragProdInfo.enabled && (
+          <div className={styles["chat-toggle"]}>
+            <label>rag</label>
+            <input
+              disabled={!ragProdInfo.enabled}
+              type="checkbox"
+              checked={chatStore.currentSession().useRAGSession}
+              onChange={(e) => (
+                chatStore.updateCurrentSession(
+                  (session) => (session.useRAGSession = e.currentTarget.checked)
+                )
+              )}
+            />
+          </div>
+        )}
+        {kgProdInfo.enabled && (
+          <div className={styles["chat-toggle"]}>
+            <label aria-disabled={!kgProdInfo.enabled}>kg</label>
+            <input
+              disabled={!kgProdInfo.enabled}
+              type="checkbox"
+              checked={chatStore.currentSession().useKGSession}
+              onChange={(e) => (
+                chatStore.updateCurrentSession(
+                  (session) => (session.useKGSession = e.currentTarget.checked)
+                )
+              )}
+            />
+          </div>
+        )}
       </div>
     </div>
   );

@@ -1,0 +1,57 @@
+KnowledgeGraph:
+  enabled: true
+  servers:
+    - server: pole-kg
+      address: biocypher
+      port: 7687
+
+VectorStore:
+  enabled: true
+  servers:
+    - server: local
+      address: standalone
+      port: 19530
+
+Text:
+  Welcome:
+    Title: Cancer Geneticist Assistant
+    Disclaimer: "This is a use case demonstration, not a final product. The data and information provided here are synthetic (in the case of patient data) or limited by demo access (in the case of the OncoKB API)."
+    About:
+      Title: About
+      Citation: "BioChatter is developed by a multicultural team over on [GitHub](https://github.com/biocypher) ([BioChatter](https://github.com/biocypher/biochatter), [BioChatter Server](https://github.com/biocypher/biochatter-server), [BioChatter Next](https://github.com/biocypher/biochatter-next), [BioChatter Light](https://github.com/biocypher/biochatter-light)), led by [Sebastian Lobentanzer](https://slobentanzer.github.io/). Biochatter Next was developed by Shaohong Feng and Cankun Wang, and is hosted by [BMBL](https://u.osu.edu/bmbl)."
+      ListTitle: "BioChatter is a tool to integrate biomedical research with current developments in Large Language Models in a user-friendly package. This pre-configured use case is its application to the complex problem of cancer genetics and treatment suggestion. The conversational interface integrates information from various sources and facilitates their interpretation through natural language. The components are:"
+      ListItems:
+        - "Results from patient whole genome and RNA sequencing, yielding short variant calls, copy number alterations, gene fusion events, and gene expression levels (synthetic data, available via KG)"
+        - "External prior knowledge on biological processes, pathways, ... (real public data, available via KG)"
+        - "External information on the clinical relevance of genetic alterations and approved/pipeline treatments (real public data, demo version limited to few genes, available via API)"
+        - "Background knownledge of the ovarian cancer studied through semantic search in embeddings of relevant scientific literature (real public data, available via vector database RAG)"
+      Heading2: How to use
+      Models: The app is pre-configured with all relevant information. You can ask the chat bot questions about the enriched patient data (KG), the biological background (vector DB), and clinical relevance / treatment suggestions for alterations (API). For connecting to each of the resources, please select the corresponding checkbox in the lower right (KG, RAG, or API).
+  Masks:
+    - name: Cancer Genetics Assistant
+      avatar: "🧑‍🔬"
+      context:
+        - id: "cancer-genetics-assistant-1"
+          role: "system"
+          content: "You are an assistant to a cancer geneticist."
+          date: ""
+        - id: "cancer-genetics-assistant-2"
+          role: "system"
+          content: "Your role is to assist the user in the task of analysing patient data and prioritising treatments. You can receive auxiliary information from a knowledge graph containing patient data and molecular knowledge, a vector database with background knowledge, and an API with clinical relevance and treatment suggestions. If you receive input from these sources, include them in your responses, citing the source."
+          date: ""
+        - id: "cancer-genetics-assistant-3"
+          role: "system"
+          content: "You can ask the user to provide explanations and more background at any time, for instance on the treatment a patient has received, or the experimental background. But for now, wait for the user to ask a question."
+          date: ""
+      modelConfig:
+        model: gpt-3.5-turbo
+        temperature: 0
+        max_tokens: 2000
+        presence_penalty: 0
+        frequency_penalty: 0
+        sendMemory: true
+        historyMessageCount: 4
+        compressMessageLengthThreshold: 2000
+      lang: en
+      builtin: true
+      createdAt: 1697222692762
