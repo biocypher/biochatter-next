@@ -13,7 +13,7 @@ services:
       - ./config:/config
     environment:
       - BASE_URL=http://flask-app:5001
-      - CUSTOM_BIOCHATTER_NEXT_FILE=/config/biochatter-next.yaml
+      - CUSTOM_BIOCHATTER_NEXT_FILE=/config/decider.yaml
     depends_on:
       - flask-app
  
