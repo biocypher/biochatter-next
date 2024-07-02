@@ -77,7 +77,7 @@ export function Welcome() {
                     config.update(
                       (config) => (config.dontShowWelcomeSplashScreen = true),
                     );
-                    navigate(Path.NewChat)
+                    navigate(Path.Chat)
                   }
                 }} />
             </div>
@@ -85,7 +85,7 @@ export function Welcome() {
               <IconButton
                 icon={<CloseIcon />}
                 bordered
-                onClick={() => { navigate(Path.NewChat) }}
+                onClick={() => { navigate(Path.Chat) }}
               />
             </div>
           </div>
