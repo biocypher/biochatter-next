@@ -80,7 +80,7 @@ function createEmptySession(mask?: Mask): ChatSession {
   
   return {
     id: generateUniqId(),
-    topic: DEFAULT_TOPIC,
+    topic: mask ? mask.name : DEFAULT_TOPIC,
     memoryPrompt: "",
     messages: [],
     stat: {

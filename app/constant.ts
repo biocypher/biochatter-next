@@ -179,7 +179,7 @@ export const MAX_RENDER_MSG_COUNT = 45;
 
 // biochatter-server error
 export const ERROR_BIOSERVER_OK = 0
-export const ERROR_BIOSERVER_UNKNOW = 5000
+export const ERROR_BIOSERVER_UNKNOWN = 5000
 export const ERROR_BIOSERVER_MILVUS_UNKNOWN = 5101
 export const ERROR_BIOSERVER_MILVUS_CONNECT_FAILED = 5102
  
