@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.2.0](https://github.com/biocypher/biochatter-next/compare/v1.1.0...v1.2.0) (2024-07-05)
+
+
+### Features
+
+* Implement the support of configurable yaml ([#68](https://github.com/biocypher/biochatter-next/issues/68)) ([3d67f04](https://github.com/biocypher/biochatter-next/commit/3d67f04d0bc5a80949164c34f6648bc7d6e4fc88))
+
 ## 1.1.0 (2024-06-14)
 
 
