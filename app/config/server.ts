@@ -43,6 +43,7 @@ const ACCESS_CODES = (function getAccessCodes(): Set<string> {
   }
 })();
 
+
 export const getServerSideConfig = () => {
   if (typeof process === "undefined") {
     throw Error(

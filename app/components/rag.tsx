@@ -1,9 +1,10 @@
 import { useNavigate } from "react-router-dom";
 import { useRAGStore } from "../store/rag";
+import { useAccessStore } from "../store/access";
 import { ErrorBoundary } from "./error";
 import Locale from "../locales";
 
-import { List, ListItem, LoadingComponent, Modal, ReactDropZone, showConfirm } from "./ui-lib";
+import { List, ListItem, LoadingComponent, Modal, ReactDropZone, SelectInput, showConfirm } from "./ui-lib";
 
 import CloseIcon from "../icons/close.svg";
 import SettingsIcon from "../icons/rag-settings.svg";
@@ -20,7 +21,11 @@ import { ApiPath, ERROR_BIOSERVER_MILVUS_CONNECT_FAILED, ERROR_BIOSERVER_OK } fr
 import { InputRange } from "./input-range";
 import { useDebouncedCallback } from "use-debounce";
 import { requestAllVSDocuments, requestRemoveDocument, requestUploadFile, requestVSConnectionStatus } from "../client/datarequest";
+import { DbConfiguration } from "../utils/datatypes";
+import { getConnectionArgsToConnect, getConnectionArgsToDisplay } from "../utils/rag";
 
+const DEFAULT_PORT = "19530";
+const DEFAULT_HOST = "";
 
 function getDocumentName(doc: any) {
   if (!doc) {
@@ -40,15 +45,18 @@ function getDocumentName(doc: any) {
 
 export function RAGPage() {
   const navigate = useNavigate();
-
+  const accessStore = useAccessStore();
   const ragStore = useRAGStore();
-
+  const prodInfo = accessStore.productionInfo === "undefined" ? undefined : JSON.parse(accessStore.productionInfo);
+  let ragProdInfo = (prodInfo?.VectorStore ?? {servers: []}) as DbConfiguration;
   const [documents, setDocuments] = useState<Array<any>>([]);
   const [uploading, setUploading] = useState(false);
   const [connected, setConnected] = useState(false);
   const [isReconnecting, setIsReconnecting] = useState(false);
   const ragConfig = ragStore.currentRAGConfig();
-  const [connectionArgs, setConnectionArgs] = useState(ragConfig.connectionArgs);
+  const [connectionArgs, setConnectionArgs] = useState(
+    getConnectionArgsToDisplay(ragConfig.connectionArgs, ragProdInfo.servers??[])
+  );
 
   const updateDocuments = useDebouncedCallback(async () => {
     const theConfig = ragStore.currentRAGConfig();
@@ -81,7 +89,9 @@ export function RAGPage() {
     const connectionStatusUrl = fetchUrl + "connectionstatus";
     setIsReconnecting(true);
     try {
-      const res = await requestVSConnectionStatus(connectionArgs);
+      const res = await requestVSConnectionStatus(
+        getConnectionArgsToConnect(connectionArgs, ragProdInfo.servers??[]          
+      ));
       const value = await res.json();
       if (value?.code === ERROR_BIOSERVER_OK && value.status) {
         if (value.status === "connected") {
@@ -295,29 +305,74 @@ export function RAGPage() {
                     <ListItem
                       title={Locale.RAG.Settings.DatabaseURL}
                     >
-                      <input
+                      {ragProdInfo.servers && ragProdInfo.servers.length > 0 ? (<SelectInput
                         disabled={!ragStore.useRAG}
-                        type="text"
+                        listName="ragservers"
                         value={connectionArgs.host}
                         onChange={(e) => {
-                          setConnectionArgs({
-                            ...connectionArgs,
-                            host: e.currentTarget?.value ?? "local"
-                          });
-                          if (
-                            e.currentTarget?.value === undefined ||
-                            e.currentTarget?.value.length === 0
-                          ) {
-                            return;
+                          const val = e.currentTarget?.value ?? DEFAULT_HOST;
+                          let default_server = false;
+                          for (let rag of ragProdInfo.servers??[]) {
+                            if (rag.server === val) {
+                              default_server = true;
+                              setConnectionArgs({
+                                ...connectionArgs,
+                                host: rag.server,
+                                port: rag.port??DEFAULT_PORT,
+                              })
+                              ragStore.updateCurrentRAGConfig(
+                                (config) => {
+                                  config.connectionArgs.host = rag.address;
+                                  config.connectionArgs.port = rag.port ?? DEFAULT_PORT;
+                                  if (rag.number_of_results !== undefined) {
+                                    config.resultNum = rag.number_of_results;
+                                  }
+                                }
+                              )
+                              break;
+                            }
                           }
-                          const host = e.currentTarget.value;
-                          const theConfig = ragStore.getRAGConfig(host, connectionArgs.port);
-                          if (!theConfig) {
-                            return;
+                          if (!default_server) {
+                            setConnectionArgs({
+                              ...connectionArgs,
+                              host:e.currentTarget?.value??DEFAULT_HOST
+                            });
+                            ragStore.updateCurrentRAGConfig(
+                              (config) => (
+                                config.connectionArgs.host = e.currentTarget?.value??DEFAULT_HOST
+                              )
+                            )
                           }
-                          ragStore.selectRAGConfig({ ...theConfig.connectionArgs })
                         }}
-                      ></input>
+                      >
+                        {ragProdInfo.servers?.map((rag) => (
+                          <option key={rag.server} value={rag.server}></option>
+                        ))}
+                      </SelectInput>) : (
+                        <input
+                          disabled={!ragStore.useRAG}
+                          type="text"
+                          value={connectionArgs.host}
+                          onChange={(e) => {
+                            setConnectionArgs({
+                              ...connectionArgs,
+                              host: e.currentTarget?.value ?? "local"
+                            });
+                            if (
+                              e.currentTarget?.value === undefined ||
+                              e.currentTarget?.value.length === 0
+                            ) {
+                              return;
+                            }
+                            const host = e.currentTarget.value;
+                            const theConfig = ragStore.getRAGConfig(host, connectionArgs.port);
+                            if (!theConfig) {
+                              return;
+                            }
+                            ragStore.selectRAGConfig({ ...theConfig.connectionArgs })
+                          }}
+                        ></input>)
+                      }
                     </ListItem>
                     <ListItem
                       title={Locale.RAG.Settings.DatabasePort}

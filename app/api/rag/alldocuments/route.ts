@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { BioChatterServerResponse, getBaseUrl } from "../../common";
-import { BiochatterPath, ERROR_BIOSERVER_MILVUS_CONNECT_FAILED, ERROR_BIOSERVER_OK, ERROR_BIOSERVER_UNKNOW } from "@/app/constant";
+import { BiochatterPath, ERROR_BIOSERVER_MILVUS_CONNECT_FAILED, ERROR_BIOSERVER_OK, ERROR_BIOSERVER_UNKNOWN } from "@/app/constant";
 import { prettyObject } from "@/app/utils/format";
 
 async function handle(request: NextRequest) {
@@ -27,7 +27,7 @@ async function handle(request: NextRequest) {
       if (v.code === ERROR_BIOSERVER_MILVUS_CONNECT_FAILED) {
         return NextResponse.json({code: ERROR_BIOSERVER_MILVUS_CONNECT_FAILED});
       } else {
-        return NextResponse.json({code: ERROR_BIOSERVER_UNKNOW,})
+        return NextResponse.json({code: ERROR_BIOSERVER_UNKNOWN,})
       }
     } else {
       console.log(v.error ?? "Unkonw errors occurred in biochatter-server")

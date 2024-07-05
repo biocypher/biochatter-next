@@ -135,6 +135,8 @@ const loadAsyncGoogleFont = () => {
 
 function Screen() {
   const config = useAppConfig();
+  const access = useAccessStore();
+  const customized = access.productionInfo === "undefined" ? false : true;
   const location = useLocation();
   const isHome = location.pathname === Path.Home;
   const isAuth = location.pathname === Path.Auth;
@@ -145,6 +147,13 @@ function Screen() {
   useEffect(() => {
     loadAsyncGoogleFont();
   }, []);
+
+  function getHomeScreen() {
+    if (config.dontShowWelcomeSplashScreen) {
+      return (customized) ? (<Chat />) : (<NewChat />)
+    }
+    return <Welcome />;
+  }
 
   return (
     <div
@@ -165,7 +174,7 @@ function Screen() {
 
           <div className={styles["window-content"]} id={SlotID.AppBody}>
             <Routes>
-              <Route path={Path.Home} element={config.dontShowWelcomeSplashScreen ? <NewChat /> : <Welcome />} />
+              <Route path={Path.Home} element={getHomeScreen()} />
               <Route path={Path.NewChat} element={<NewChat />} />
               <Route path={Path.Welcome} element={<Welcome />} />
               <Route path={Path.Masks} element={<MaskPage />} />
