@@ -65,6 +65,8 @@ export interface ChatSession {
   clearContextIndex?: number;
 
   mask: Mask;
+  useAutoAgentSession: boolean;
+  useOncoKBSession: boolean;
   useRAGSession: boolean;
   useKGSession: boolean;
   contextualPrompts: RagContext[];
@@ -94,6 +96,8 @@ function createEmptySession(mask?: Mask): ChatSession {
     mask: mask ?? createEmptyMask(),
     useRAGSession: false,
     useKGSession: false,
+    useAutoAgentSession: false,
+    useOncoKBSession: false,
     contextualPrompts: []
   };
 }

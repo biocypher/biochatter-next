@@ -1,7 +1,10 @@
 import { Mask, createEmptyMask } from "../store/mask";
-import { DbConfiguration, ProductionInfo } from "./datatypes";
+import { APIAgentInfo, DbConfiguration, ProductionInfo } from "./datatypes";
 import Locale  from "../locales";
 
+export function getOncoKBInfo(prodInfo?: ProductionInfo): APIAgentInfo {
+  return (prodInfo?.OncoKBAPI ?? {enabled: true})
+}
 
 export function getKnowledgeGraphInfo(prodInfo?: ProductionInfo): DbConfiguration {
   return (prodInfo?.KnowledgeGraph ?? {servers: [], enabled: true});

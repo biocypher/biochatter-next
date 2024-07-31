@@ -16,13 +16,10 @@ VectorStore:
       address: 10.95.224.94 # standalone
       port: 19530
       description: "This vector store contains Lexus vehicles' manual"
-BLAST_API:
-  enabled: true
-  description: "BLAST API can query and fetch results from BLAST. The Basic Local Alignment Search Tool (BLAST) finds regions of local similarity between sequences. BLAST compares nucleotide or protein sequences to sequence databases and calculates the statistical significance of matches."
 
 OncoKB_API:
   enabled: true
-  description: "OncoKB API can query and fetch results from OncoKB.OncoKB is a precision oncology knowledge base and contains information about the effects and treatment implications of specific cancer gene alterations."
+  description: "OncoKB API can query and fetch results from OncoKB. OncoKB is a precision oncology knowledge base and contains information about the effects and treatment implications of specific cancer gene alterations."
 
 Text:
   Welcome:

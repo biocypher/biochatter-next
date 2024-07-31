@@ -35,8 +35,14 @@ export interface TextConfiguration {
   Masks?: Array<Mask>;
 }
 
+export interface APIAgentInfo {
+  enabled: boolean;
+  description?: string;
+}
+
 export interface ProductionInfo {
   KnowledgeGraph?: DbConfiguration;
   VectorStore?: DbConfiguration;
+  OncoKBAPI?: APIAgentInfo;
   Text?: TextConfiguration;
 }

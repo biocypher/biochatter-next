@@ -28,13 +28,9 @@ import EditIcon from "../icons/rename.svg";
 import ConfirmIcon from "../icons/confirm.svg";
 import CancelIcon from "../icons/cancel.svg";
 
-import LightIcon from "../icons/light.svg";
-import DarkIcon from "../icons/dark.svg";
-import AutoIcon from "../icons/auto.svg";
 import BottomIcon from "../icons/bottom.svg";
 import StopIcon from "../icons/pause.svg";
 import RobotIcon from "../icons/robot.svg";
-import RagIcon from "../icons/rag.svg";
 
 import {
   ChatMessage,
@@ -94,6 +90,7 @@ import { useAllModels } from "../utils/hooks";
 import { useRAGStore } from "../store/rag";
 import { useKGStore } from "../store/kg";
 import { DbConfiguration } from "../utils/datatypes";
+import { getOncoKBInfo } from "../utils/prodinfo";
 
 const Markdown = dynamic(async () => (await import("./markdown")).Markdown, {
   loading: () => <LoadingIcon />,
@@ -443,6 +440,10 @@ export function ChatActions(props: {
   const prodInfo = accessStore.productionInfo === "undefined" ? undefined : JSON.parse(accessStore.productionInfo);
   const kgProdInfo = (prodInfo?.KnowledgeGraph ?? {servers: [], enabled: true}) as DbConfiguration;
   const ragProdInfo = (prodInfo?.VectorStore ?? {servers: [], enabled: true}) as DbConfiguration;
+  const oncokbInfo = getOncoKBInfo(prodInfo);
+  const agentEnableFlags = [kgProdInfo.enabled, ragProdInfo.enabled, oncokbInfo.enabled]
+  let enabledAgentsNum = 0;
+  agentEnableFlags.forEach((flag) => (enabledAgentsNum += flag ? 1 : 0));
   const session = chatStore.currentSession();
   const contexts = session.contextualPrompts;
   const total_rag_prompts_num = contexts.reduce((prev, cur) => (prev + cur.context.length), 0);
@@ -566,12 +567,42 @@ export function ChatActions(props: {
         )}
       </div>
       <div className={styles["chat-toggle-group"]}>
+        {enabledAgentsNum > 1 && (
+          <div className={styles["chat-toggle"]}>
+            <label>auto</label>
+            <input
+            type="checkbox"
+            checked={chatStore.currentSession().useAutoAgentSession}
+            onChange={(e) => (
+              chatStore.updateCurrentSession(
+                (session) => (session.useAutoAgentSession = e.currentTarget.checked)
+              )
+            )}/>
+          </div>
+        )}
+        {oncokbInfo.enabled && (
+          <div className={styles["chat-toggle"]}>
+          <label>OncoKB</label>
+          <input
+            type="checkbox"
+            className={styles["agent-checkbox"]}
+            disabled={chatStore.currentSession().useAutoAgentSession}
+            checked={chatStore.currentSession().useOncoKBSession}
+            onChange={(e) => (
+              chatStore.updateCurrentSession(
+                (session) => (session.useOncoKBSession = e.currentTarget.checked)
+              )
+            )}
+          />
+        </div>
+        )}
         {ragProdInfo.enabled && (
           <div className={styles["chat-toggle"]}>
             <label>rag</label>
             <input
-              disabled={!ragProdInfo.enabled}
+              disabled={chatStore.currentSession().useAutoAgentSession}
               type="checkbox"
+              className={styles["agent-checkbox"]}
               checked={chatStore.currentSession().useRAGSession}
               onChange={(e) => (
                 chatStore.updateCurrentSession(
@@ -585,8 +616,9 @@ export function ChatActions(props: {
           <div className={styles["chat-toggle"]}>
             <label aria-disabled={!kgProdInfo.enabled}>kg</label>
             <input
-              disabled={!kgProdInfo.enabled}
+              disabled={chatStore.currentSession().useAutoAgentSession}
               type="checkbox"
+              className={styles["agent-checkbox"]}
               checked={chatStore.currentSession().useKGSession}
               onChange={(e) => (
                 chatStore.updateCurrentSession(
