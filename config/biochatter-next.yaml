@@ -2,15 +2,20 @@ KnowledgeGraph:
   enabled: true
   servers:
     - server: pole-kg
-      address: biocypher
+      address: 10.95.224.94 # biocypher
       port: 7687
+    - server: decider-genetic-kg
+      address: 10.95.224.94 # biocypher
+      port: 47687
+      description: "This knowledge graph contains nodes, 'Gene', 'Sample', 'BiologicalProcess', 'SequenceVariant', 'Patient', edges: 'PatientToSampleAssociation', 'SampleToVariantAssociation', 'PatientToVariantAssociation', 'VariantToGeneAssociation, 'PatientToGeneCopyNumberAssociation', and 'GeneToBiologcialProcessAssociation'"
 
 VectorStore:
   enabled: true
   servers:
     - server: local
-      address: standalone
+      address: 10.95.224.94 # standalone
       port: 19530
+      description: "This vector store contains Lexus vehicles' manual"
 
 Text:
   Welcome:

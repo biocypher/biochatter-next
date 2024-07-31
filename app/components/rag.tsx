@@ -22,7 +22,7 @@ import { InputRange } from "./input-range";
 import { useDebouncedCallback } from "use-debounce";
 import { requestAllVSDocuments, requestRemoveDocument, requestUploadFile, requestVSConnectionStatus } from "../client/datarequest";
 import { DbConfiguration } from "../utils/datatypes";
-import { getConnectionArgsToConnect, getConnectionArgsToDisplay } from "../utils/rag";
+import { getVectorStoreConnectionArgsToConnect, getVectorStoreConnectionArgsToDisplay } from "../utils/rag";
 
 const DEFAULT_PORT = "19530";
 const DEFAULT_HOST = "";
@@ -55,7 +55,7 @@ export function RAGPage() {
   const [isReconnecting, setIsReconnecting] = useState(false);
   const ragConfig = ragStore.currentRAGConfig();
   const [connectionArgs, setConnectionArgs] = useState(
-    getConnectionArgsToDisplay(ragConfig.connectionArgs, ragProdInfo.servers??[])
+    getVectorStoreConnectionArgsToDisplay(ragConfig.connectionArgs, ragProdInfo.servers??[])
   );
 
   const updateDocuments = useDebouncedCallback(async () => {
@@ -90,7 +90,7 @@ export function RAGPage() {
     setIsReconnecting(true);
     try {
       const res = await requestVSConnectionStatus(
-        getConnectionArgsToConnect(connectionArgs, ragProdInfo.servers??[]          
+        getVectorStoreConnectionArgsToConnect(connectionArgs, ragProdInfo.servers??[]          
       ));
       const value = await res.json();
       if (value?.code === ERROR_BIOSERVER_OK && value.status) {
@@ -326,6 +326,9 @@ export function RAGPage() {
                                   config.connectionArgs.port = rag.port ?? DEFAULT_PORT;
                                   if (rag.number_of_results !== undefined) {
                                     config.resultNum = rag.number_of_results;
+                                  }
+                                  if (rag.description !== undefined) {
+                                    config.description = rag.description;
                                   }
                                 }
                               )

@@ -11,6 +11,7 @@ export interface RAGConfig {
   resultNum: number;
   docIdsWorkspace: Array<string>;
   selectedDocIds?: Array<string>;
+  description?: string;
 }
 
 export const createEmptyRAGConfig = (

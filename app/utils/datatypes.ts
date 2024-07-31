@@ -4,7 +4,7 @@ export interface DbConnectionArgs {
   host: string;
   port: string;
   user?: string;
-  password?: string
+  password?: string;
 }
 
 export interface DbServerSettings {
@@ -12,6 +12,7 @@ export interface DbServerSettings {
   address: string;
   port?: string;
   number_of_results?: number;
+  description: string;
 }
 
 export interface DbConfiguration {
