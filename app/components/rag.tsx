@@ -65,7 +65,8 @@ export function RAGPage() {
     
     try {
       const res = await requestAllVSDocuments(
-        theConfig.connectionArgs, theConfig.docIdsWorkspace
+        getVectorStoreConnectionArgsToConnect(connectionArgs, ragProdInfo.servers??[]),
+        theConfig.docIdsWorkspace
       );
       const value = await res.json();
       if (value.documents) {
@@ -88,15 +89,16 @@ export function RAGPage() {
     }
     const connectionStatusUrl = fetchUrl + "connectionstatus";
     setIsReconnecting(true);
+    const connectionArgsAddress = getVectorStoreConnectionArgsToConnect(
+      connectionArgs, ragProdInfo.servers??[]
+    );
     try {
-      const res = await requestVSConnectionStatus(
-        getVectorStoreConnectionArgsToConnect(connectionArgs, ragProdInfo.servers??[]          
-      ));
+      const res = await requestVSConnectionStatus(connectionArgsAddress);
       const value = await res.json();
       if (value?.code === ERROR_BIOSERVER_OK && value.status) {
         if (value.status === "connected") {
           setConnected(true);
-          ragStore.selectRAGConfig(connectionArgs);
+          ragStore.selectRAGConfig(connectionArgsAddress);
         } else {
           setConnected(false);
         }
