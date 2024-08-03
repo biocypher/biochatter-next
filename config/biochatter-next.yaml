@@ -16,7 +16,6 @@ VectorStore:
     - server: local
       address: standalone
       port: 19530
-      description: "This vector store contains Lexus vehicles' manual"
 
 OncoKBAPI:
   enabled: true
