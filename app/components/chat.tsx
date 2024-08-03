@@ -171,7 +171,7 @@ function PromptToast(props: {
   const chatStore = useChatStore();
   const session = chatStore.currentSession();
   const context = session.mask.context;
-  
+
   return (
     <div className={styles["prompt-toast"]} key="prompt-toast">
       {props.showToast && (
@@ -194,7 +194,7 @@ function PromptToast(props: {
 }
 
 function RagPromptToast(
-  {showModal, setShowModal}: {showModal: boolean, setShowModal: (_: boolean) => void}
+  { showModal, setShowModal }: { showModal: boolean, setShowModal: (_: boolean) => void }
 ) {
   const chatStore = useChatStore();
   const session = chatStore.currentSession();
@@ -438,8 +438,8 @@ export function ChatActions(props: {
   const chatStore = useChatStore();
   const accessStore = useAccessStore();
   const prodInfo = accessStore.productionInfo === "undefined" ? undefined : JSON.parse(accessStore.productionInfo);
-  const kgProdInfo = (prodInfo?.KnowledgeGraph ?? {servers: [], enabled: true}) as DbConfiguration;
-  const ragProdInfo = (prodInfo?.VectorStore ?? {servers: [], enabled: true}) as DbConfiguration;
+  const kgProdInfo = (prodInfo?.KnowledgeGraph ?? { servers: [], enabled: true }) as DbConfiguration;
+  const ragProdInfo = (prodInfo?.VectorStore ?? { servers: [], enabled: true }) as DbConfiguration;
   const oncokbInfo = getOncoKBInfo(prodInfo);
   const agentEnableFlags = [kgProdInfo.enabled, ragProdInfo.enabled, oncokbInfo.enabled]
   let enabledAgentsNum = 0;
@@ -447,9 +447,9 @@ export function ChatActions(props: {
   const session = chatStore.currentSession();
   const contexts = session.contextualPrompts;
   const total_rag_prompts_num = contexts.reduce((prev, cur) => (prev + cur.context.length), 0);
-  const rag_prompts_text = (total_rag_prompts_num === 0) ? 
+  const rag_prompts_text = (total_rag_prompts_num === 0) ?
     (Locale.RagContext.Toast("0", "")) :
-    (contexts.map((ctx) => (ctx.context.length > 0 ? 
+    (contexts.map((ctx) => (ctx.context.length > 0 ?
       Locale.RagContext.Toast(ctx.context.length, ctx.mode) :
       ""
     ))).join(" ");
@@ -569,36 +569,36 @@ export function ChatActions(props: {
       <div className={styles["chat-toggle-group"]}>
         {enabledAgentsNum > 1 && (
           <div className={styles["chat-toggle"]}>
-            <label>auto</label>
+            <label>Auto</label>
             <input
-            type="checkbox"
-            checked={chatStore.currentSession().useAutoAgentSession}
-            onChange={(e) => (
-              chatStore.updateCurrentSession(
-                (session) => (session.useAutoAgentSession = e.currentTarget.checked)
-              )
-            )}/>
+              type="checkbox"
+              checked={chatStore.currentSession().useAutoAgentSession}
+              onChange={(e) => (
+                chatStore.updateCurrentSession(
+                  (session) => (session.useAutoAgentSession = e.currentTarget.checked)
+                )
+              )} />
           </div>
         )}
         {oncokbInfo.enabled && (
           <div className={styles["chat-toggle"]}>
-          <label>OncoKB</label>
-          <input
-            type="checkbox"
-            className={styles["agent-checkbox"]}
-            disabled={chatStore.currentSession().useAutoAgentSession}
-            checked={chatStore.currentSession().useOncoKBSession}
-            onChange={(e) => (
-              chatStore.updateCurrentSession(
-                (session) => (session.useOncoKBSession = e.currentTarget.checked)
-              )
-            )}
-          />
-        </div>
+            <label>OncoKB</label>
+            <input
+              type="checkbox"
+              className={styles["agent-checkbox"]}
+              disabled={chatStore.currentSession().useAutoAgentSession}
+              checked={chatStore.currentSession().useOncoKBSession}
+              onChange={(e) => (
+                chatStore.updateCurrentSession(
+                  (session) => (session.useOncoKBSession = e.currentTarget.checked)
+                )
+              )}
+            />
+          </div>
         )}
         {ragProdInfo.enabled && (
           <div className={styles["chat-toggle"]}>
-            <label>rag</label>
+            <label>RAG</label>
             <input
               disabled={chatStore.currentSession().useAutoAgentSession}
               type="checkbox"
@@ -614,7 +614,7 @@ export function ChatActions(props: {
         )}
         {kgProdInfo.enabled && (
           <div className={styles["chat-toggle"]}>
-            <label aria-disabled={!kgProdInfo.enabled}>kg</label>
+            <label aria-disabled={!kgProdInfo.enabled}>KG RAG</label>
             <input
               disabled={chatStore.currentSession().useAutoAgentSession}
               type="checkbox"
