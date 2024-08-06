@@ -13,6 +13,7 @@ export interface DbServerSettings {
   port?: string;
   number_of_results?: number;
   description: string;
+  global?: boolean;
 }
 
 export interface DbConfiguration {

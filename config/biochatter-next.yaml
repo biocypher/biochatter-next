@@ -14,8 +14,10 @@ VectorStore:
   enabled: true
   servers:
     - server: local
-      address: standalone
+      address: 167.172.182.229
+      # address: 10.95.224.94
       port: 19530
+      global: true
 
 OncoKBAPI:
   enabled: true

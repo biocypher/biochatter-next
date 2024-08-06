@@ -38,6 +38,24 @@ export const getVectorStoreConnectionArgsToDisplay = (
 ): DbConnectionArgs => {
   return getConnectionArgsToDisplay(connectionArgs, vsServers, "19530");
 }
+export const getVectorStoreServerGlobal = (
+  connectionArgs: DbConnectionArgs,
+  servers: Array<DbServerSettings>,
+): boolean => {
+  const defaultPort = "19530";
+  for (const server of servers) {
+    if (server.server === connectionArgs.host) {
+      return server.global ?? false;
+    }
+    const serverPort = `${server.port??defaultPort}`;
+    const connectionArgsPort = `${connectionArgs.port??defaultPort}`
+    if (server.address === connectionArgs.host 
+      && (serverPort === connectionArgsPort) ) {
+      return server.global ?? false;
+    }
+  }
+  return false;
+}
 
 const getConnectionArgsToConnect = (
   connectionArgs: DbConnectionArgs, 

@@ -9,7 +9,7 @@ export interface RAGConfig {
   chunkSize: number;
   overlapSize: number,
   resultNum: number;
-  docIdsWorkspace: Array<string>;
+  docIdsWorkspace?: Array<string>;
   selectedDocIds?: Array<string>;
   description?: string;
 }

@@ -35,7 +35,7 @@ export const requestKGConnectionStatus = async (
 
 export const requestAllVSDocuments = async (
   connectionArgs: DbConnectionArgs,
-  docIds: string[]
+  docIds?: string[]
 ) => {
   const RAG_URL = ApiPath.RAG;
   let fetchUrl = RAG_URL as string;

@@ -28,6 +28,7 @@ import {
 } from "../utils/prodinfo";
 import { useRAGStore } from "./rag";
 import { useKGStore } from "./kg";
+import { getVectorStoreServerGlobal } from "../utils/rag";
 
 const generateUniqId = () => uuidv4();
 
@@ -339,6 +340,12 @@ export const useChatStore = createPersistStore(
         const vsInfo = getVectorStoreInfo(prodInfo);
         const kgInfo = getKnowledgeGraphInfo(prodInfo);
         const ragConfig = vsInfo.enabled ? useRAGStore.getState().currentRAGConfig() : undefined;
+        const globalVS = ragConfig !== undefined ? 
+          getVectorStoreServerGlobal(ragConfig.connectionArgs, prodInfo?.VectorStore?.server??[]) :
+          false;
+        if (ragConfig && globalVS) {
+          ragConfig.docIdsWorkspace = undefined;
+        }  
         const useRAG = useChatStore.getState().currentSession().useRAGSession;
         const useKG = useChatStore.getState().currentSession().useKGSession;
         const useOncoKB = useChatStore.getState().currentSession().useOncoKBSession??false;
