@@ -4,6 +4,11 @@ KnowledgeGraph:
     - server: pole-kg
       address: biocypher
       port: 7687
+      description: "This knowledge graph contains nodes: 'Object', 'Person', 'Officer', 'Location' and 'Crime', and relationships: 'KNOWS', 'IS_RELATED_TO', 'LIVES_AT', 'OCCURRED_AT', 'PARTY_TO', 'INVESTIGATED_BY', 'MADE_CALL', 'RECEIVED_CALL' and 'INVOLVED_IN' "
+    - server: decider-genetic-kg
+      address: 10.95.224.94 # biocypher
+      port: 47687
+      description: "This knowledge graph contains nodes, 'Gene', 'Sample', 'BiologicalProcess', 'SequenceVariant', 'Patient', and relationships: 'PatientToSampleAssociation', 'SampleToVariantAssociation', 'PatientToVariantAssociation', 'VariantToGeneAssociation, 'PatientToGeneCopyNumberAssociation', and 'GeneToBiologcialProcessAssociation'"
 
 VectorStore:
   enabled: true
@@ -11,6 +16,10 @@ VectorStore:
     - server: local
       address: standalone
       port: 19530
+
+OncoKBAPI:
+  enabled: true
+  description: "OncoKB API can query and fetch results from OncoKB. OncoKB is a precision oncology knowledge base and contains information about the effects and treatment implications of specific cancer gene alterations."
 
 Text:
   Welcome:

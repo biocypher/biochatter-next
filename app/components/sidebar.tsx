@@ -143,8 +143,8 @@ export function SideBar(props: { className?: string }) {
     accessStore.productionInfo === "undefined" ? 
     undefined : 
     (JSON.parse(accessStore.productionInfo) as any) as ProductionInfo;
-  const kgProdInfo = getKnowledgeGraphInfo(prodInfo); // (prodInfo?.KnowledgeGraph ?? {servers: [], enabled: true}) as DbConfiguration;
-  const ragProdInfo = getVectorStoreInfo(prodInfo); // (prodInfo?.VectorStore ?? {servers: [], enabled: true}) as DbConfiguration;
+  const kgProdInfo = getKnowledgeGraphInfo(prodInfo); 
+  const ragProdInfo = getVectorStoreInfo(prodInfo); 
   const mask = getMaskInfo(prodInfo);
 
   // drag side bar

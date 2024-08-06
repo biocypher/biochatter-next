@@ -19,7 +19,7 @@ services:
  
   flask-app:
     container_name: biochatter-server
-    image: biocypher/biochatter-server:0.2.8
+    image: biocypher/biochatter-server:0.4.0
     env_file:
       - .bioserver.env
     ports:

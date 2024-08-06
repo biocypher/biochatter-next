@@ -1,6 +1,8 @@
 import { getClientConfig } from "../config/client";
 import { ACCESS_CODE_PREFIX, Azure, ServiceProvider } from "../constant";
 import { ChatMessage, ModelType, useAccessStore } from "../store";
+import { KGConfig } from "../store/kg";
+import { RAGConfig } from "../store/rag";
 import { ChatGPTApi } from "./platforms/openai";
 
 export const ROLES = ["system", "user", "assistant"] as const;
@@ -23,9 +25,20 @@ export interface LLMConfig {
   frequency_penalty?: number;
 }
 
+export interface AgentInfo {
+  useRAG: boolean;
+  useKG: boolean;
+  useOncoKB: boolean;
+  useAutoAgent: boolean;
+  kgConfig?: KGConfig;
+  ragConfig?: RAGConfig;
+  oncokbConfig?: Record<string, any>;
+}
+
 export interface ChatOptions {
   messages: RequestMessage[];
   config: LLMConfig;
+  agentInfo?: AgentInfo;
 
   onUpdate?: (message: string, chunk: string) => void;
   onFinish: (message: string, context?: any[]) => void;
