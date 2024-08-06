@@ -9,16 +9,16 @@ const getConnectionArgsToDisplay = (
     if (server.server === connectionArgs.host) {
       return {
         host: server.server,
-        port: server.port ?? defaultPort,
+        port: `${server.port}` ?? defaultPort,
       }
     }
+    const serverPort = `${server.port??defaultPort}`;
+    const connectionArgsPort = `${connectionArgs.port??defaultPort}`
     if (server.address === connectionArgs.host 
-      && (server.port === connectionArgs.port 
-        || (server.port === undefined 
-          && connectionArgs.port === "7687")) ) {
+      && (serverPort === connectionArgsPort) ) {
       return {
         host: server.server,
-        port: server.port ?? defaultPort,
+        port: serverPort,
       }
     }
   }
