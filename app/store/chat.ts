@@ -349,7 +349,7 @@ export const useChatStore = createPersistStore(
         const useRAG = useChatStore.getState().currentSession().useRAGSession;
         const useKG = useChatStore.getState().currentSession().useKGSession;
         const useOncoKB = useChatStore.getState().currentSession().useOncoKBSession??false;
-        const useAutoAgent = useChatStore.getState().currentSession().useAutoAgentSession;
+        const useAutoAgent = false; // useChatStore.getState().currentSession().useAutoAgentSession;
         const kgConfig = kgInfo.enabled ? useKGStore.getState().config : undefined;
         const oncokbConfig = oncokbInfo.enabled ? {
           useOncoKB: useOncoKB,

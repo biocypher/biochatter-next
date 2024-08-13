@@ -567,19 +567,6 @@ export function ChatActions(props: {
         )}
       </div>
       <div className={styles["chat-toggle-group"]}>
-        {enabledAgentsNum > 1 && (
-          <div className={styles["chat-toggle"]}>
-            <label>Auto</label>
-            <input
-              type="checkbox"
-              checked={chatStore.currentSession().useAutoAgentSession}
-              onChange={(e) => (
-                chatStore.updateCurrentSession(
-                  (session) => (session.useAutoAgentSession = e.currentTarget.checked)
-                )
-              )} />
-          </div>
-        )}
         {oncokbInfo.enabled && (
           <div className={styles["chat-toggle"]}>
             <label>OncoKB</label>
@@ -590,7 +577,13 @@ export function ChatActions(props: {
               checked={chatStore.currentSession().useOncoKBSession}
               onChange={(e) => (
                 chatStore.updateCurrentSession(
-                  (session) => (session.useOncoKBSession = e.currentTarget.checked)
+                  (session) => {
+                    session.useOncoKBSession = e.currentTarget.checked;
+                    if (session.useOncoKBSession) {
+                      session.useKGSession = false;
+                      session.useRAGSession = false;
+                    }
+                  }
                 )
               )}
             />
@@ -606,7 +599,13 @@ export function ChatActions(props: {
               checked={chatStore.currentSession().useRAGSession}
               onChange={(e) => (
                 chatStore.updateCurrentSession(
-                  (session) => (session.useRAGSession = e.currentTarget.checked)
+                  (session) => {
+                    session.useRAGSession = e.currentTarget.checked;
+                    if (session.useRAGSession) {
+                      session.useKGSession = false;
+                      session.useOncoKBSession = false;
+                    }
+                  }
                 )
               )}
             />
@@ -622,7 +621,13 @@ export function ChatActions(props: {
               checked={chatStore.currentSession().useKGSession}
               onChange={(e) => (
                 chatStore.updateCurrentSession(
-                  (session) => (session.useKGSession = e.currentTarget.checked)
+                  (session) => {
+                    session.useKGSession = e.currentTarget.checked;
+                    if (session.useKGSession) {
+                      session.useRAGSession = false;
+                      session.useOncoKBSession = false;
+                    }
+                  }
                 )
               )}
             />
