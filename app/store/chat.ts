@@ -341,7 +341,7 @@ export const useChatStore = createPersistStore(
         const kgInfo = getKnowledgeGraphInfo(prodInfo);
         const ragConfig = vsInfo.enabled ? useRAGStore.getState().currentRAGConfig() : undefined;
         const globalVS = ragConfig !== undefined ? 
-          getVectorStoreServerGlobal(ragConfig.connectionArgs, prodInfo?.VectorStore?.server??[]) :
+          getVectorStoreServerGlobal(ragConfig.connectionArgs, prodInfo?.VectorStore?.servers??[]) :
           false;
         if (ragConfig && globalVS) {
           ragConfig.docIdsWorkspace = undefined;
