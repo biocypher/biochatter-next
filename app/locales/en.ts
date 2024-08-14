@@ -116,6 +116,11 @@ const en: LocaleType = {
         }
       }
     },
+    Loading: {
+      OncoKB: "Calling OncoKB",
+      RAG: "Calling RAG",
+      KG: "Calling KG RAG",
+    },
   },
   Export: {
     Title: "Export Messages",

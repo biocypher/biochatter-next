@@ -114,6 +114,11 @@ const cn = {
         }
       }
     },
+    Loading: {
+      OncoKB: "",
+      RAG: "",
+      KG: "",
+    },
   },
   Export: {
     Title: "分享聊天记录",

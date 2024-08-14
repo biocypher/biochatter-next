@@ -960,6 +960,22 @@ function _Chat() {
     });
   };
 
+  const getLoadingText = (
+    useOncoKB: boolean,
+    useRAG: boolean,
+    useKG: boolean,
+  ): string | undefined => {
+    if (useOncoKB) {
+      return Locale.Chat.Loading.OncoKB;
+    } else if (useRAG) {
+      return Locale.Chat.Loading.RAG;
+    } else if (useKG) {
+      return Locale.Chat.Loading.KG;
+    } else {
+      return undefined;
+    }
+  }
+
   const context: RenderMessage[] = useMemo(() => {
     return session.mask.hideContext ? [] : session.mask.context.slice();
   }, [session.mask.context, session.mask.hideContext]);
@@ -1334,6 +1350,13 @@ function _Chat() {
                         (message.preview || message.streaming) &&
                         message.content.length === 0 &&
                         !isUser
+                      }
+                      loadingText={
+                        ((message.preview || message.streaming) &&
+                        message.content.length === 0 &&
+                        !isUser) ? 
+                        (getLoadingText(session.useOncoKBSession, session.useRAGSession, session.useKGSession)) : 
+                        undefined
                       }
                       onContextMenu={(e) => onRightClick(e, message)}
                       onDoubleClickCapture={() => {
