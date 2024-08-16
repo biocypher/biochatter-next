@@ -286,6 +286,20 @@ export function KGPage() {
                         }}
                       ></InputRange>
                     </ListItem>
+                    <ListItem
+                      title={Locale.KG.Settings.useReflexion.Label}
+                    >
+                      <input
+                        type="checkbox"
+                        disabled={!kgStore.useKG}
+                        checked={kgConfig.useReflexion??false}
+                        onChange={(e) => {
+                          kgStore.updateConfig(
+                            (config) => (config.useReflexion = e.currentTarget?.checked??false)
+                          )
+                        }}
+                      ></input>
+                    </ListItem>
                   </List>
                 </div>
               </div>

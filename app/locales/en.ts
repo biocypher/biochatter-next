@@ -503,7 +503,10 @@ const en: LocaleType = {
       ResultsNum: {
         Label: "Number of results",
         subLabel: "How many results should be used to supplement the prompts",
-      }
+      },
+      useReflexion: {
+        Label: "Use Reflexion",
+      },
     }
   },
   RAG: {
