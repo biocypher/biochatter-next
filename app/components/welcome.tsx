@@ -113,6 +113,21 @@ export function Welcome() {
             <p>
               <MarkdownContent content={about?.Citation} />
             </p>
+            {about?.ExampleHeading3 && (
+              <h3>{about.ExampleHeading3}</h3>
+            )}
+            {about?.ExampleContent && (
+              <MarkdownContent content={about?.ExampleContent} />
+            )}
+            {about?.Examples && (
+              <ul>
+                {about.Examples.map((listItem: any, index: any) => (
+                  <li key={`example-${index}`}>
+                    {listItem}
+                  </li>
+                ))}
+              </ul>
+            )}
           </section>
           {(how && what) && (<section>
             <div className={styles["what-how-messages"]}>

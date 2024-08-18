@@ -38,6 +38,14 @@ Text:
         - "Background knownledge of the ovarian cancer studied through semantic search in embeddings of relevant scientific literature (real public data, available via vector database RAG)"
       Heading2: How to use
       Models: The app is pre-configured with all relevant information. You can ask the chat bot questions about the enriched patient data (KG), the biological background (vector DB), and clinical relevance / treatment suggestions for alterations (API). For connecting to each of the resources, please select the corresponding checkbox in the lower right (KG, RAG, or API).
+      ExampleHeading3: Example
+      ExampleContent: "Here are example questions you can ask abouth the DECIDER-genetics knowledge graph"
+      Examples:
+        - How many patients do we have on record?
+        - What is the variant with the highest CADD_phred of the samples of the patient with id "patient1"
+        - What are the biological functions of the gene SETBP1
+        - How many clinically significant (CLNSIG = Pathogenic) variants does each patient have
+
   Masks:
     - name: Cancer Genetics Assistant
       avatar: "🧑‍🔬"
