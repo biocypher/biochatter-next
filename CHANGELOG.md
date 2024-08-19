@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.3.0](https://github.com/biocypher/biochatter-next/compare/v1.2.0...v1.3.0) (2024-08-19)
+
+
+### Features
+
+* support OncoKB api agent and auto agent selector ([#70](https://github.com/biocypher/biochatter-next/issues/70)) ([6ff977c](https://github.com/biocypher/biochatter-next/commit/6ff977c657c6b51dc6211c72b56ae5bcb44b2363))
+
 ## [1.2.0](https://github.com/biocypher/biochatter-next/compare/v1.1.0...v1.2.0) (2024-07-05)
 
 
