@@ -20,7 +20,15 @@ import { estimateTokenLength } from "../utils/token";
 import { nanoid } from "nanoid";
 import { createPersistStore } from "../utils/store";
 import { ProductionInfo } from "../utils/datatypes";
-import { getMaskInfo } from "../utils/prodinfo";
+import { 
+  getKnowledgeGraphInfo, 
+  getMaskInfo, 
+  getOncoKBInfo, 
+  getVectorStoreInfo 
+} from "../utils/prodinfo";
+import { useRAGStore } from "./rag";
+import { useKGStore } from "./kg";
+import { getVectorStoreServerGlobal } from "../utils/rag";
 
 const generateUniqId = () => uuidv4();
 
@@ -65,6 +73,8 @@ export interface ChatSession {
   clearContextIndex?: number;
 
   mask: Mask;
+  useAutoAgentSession: boolean;
+  useOncoKBSession: boolean;
   useRAGSession: boolean;
   useKGSession: boolean;
   contextualPrompts: RagContext[];
@@ -94,6 +104,8 @@ function createEmptySession(mask?: Mask): ChatSession {
     mask: mask ?? createEmptyMask(),
     useRAGSession: false,
     useKGSession: false,
+    useAutoAgentSession: false,
+    useOncoKBSession: false,
     contextualPrompts: []
   };
 }
@@ -322,11 +334,41 @@ export const useChatStore = createPersistStore(
             botMessage,
           ]);
         });
+        const strProdInfo = useAccessStore.getState().productionInfo;
+        const prodInfo = strProdInfo === "undefined" ? undefined : JSON.parse(strProdInfo);
+        const oncokbInfo = getOncoKBInfo(prodInfo);
+        const vsInfo = getVectorStoreInfo(prodInfo);
+        const kgInfo = getKnowledgeGraphInfo(prodInfo);
+        const ragConfig = vsInfo.enabled ? useRAGStore.getState().currentRAGConfig() : undefined;
+        const globalVS = ragConfig !== undefined ? 
+          getVectorStoreServerGlobal(ragConfig.connectionArgs, prodInfo?.VectorStore?.servers??[]) :
+          false;
+        if (ragConfig && globalVS) {
+          ragConfig.docIdsWorkspace = undefined;
+        }  
+        const useRAG = useChatStore.getState().currentSession().useRAGSession;
+        const useKG = useChatStore.getState().currentSession().useKGSession;
+        const useOncoKB = useChatStore.getState().currentSession().useOncoKBSession??false;
+        const useAutoAgent = false; // useChatStore.getState().currentSession().useAutoAgentSession;
+        const kgConfig = kgInfo.enabled ? useKGStore.getState().config : undefined;
+        const oncokbConfig = oncokbInfo.enabled ? {
+          useOncoKB: useOncoKB,
+          description: oncokbInfo.description,
+        } : undefined;
 
         // make request
         api.llm.chat({
           messages: sendMessages,
           config: { ...modelConfig, stream: true },
+          agentInfo: {
+            useAutoAgent,
+            useRAG,
+            useKG,
+            useOncoKB,
+            kgConfig,
+            ragConfig,
+            oncokbConfig,
+          },
           onUpdate(message) {
             botMessage.streaming = true;
             if (message) {

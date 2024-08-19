@@ -23,7 +23,7 @@ import { List, ListItem, SelectInput } from "./ui-lib";
 
 import { InputRange } from "./input-range";
 import { DbConnectionArgs } from "../utils/datatypes";
-import { getConnectionArgsToConnect, getConnectionArgsToDisplay } from "../utils/rag";
+import { getKGConnectionArgsToConnect, getKGConnectionArgsToDisplay } from "../utils/rag";
 
 const DEFAULT_PORT = "7687";
 const DEFAULT_HOST = "";
@@ -36,7 +36,7 @@ export function KGPage() {
   let kgProdInfo = (prodInfo?.KnowledgeGraph ?? {servers: []}) as DbConfiguration;
   const kgConfig = kgStore.config;
   const [connectionArgs, setConnectionArgs] 
-    = useState(getConnectionArgsToDisplay(kgConfig.connectionArgs, kgProdInfo.servers ?? []));
+    = useState(getKGConnectionArgsToDisplay(kgConfig.connectionArgs, kgProdInfo.servers ?? []));
   const [uploading, setUploading] = useState(false);
   const [document, setDocument] = useState<string | undefined>();
   const [connected, setConnected] = useState(false);
@@ -65,7 +65,7 @@ export function KGPage() {
   const updateConnectionStatus = useDebouncedCallback(async () => {    
     setIsReconnecting(true);
     try {
-      const conn = getConnectionArgsToConnect(connectionArgs, kgProdInfo.servers??[]);
+      const conn = getKGConnectionArgsToConnect(connectionArgs, kgProdInfo.servers??[]);
       const res = await requestKGConnectionStatus(conn);
       const value = await res.json();
       if(value?.code === ERROR_BIOSERVER_OK && value.status) {
@@ -205,6 +205,9 @@ export function KGPage() {
                                   if (kg.number_of_results !== undefined) {
                                     config.resultNum = kg.number_of_results;
                                   }
+                                  if (kg.description !== undefined) {
+                                    config.description = kg.description;
+                                  }
                                 }
                               )
                               break;
@@ -282,6 +285,20 @@ export function KGPage() {
                           )
                         }}
                       ></InputRange>
+                    </ListItem>
+                    <ListItem
+                      title={Locale.KG.Settings.useReflexion.Label}
+                    >
+                      <input
+                        type="checkbox"
+                        disabled={!kgStore.useKG}
+                        checked={kgConfig.useReflexion??false}
+                        onChange={(e) => {
+                          kgStore.updateConfig(
+                            (config) => (config.useReflexion = e.currentTarget?.checked??false)
+                          )
+                        }}
+                      ></input>
                     </ListItem>
                   </List>
                 </div>

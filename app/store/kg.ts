@@ -5,6 +5,8 @@ import { DbConnectionArgs } from "../utils/datatypes";
 export interface KGConfig {
   connectionArgs: DbConnectionArgs;
   resultNum: number;
+  description?: string;
+  useReflexion?: boolean;
 }
 
 export const createEmptyKGConfig = (): KGConfig => ({

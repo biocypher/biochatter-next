@@ -4,7 +4,7 @@ export interface DbConnectionArgs {
   host: string;
   port: string;
   user?: string;
-  password?: string
+  password?: string;
 }
 
 export interface DbServerSettings {
@@ -12,6 +12,8 @@ export interface DbServerSettings {
   address: string;
   port?: string;
   number_of_results?: number;
+  description: string;
+  global?: boolean;
 }
 
 export interface DbConfiguration {
@@ -34,8 +36,14 @@ export interface TextConfiguration {
   Masks?: Array<Mask>;
 }
 
+export interface APIAgentInfo {
+  enabled: boolean;
+  description?: string;
+}
+
 export interface ProductionInfo {
   KnowledgeGraph?: DbConfiguration;
   VectorStore?: DbConfiguration;
+  OncoKBAPI?: APIAgentInfo;
   Text?: TextConfiguration;
 }

@@ -26,8 +26,8 @@ export function Welcome() {
 
   const updateStore = useUpdateStore();
   const accessStore = useAccessStore();
-  const prodInfo = accessStore.productionInfo === "undefined" ? 
-    undefined : 
+  const prodInfo = accessStore.productionInfo === "undefined" ?
+    undefined :
     (JSON.parse(accessStore.productionInfo) as any) as ProductionInfo;
   const welcome = prodInfo?.Text?.Welcome ?? Locale.Welcome.Page;
 
@@ -98,9 +98,9 @@ export function Welcome() {
             <h2>About</h2>
             <div>
               <p>
-                {about?.ListTitle}
+                {about?.Body1}
                 <ul>
-                  {about?.ListItems.map((listItem: any, index: any) => (
+                  {about?.ListItems1.map((listItem: any, index: any) => (
                     <li key={index}>
                       {listItem}
                     </li>
@@ -109,7 +109,16 @@ export function Welcome() {
               </p>
             </div>
             <h2>{about?.Heading2}</h2>
-            <MarkdownContent content={about?.Models} />
+            <MarkdownContent content={about?.Body2} />
+            {about?.ListItems2 && (
+              <ul>
+                {about.ListItems2.map((listItem: any, index: any) => (
+                  <li key={`example-${index}`}>
+                    {listItem}
+                  </li>
+                ))}
+              </ul>
+            )}
             <p>
               <MarkdownContent content={about?.Citation} />
             </p>
@@ -120,9 +129,9 @@ export function Welcome() {
                 <h2 className={styles["message-column-title"]}>{what}</h2>
                 <div className={styles["message-list"]} onClick={handleWhatClick}>
                   <div className={styles["message-text"]}>
-                    {whatMessages && 
-                     whatMessages?.length > 0 && 
-                     (<MarkdownContent content={whatMessages[currentWhatMessageIndex]} />)}
+                    {whatMessages &&
+                      whatMessages?.length > 0 &&
+                      (<MarkdownContent content={whatMessages[currentWhatMessageIndex]} />)}
                   </div>
                 </div>
               </div>
@@ -131,8 +140,8 @@ export function Welcome() {
                 <div className={styles["message-list"]} onClick={handleHowClick}>
                   <div className={styles["message-text"]}>
                     {howMessages &&
-                     howMessages.length > 0 &&
-                     (<MarkdownContent content={howMessages[currentHowMessageIndex]} />)}
+                      howMessages.length > 0 &&
+                      (<MarkdownContent content={howMessages[currentHowMessageIndex]} />)}
                   </div>
                 </div>
               </div>

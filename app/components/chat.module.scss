@@ -67,6 +67,10 @@
       flex-direction: row;
       margin-right: 10px;
 
+      .agent-checkbox:disabled {
+        cursor: not-allowed;
+      }
+
       &:last-child {
         margin-right: 20px;
       }

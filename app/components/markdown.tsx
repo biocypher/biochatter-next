@@ -157,6 +157,7 @@ export function Markdown(
   props: {
     content: string;
     loading?: boolean;
+    loadingText?: string;
     fontSize?: number;
     parentRef?: RefObject<HTMLDivElement>;
     defaultShow?: boolean;
@@ -176,7 +177,10 @@ export function Markdown(
       dir="auto"
     >
       {props.loading ? (
-        <LoadingIcon />
+        props.loadingText ? (
+        <div style={{display: "flex", flexDirection: "row", alignItems: "center" }}>
+        <div style={{marginRight: 5, maxHeight: 25}}><p>{props.loadingText} </p></div> <LoadingIcon />
+        </div>) : (<LoadingIcon />)
       ) : (
         <MarkdownContent content={props.content} />
       )}

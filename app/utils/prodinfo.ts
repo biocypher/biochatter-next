@@ -1,7 +1,16 @@
 import { Mask, createEmptyMask } from "../store/mask";
-import { DbConfiguration, ProductionInfo } from "./datatypes";
+import { 
+  APIAgentInfo, 
+  DbConfiguration, 
+  DbConnectionArgs, 
+  DbServerSettings, 
+  ProductionInfo 
+} from "./datatypes";
 import Locale  from "../locales";
 
+export function getOncoKBInfo(prodInfo?: ProductionInfo): APIAgentInfo {
+  return (prodInfo?.OncoKBAPI ?? {enabled: true})
+}
 
 export function getKnowledgeGraphInfo(prodInfo?: ProductionInfo): DbConfiguration {
   return (prodInfo?.KnowledgeGraph ?? {servers: [], enabled: true});
@@ -9,6 +18,20 @@ export function getKnowledgeGraphInfo(prodInfo?: ProductionInfo): DbConfiguratio
 
 export function getVectorStoreInfo(prodInfo?: ProductionInfo): DbConfiguration {
   return (prodInfo?.VectorStore ?? {servers: [], enabled: true});
+}
+
+export function selectServerInfoFromDbConnectionArgs(
+  dbConfig: DbConfiguration, 
+  connectionArgs: DbConnectionArgs
+): DbServerSettings | undefined {
+  if (!dbConfig.servers || dbConfig.servers.length === 0) {
+    return;
+  }
+  return dbConfig.servers.find((server) => (
+    (server.address === connectionArgs.host ||
+    server.server === connectionArgs.host) &&
+    server.port === connectionArgs.port
+  ));
 }
 
 export function getWelcomeAbout(prodInfo?: ProductionInfo): Record<string, any> | undefined {
