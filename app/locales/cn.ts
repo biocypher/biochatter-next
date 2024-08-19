@@ -198,15 +198,15 @@ const cn = {
         Name: "关于",
         Title: "关于",
         Citation: "BioChatter 由 [Sebastian Lobentanzer](https://slobentanzer.github.io/) 开发； 你可以在 [GitHub](https://github.com/biocypher/biochatter-next) 上找到源代码",
-        ListTitle: "BioChatter 是一种快速将生物医学分析的常见结果置于背景中的工具。 它的工作原理是使用预先训练的语言模型建立主题受限的对话。 这种方法的主要好处是:",
-        ListItems: [
+        Body1: "BioChatter 是一种快速将生物医学分析的常见结果置于背景中的工具。 它的工作原理是使用预先训练的语言模型建立主题受限的对话。 这种方法的主要好处是:",
+        ListItems1: [
           "与流行生物信息学工具（例如 gsea、progeny、de Coupler) 的低维输出集成",
           "针对生物医学研究和您的具体问题进行提示",
           "综合保障措施，防止虚假信息并与策划的先验知识进行比较",
           "共享数据的保密性（与 ChatGPT 界面相反, ChatGPT 界面允许 OpenAI 存储和重用用户的提示）"
         ],
         Heading2: "关于型号",
-        Models: "加载的默认模型是 OpenAIs gpt-3.5-turbo 模型，在标准版本中，每个会话的令牌限制为 4000。 该模型目前有两个版本：0301 和 0613。后者是更新的版本，改进了系统消息的解释和处理函数的功能（以 JSON 形式返回给定函数的属性值）。 此外，OpenAI 还提供了 gpt-3.5-turbo-16k 模型，每个对话的代币限制增加到 16000 个。 该模型稍微昂贵，但对于较长的对话非常有用，特别是在包含文档摘要/提示注入功能时"
+        Body2: "加载的默认模型是 OpenAIs gpt-3.5-turbo 模型，在标准版本中，每个会话的令牌限制为 4000。 该模型目前有两个版本：0301 和 0613。后者是更新的版本，改进了系统消息的解释和处理函数的功能（以 JSON 形式返回给定函数的属性值）。 此外，OpenAI 还提供了 gpt-3.5-turbo-16k 模型，每个对话的代币限制增加到 16000 个。 该模型稍微昂贵，但对于较长的对话非常有用，特别是在包含文档摘要/提示注入功能时"
       },
       VersionInfo: (x: any) => (`BioChatter Next, 版本: ${x}`),
     }
