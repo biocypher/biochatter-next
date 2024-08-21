@@ -95,19 +95,17 @@ export function Welcome() {
             <div className={styles["alert"]}>
               <MarkdownContent content={welcome.Disclaimer} />
             </div>
-            <h2>About</h2>
-            <div>
-              <p>
-                {about?.Body1}
-                <ul>
-                  {about?.ListItems1.map((listItem: any, index: any) => (
-                    <li key={index}>
-                      {listItem}
-                    </li>
-                  ))}
-                </ul>
-              </p>
-            </div>
+            <h2>{about?.Heading1}</h2>
+            <MarkdownContent content={about?.Body1} />
+            {about?.ListItems1 && (
+              <ul>
+                {about.ListItems1.map((listItem: any, index: any) => (
+                  <li key={`example-${index}`}>
+                    {listItem}
+                  </li>
+                ))}
+              </ul>
+            )}
             <h2>{about?.Heading2}</h2>
             <MarkdownContent content={about?.Body2} />
             {about?.ListItems2 && (

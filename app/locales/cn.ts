@@ -196,7 +196,7 @@ const cn = {
       Disclaimer: "This app is still in development; you are seeing a preview with limited functionality.\nFor more information on our vision of the platform, please see our [preprint](https://arxiv.org/abs/2305.06488)!\nIf you'd like to contribute to the project, please find us on [GitHub](https://github.com/biocypher/biochatter-next) or [Zulip](https://biocypher.zulipchat.com/). We'd love to hear from you!",
       About: {
         Name: "关于",
-        Title: "关于",
+        Heading1: "关于",
         Citation: "BioChatter 由 [Sebastian Lobentanzer](https://slobentanzer.github.io/) 开发； 你可以在 [GitHub](https://github.com/biocypher/biochatter-next) 上找到源代码",
         Body1: "BioChatter 是一种快速将生物医学分析的常见结果置于背景中的工具。 它的工作原理是使用预先训练的语言模型建立主题受限的对话。 这种方法的主要好处是:",
         ListItems1: [

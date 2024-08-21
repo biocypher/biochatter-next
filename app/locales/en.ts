@@ -199,7 +199,7 @@ const en: LocaleType = {
       Disclaimer: "For more information on the platform, please see our [preprint](https://arxiv.org/abs/2305.06488)!\nIf you'd like to contribute to the project, please find us on [GitHub](https://github.com/biocypher/biochatter-next) or [Zulip](https://biocypher.zulipchat.com/). We'd love to hear from you!",
       About: {
         Name: "About",
-        Title: "About",
+        Heading1: "About",
         Body1: "BioChatter is a platform to integrate biomedical research with current developments in Large Language Models in a user-friendly package. It works by setting up a topic-constrained conversation with a pre-trained language model. Optionally, auxiliary technologies such as knowledge graphs, vector databases, and external APIs can be seamlessly integrated into the conversations. The main benefits of this approach are:",
         ListItems1: [
           "Transparency to increase trust in the framework and LLM-driven insights",
