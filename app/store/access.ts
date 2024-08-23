@@ -68,27 +68,25 @@ export const useAccessStore = createPersistStore(
         (this.enabledAccessControl() && ensure(get(), ["accessCode"]))
       );
     },
-    fetch() {
+    async fetch() {
       if (fetchState > 0 || getClientConfig()?.buildMode === "export") return;
       fetchState = 1;
-      fetch("/api/config", {
-        method: "post",
-        body: null,
-        headers: {
-          ...getHeaders(),
-        },
-      })
-        .then((res) => res.json())
-        .then((res: DangerConfig) => {
-          console.log("[Config] got config from server", res);
-          set(() => ({ ...res }));
-        })
-        .catch(() => {
-          console.error("[Config] failed to fetch config");
-        })
-        .finally(() => {
-          fetchState = 2;
+      try {
+        const res = await fetch("/api/config", {
+          method: "post",
+          body: null,
+          headers: {
+            ...getHeaders(),
+          },
         });
+        const jsonBody:DangerConfig = await res.json();
+        console.log("[Config] got config from server", jsonBody);
+        set(() => ({...jsonBody}));
+      } catch (_e: any) {
+        console.error("[Config] failed to fetch config");
+      } finally {
+        fetchState = 2;
+      }        
     },
   }),
   {

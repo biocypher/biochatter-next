@@ -169,6 +169,25 @@ export const useChatStore = createPersistStore(
         }));
       },
 
+      initializeChat(mask?: Mask) {
+        if (!mask) {
+          return;
+        }
+        const sessions = _get().sessions;
+        if (sessions.length === 1 && sessions[0].messages.length === 0) {
+          const config = useAppConfig.getState();
+          this.updateCurrentSession((session: ChatSession) => {
+            session.topic = mask.name;
+            session.mask = {
+              ...mask,
+              modelConfig: {
+                ...config.modelConfig,
+                ...mask.modelConfig,
+              }
+            }
+          });
+        }
+      },
       selectSession(index: number) {
         set({
           currentSessionIndex: index,
