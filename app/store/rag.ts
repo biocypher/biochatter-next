@@ -1,7 +1,7 @@
 import { nanoid } from "nanoid";
 import { createPersistStore } from "../utils/store";
 import { StoreKey } from "../constant";
-import { DbConnectionArgs } from "../utils/datatypes";
+import { DbConfiguration, DbConnectionArgs } from "../utils/datatypes";
 
 export interface RAGConfig {
   connectionArgs: DbConnectionArgs;
@@ -34,6 +34,17 @@ export const createEmptyRAGConfig = (
   docIdsWorkspace: []
 });
 
+const is_rag_config_default_config = (config: RAGConfig): boolean => {
+  return (
+    config.connectionArgs.host === "local" && 
+    config.connectionArgs.port === "19530" &&
+    config.resultNum === 3 &&
+    config.chunkSize === 1000 &&
+    config.overlapSize === 0 &&
+    config.docIdsWorkspace?.length === 0
+  );
+}
+
 export const DEFAULT_RAG_STATE = {
   configs: [createEmptyRAGConfig()],
   currentConfigIndex: 0,
@@ -59,6 +70,29 @@ export const useRAGStore = createPersistStore(
         set({
           useRAG
         })
+      },
+      initializeRAG(ragInfo?: DbConfiguration) {
+        if (ragInfo === undefined) {
+          return;
+        }
+        if (ragInfo.enabled !== undefined && ragInfo.enabled === false) {
+          return;
+        }
+        if (!ragInfo.servers || ragInfo.servers.length === 0) {
+          return;
+        }
+        const configs = _get().configs;
+        if (
+          configs.length > 1 || is_rag_config_default_config(configs[0])
+        ) {
+          return;
+        }
+        const server = ragInfo.servers[0];
+        this.updateCurrentRAGConfig((config: RAGConfig) => {
+          config.connectionArgs.host = server.server;
+          config.connectionArgs.port = server.port ?? "19530";
+          config.resultNum = server.number_of_results ?? config.resultNum;
+        });
       },
       clearRAGConfig() {
         set(() => ({

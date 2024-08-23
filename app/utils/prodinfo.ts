@@ -71,6 +71,6 @@ export function getWelcomeHowMessages(prodInfo?: ProductionInfo): Array<string> 
   }
 }
 export function getMaskInfo(prodInfo?: ProductionInfo): Mask | undefined {
-  return prodInfo?.Text?.Masks? prodInfo.Text.Masks[0] : undefined;
+  return prodInfo?.Text?.Masks ? prodInfo.Text.Masks[0] : undefined;
 }
 
