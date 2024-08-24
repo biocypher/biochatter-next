@@ -1,5 +1,7 @@
 import { BuiltinMask } from "./typing";
 
+const DEFAULT_MODEL = "gpt-4o";
+
 export const EN_MASKS: BuiltinMask[] = [
   // {
   //   avatar: "1f47e",
@@ -161,7 +163,7 @@ export const EN_MASKS: BuiltinMask[] = [
       },
     ],
     modelConfig: {
-      model: "gpt-3.5-turbo",
+      model: DEFAULT_MODEL,
       temperature: 0,
       max_tokens: 2000,
       presence_penalty: 0,
@@ -179,7 +181,7 @@ export const EN_MASKS: BuiltinMask[] = [
     name: "Plain conversation",
     context: [],
     modelConfig: {
-      model: "gpt-3.5-turbo",
+      model: DEFAULT_MODEL,
       temperature: 0,
       max_tokens: 2000,
       presence_penalty: 0,
@@ -218,7 +220,7 @@ export const EN_MASKS: BuiltinMask[] = [
       },
     ],
     modelConfig: {
-      model: "gpt-3.5-turbo",
+      model: DEFAULT_MODEL,
       temperature: 0,
       max_tokens: 2000,
       presence_penalty: 0,
@@ -257,7 +259,7 @@ export const EN_MASKS: BuiltinMask[] = [
       },
     ],
     modelConfig: {
-      model: "gpt-3.5-turbo",
+      model: DEFAULT_MODEL,
       temperature: 0,
       max_tokens: 2000,
       presence_penalty: 0,
@@ -296,7 +298,7 @@ export const EN_MASKS: BuiltinMask[] = [
       },
     ],
     modelConfig: {
-      model: "gpt-3.5-turbo",
+      model: DEFAULT_MODEL,
       temperature: 0,
       max_tokens: 2000,
       presence_penalty: 0,
@@ -328,7 +330,7 @@ export const EN_MASKS: BuiltinMask[] = [
       },
     ],
     modelConfig: {
-      model: "gpt-3.5-turbo",
+      model: DEFAULT_MODEL,
       temperature: 0,
       max_tokens: 2000,
       presence_penalty: 0,
@@ -367,7 +369,7 @@ export const EN_MASKS: BuiltinMask[] = [
       },
     ],
     modelConfig: {
-      model: "gpt-3.5-turbo",
+      model: DEFAULT_MODEL,
       temperature: 0,
       max_tokens: 2000,
       presence_penalty: 0,
@@ -398,7 +400,7 @@ export const EN_MASKS: BuiltinMask[] = [
       },
     ],
     modelConfig: {
-      model: "gpt-3.5-turbo",
+      model: DEFAULT_MODEL,
       temperature: 0,
       max_tokens: 2000,
       presence_penalty: 0,
