@@ -535,12 +535,6 @@ export function ChatActions(props: {
             });
           }}
         />
-
-        <ChatAction
-          onClick={() => setShowModelSelector(true)}
-          text={currentModel}
-          icon={<RobotIcon />}
-        />
         <ChatAction
           onClick={props.showRagPromptModal}
           icon={<BrainIcon />}

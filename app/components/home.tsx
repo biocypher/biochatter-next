@@ -32,6 +32,7 @@ import { useAccessStore, useChatStore } from "../store";
 import { ProductionInfo } from "../utils/datatypes";
 import { 
   getKnowledgeGraphInfo, 
+  getLLMModels, 
   getMaskInfo, 
   getVectorStoreInfo 
 } from "../utils/prodinfo";
@@ -225,8 +226,10 @@ export function Home() {
       useChatStore.getState().initializeChat(mask);
       const ragInfo = getVectorStoreInfo(theProdInfo);
       const kgInfo = getKnowledgeGraphInfo(theProdInfo);
+      const models = getLLMModels(theProdInfo);
       useRAGStore.getState().initializeRAG(ragInfo);
       useKGStore.getState().initializeKG(kgInfo);
+      useAppConfig.getState().initializeConfig(models);
     });
   }, []);
 
