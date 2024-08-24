@@ -83,7 +83,7 @@ export const useRAGStore = createPersistStore(
         }
         const configs = _get().configs;
         if (
-          configs.length > 1 || is_rag_config_default_config(configs[0])
+          configs.length > 1 || !is_rag_config_default_config(configs[0])
         ) {
           return;
         }
