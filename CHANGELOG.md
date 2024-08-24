@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.3.4](https://github.com/biocypher/biochatter-next/compare/v1.3.3...v1.3.4) (2024-08-24)
+
+
+### Bug Fixes
+
+* rag store initialization bug and remove other gpt models ([#74](https://github.com/biocypher/biochatter-next/issues/74)) ([a6e9a65](https://github.com/biocypher/biochatter-next/commit/a6e9a65ec3bdaa2a09789a3bce05aba439456d37))
+
 ### [1.3.3](https://github.com/biocypher/biochatter-next/compare/v1.3.2...v1.3.3) (2024-08-23)
 
 
