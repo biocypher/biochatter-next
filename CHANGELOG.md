@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.3.5](https://github.com/biocypher/biochatter-next/compare/v1.3.4...v1.3.5) (2024-08-26)
+
+
+### Bug Fixes
+
+* bugs in store initalization ([#75](https://github.com/biocypher/biochatter-next/issues/75)) ([ff2bb1b](https://github.com/biocypher/biochatter-next/commit/ff2bb1b4a7ee949543ce29e71dabe1107dbae821))
+
 ### [1.3.4](https://github.com/biocypher/biochatter-next/compare/v1.3.3...v1.3.4) (2024-08-24)
 
 
