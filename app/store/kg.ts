@@ -53,7 +53,7 @@ export const useKGStore = createPersistStore(
         }
         const server = kgInfo.servers[0];
         this.updateConfig((config: KGConfig) => {
-          config.connectionArgs.host = server.server;
+          config.connectionArgs.host = server.address;
           config.connectionArgs.port = server.port ?? "7687";
           config.resultNum = server.number_of_results ?? config.resultNum;
         });

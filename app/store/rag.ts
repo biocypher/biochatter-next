@@ -89,7 +89,7 @@ export const useRAGStore = createPersistStore(
         }
         const server = ragInfo.servers[0];
         this.updateCurrentRAGConfig((config: RAGConfig) => {
-          config.connectionArgs.host = server.server;
+          config.connectionArgs.host = server.address;
           config.connectionArgs.port = server.port ?? "19530";
           config.resultNum = server.number_of_results ?? config.resultNum;
         });
