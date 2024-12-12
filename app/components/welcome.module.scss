@@ -1,0 +1,94 @@
+@import "../styles/animation.scss";
+@import "../styles/window.scss";
+
+.welcome-page {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    font-size: 12px;
+    overflow-y: scroll;
+
+    .welcome-page-body {
+        padding: 20px;
+        overflow-y: auto;
+        display: flex;
+        flex-direction: column;
+        height: 100vh;
+
+        .what-how-messages {
+            display: flex;
+            justify-content: space-between;
+            align-items: stretch;
+        }
+
+        .message-column {
+            flex: 1 0 50%;
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .message-column-title {
+            text-align: center;
+        }
+
+        .message-list {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .message-text {
+            padding: 10px 20px; // Increase horizontal padding for a more button-like appearance
+            background-color: var(--white); // Use a primary color for the button background
+            border-radius: 15px; // Decrease border radius for a more button-like appearance
+            margin-bottom: 10px;
+            margin-left: 5px;
+            box-shadow: var(--card-shadow); // Use a specific shadow for buttons
+            transition: background-color 0.3s ease, color 0.3s ease; // Add transition for color
+            cursor: pointer;
+            user-select: none;
+            border: 2px solid var(--primary);
+            position: relative;
+            content-visibility: auto;
+            color: var(--black); // Use a contrasting color for the text
+            text-align: center; // Center the text
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            min-height: 50px;
+
+            &:hover {
+                background-color: var(--gray);
+                color: var(--black);
+            }
+
+            &:focus {
+                border-color: var(--grey);
+            }
+
+            p {
+                margin: 0px;
+            }
+        }
+
+        .version-info {
+            display: flex;
+            justify-content: flex-end;
+            align-items: flex-end;
+            font-size: .75em;
+            margin-top: auto;
+        }
+
+
+        .alert {
+            padding: 20px 20px;
+            border-radius: 3px;
+            background: var(--alert-bg);
+            color: var(--alert-fg);
+
+            p {
+                margin: 0px;
+            }
+        }
+    }
+}

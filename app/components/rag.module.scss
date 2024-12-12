@@ -1,0 +1,139 @@
+@import "../styles/animation.scss";
+
+.rag-page {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+
+  .rag-page-body {
+    padding: 5px;
+    flex-grow: 10;
+    display: flex;
+    flex-direction: column;
+
+    --description-height: 72px;
+
+    .rag-description {
+      flex-grow: 0;
+      font-size: 0.9rem;
+      overflow: auto;
+      padding: 10px;
+    }
+
+    .rag-page-content {
+      flex-grow: 10;
+      width: 100%;
+      display: flex;
+      flex-direction: row;
+
+      .rag-column {
+        flex-grow: 10;
+        position: relative;
+
+        .column-container {
+          position: absolute;
+          top: 0;
+          bottom: 0;
+          left: 0;
+          right: 0;
+          display: flex;
+          flex-direction: column;
+        }
+
+        .column-title {
+          padding-top: 10px;
+          justify-content: center;
+          flex-grow: 0;
+          display: flex;
+          flex-direction: row;
+
+          .column-icon {
+            flex-grow: 0;
+          }
+
+          .column-label {
+            padding-left: 10px;
+            flex-grow: 0;
+            font-size: 24px;
+          }
+        }
+
+        .column-body {
+          padding: 10px;
+          flex-grow: 10;
+          overflow-y: auto;
+          display: flex;
+          flex-direction: column;
+
+          .connected-snippet {
+            height: 36px;
+            color: rgba($color: green, $alpha: 0.8);
+            border-color: rgba($color: green, $alpha: 0.5);
+            border-radius: 10px;
+            padding: 0 10px;
+            background-color: rgba($color: green, $alpha: 0.05);
+            margin-right: 5px;
+            display: flex;
+            align-items: center;
+          }
+
+          .disconnected-snippet {
+            height: 36px;
+            color: rgba($color: red, $alpha: 0.8);
+            border-color: rgba($color: red, $alpha: 0.5);
+            border-radius: 10px;
+            padding: 0 10px;
+            background-color: rgba($color: red, $alpha: 0.05);
+            margin-right: 5px;
+            display: flex;
+            align-items: center;
+          }
+
+          .feature-hints {
+            font-size: 0.9rem;
+            flex-grow: 0;
+            margin: 5px;
+            padding: 10px;
+            border-radius: 10px;
+          }
+
+          .uploading-prompts {
+            flex-grow: 0;
+            display: flex;
+            flex-direction: row;
+          }
+
+          .documents {
+            flex-grow: 0;
+
+            .document-item {
+              display: flex;
+              flex-direction: row;
+              margin-bottom: 15px;
+              padding-right: 20px;
+
+              .document-label {
+                flex-grow: 0;
+              }
+
+              .document-stretch-area {
+                flex-grow: 10;
+              }
+
+              .document-remove-icon {
+                background-color: var(--white);
+                flex-grow: 0;
+                margin-right: 20px;
+                width: 24px;
+                height: 24px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
