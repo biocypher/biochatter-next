@@ -910,7 +910,7 @@ export function Settings() {
           </ListItem>
         </List>
 
-        <List id={SlotID.CustomModel}>
+        {false && (<List id={SlotID.CustomModel}>
           {showAccessCode && (
             <ListItem
               title={Locale.Settings.Access.AccessCode.Title}
@@ -1121,6 +1121,7 @@ export function Settings() {
             ></input>
           </ListItem>
         </List>
+        )}
 
         <List>
           <ModelConfigList

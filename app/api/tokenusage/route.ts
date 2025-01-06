@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
-import { getBaseUrl } from "../../common";
-import { BiochatterPath } from "@/app/constant";
+import { getBaseUrl } from "../common";
+import { BiochatterPath} from "@/app/constant";
 import { prettyObject } from "@/app/utils/format";
 
 async function handle(request: NextRequest) {
@@ -8,7 +8,7 @@ async function handle(request: NextRequest) {
   const authValue = request.headers.get(AUTHORIZATION) ?? "";
   const baseUrl = getBaseUrl();
   const data = await request.json();
-  const path = BiochatterPath.RAGConnectionStatus;
+  const path = BiochatterPath.TokenUsage;
   const url = `${baseUrl}/${path}`;
   try {
     const res = await fetch(
@@ -19,7 +19,10 @@ async function handle(request: NextRequest) {
           [AUTHORIZATION]: authValue,
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({connectionArgs: data.connectionArgs}),
+        body: JSON.stringify({
+          model: data.model ?? "gpt-3.5-turbo",
+          session_id: data.session_id ?? "",
+        }),
       }
     );
     const jsonBody = await res.json();

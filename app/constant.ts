@@ -32,6 +32,7 @@ export enum ApiPath {
   OpenAI = "/api/openai",
   RAG = "/api/rag",
   KG = "/api/kg",
+  TokenUsage = "/api/tokenusage"
 }
 
 export enum SlotID {
@@ -91,6 +92,7 @@ export const BiochatterPath = {
   Document: "v1/rag/document",
   RAGConnectionStatus: "v1/rag/connectionstatus",
   KGConnectionStatus: "v1/kg/connectionstatus",
+  TokenUsage: "v1/tokenusage",
 }
 
 export const Azure = {
@@ -127,9 +129,10 @@ export const MAX_RENDER_MSG_COUNT = 45;
 
 // biochatter-server error
 export const ERROR_BIOSERVER_OK = 0
-export const ERROR_BIOSERVER_UNKNOWN = 5000
+export const ERROR_BIOSERVER_UNKNOWN = 5100
 export const ERROR_BIOSERVER_MILVUS_UNKNOWN = 5101
 export const ERROR_BIOSERVER_MILVUS_CONNECT_FAILED = 5102
+export const ERROR_BIOSERVER_EXCEEDS_TOKEN_LIMIT = 5103
  
 export const HDR_CONTENT_TYPE = "Content-Type";
 export const HDR_APPLICATION_JSON = "application/json";

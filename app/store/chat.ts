@@ -192,6 +192,14 @@ export const useChatStore = createPersistStore(
         set({
           currentSessionIndex: index,
         });
+
+        // on session changed
+        if (index >= get().sessions.length) {
+          return;
+        }
+        const model = get().sessions[index].mask?.modelConfig?.model ?? "gpt-3.5-turbo";
+        const sessionId = get().sessions[index].id;
+        useAccessStore.getState().updateTokenUsage(sessionId, model);
       },
 
       moveSession(from: number, to: number) {
@@ -407,6 +415,7 @@ export const useChatStore = createPersistStore(
               get().onNewMessage(botMessage);
             }
             ChatControllerPool.remove(session.id, botMessage.id);
+            useAccessStore.getState().updateTokenUsage(session.id, modelConfig.model);
           },
           onError(error) {
             const isAborted = error.message.includes("aborted");
