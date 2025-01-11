@@ -117,12 +117,16 @@ export const KnowledgeCutOffDate: Record<string, string> = {
   "gpt-4-vision-preview": "2023-04",
 };
 
-export const DEFAULT_MODELS = [
-  {
-    name: "gpt-4o",
-    available: true,
-  },
-] as const;
+export const DEFAULT_MODELS = [{
+  name: "gpt-4o",
+  available: true,
+}, {
+  name: "gpt-4",
+  available: true,
+}, {
+  name: "gpt-3.5-turbo",
+  available: true,
+}] as const;
 
 export const CHAT_PAGE_SIZE = 15;
 export const MAX_RENDER_MSG_COUNT = 45;
