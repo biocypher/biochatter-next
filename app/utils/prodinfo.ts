@@ -10,7 +10,7 @@ import Locale  from "../locales";
 import { LLMModel } from "../client/api";
 
 export function getOncoKBInfo(prodInfo?: ProductionInfo): APIAgentInfo {
-  return (prodInfo?.OncoKBAPI ?? {enabled: true})
+  return (prodInfo?.OncoKBAPI ?? {enabled: false})
 }
 
 export function getKnowledgeGraphInfo(prodInfo?: ProductionInfo): DbConfiguration {
