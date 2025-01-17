@@ -143,6 +143,8 @@ export function SideBar(props: { className?: string }) {
     accessStore.productionInfo === "undefined" ? 
     undefined : 
     (JSON.parse(accessStore.productionInfo) as any) as ProductionInfo;
+  const currentModel = chatStore.currentSession().mask.modelConfig.model ?? "gpt-3.5-turbo";
+  const sessionId = chatStore.currentSession().id ?? "";
   const kgProdInfo = getKnowledgeGraphInfo(prodInfo); 
   const ragProdInfo = getVectorStoreInfo(prodInfo); 
   const mask = getMaskInfo(prodInfo);
@@ -159,6 +161,10 @@ export function SideBar(props: { className?: string }) {
   );
 
   useHotKey();
+
+  useEffect(() => {
+    accessStore.updateTokenUsage(sessionId, currentModel);
+  }, []);
 
   // switch themes
   function nextTheme() {
@@ -237,7 +243,10 @@ export function SideBar(props: { className?: string }) {
         <ChatList narrow={shouldNarrow} />
       </div>
 
-      <div className={styles["sidebar-header-bar"]}>
+      <div className={styles["sidebar-footer-bar"]}>
+        <div 
+          className={styles["sidebar-bar-buttons"]}
+        >
         <IconButton
           disabled={!ragProdInfo.enabled}
           icon={<RagIcon width={16} height={16} />}
@@ -258,6 +267,17 @@ export function SideBar(props: { className?: string }) {
           }}
           shadow
         />
+        </div>
+        {!shouldNarrow && (
+          <div className={styles["sidebar-token-usage"]}>
+          {useAccessStore.getState().tokenUsage.auth_type.slice(0, 6) === "Server" ? (
+            <div style={{fontSize: "14px", marginBottom: "10px"}}>Server token usage</div>
+          ) : (
+            <div style={{fontSize: "14px", marginBottom: "10px"}}>Client token usage</div>
+          )}
+          <div>Total tokens: {useAccessStore.getState().tokenUsage.tokens.total_tokens}</div>
+          </div>
+        )}
       </div>
       <div className={styles["sidebar-tail"]}>
         <div className={styles["sidebar-actions"]}>

@@ -9,7 +9,7 @@ const getConnectionArgsToDisplay = (
     if (server.server === connectionArgs.host) {
       return {
         host: server.server,
-        port: `${server.port}` ?? defaultPort,
+        port: `${server.port ?? defaultPort}`,
       }
     }
     const serverPort = `${server.port??defaultPort}`;

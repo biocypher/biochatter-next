@@ -8,6 +8,7 @@ import { getHeaders } from "../client/api";
 import { getClientConfig } from "../config/client";
 import { createPersistStore } from "../utils/store";
 import { ensure } from "../utils/clone";
+import { requestTokenUsage } from "../client/datarequest";
 
 let fetchState = 0; // 0 not fetch, 1 fetching, 2 done
 
@@ -37,6 +38,14 @@ const DEFAULT_ACCESS_STATE = {
   disableFastLink: false,
   customModels: "",
   productionInfo: "undefined",
+  tokenUsage: {
+    auth_type: "Unknown",
+    tokens: {
+      "completion_tokens": 0,
+      "prompt_tokens": 0,
+      "total_tokens": 0,
+    }
+  }
 };
 
 export const useAccessStore = createPersistStore(
@@ -88,10 +97,26 @@ export const useAccessStore = createPersistStore(
         fetchState = 2;
       }        
     },
+    async updateTokenUsage(session_id: string, model: string) {
+      requestTokenUsage(session_id, model).then((res: any) => {
+        res.json().then((dat: any) => {
+          set({
+            tokenUsage: {
+              auth_type: dat.auth_type ?? "Unknown",
+              tokens: {
+                completion_tokens: dat.tokens?.completion_tokens ?? 0,
+                prompt_tokens: dat.tokens?.prompt_tokens ?? 0,
+                total_tokens: dat.tokens?.total_tokens ?? 0,
+              }
+            }
+          });
+        });
+      });
+    },
   }),
   {
     name: StoreKey.Access,
-    version: 2.1,
+    version: 2.2,
     migrate(persistedState, version) {
       if (version < 2) {
         const state = persistedState as {
@@ -107,6 +132,24 @@ export const useAccessStore = createPersistStore(
           productionInfo: string;
         }
         state.productionInfo = "undefined";
+      }
+      if (version < 2.2) {
+        const state = persistedState as {
+          tokenUsage: {
+            auth_type: string,
+            tokens: {
+              "completion_tokens": number,
+              "prompt_tokens": number,
+              "total_tokens": number,
+            }
+          }
+        }
+        state.tokenUsage.auth_type = "Unknown";
+        state.tokenUsage.tokens = {
+          "completion_tokens": 0,
+          "prompt_tokens": 0,
+          "total_tokens": 0,
+        }
       }
 
       return persistedState as any;

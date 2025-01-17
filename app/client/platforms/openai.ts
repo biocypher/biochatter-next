@@ -2,11 +2,12 @@ import {
   ApiPath,
   DEFAULT_API_HOST,
   DEFAULT_MODELS,
+  ERROR_BIOSERVER_EXCEEDS_TOKEN_LIMIT,
   OpenaiPath,
   REQUEST_TIMEOUT_MS,
   ServiceProvider,
 } from "@/app/constant";
-import { ChatSession, useAccessStore, useAppConfig, useChatStore } from "@/app/store";
+import { useAccessStore, useAppConfig, useChatStore } from "@/app/store";
 
 import { ChatOptions, getHeaders, LLMApi, LLMModel, LLMUsage } from "../api";
 import Locale from "../../locales";
@@ -17,9 +18,6 @@ import {
 import { prettyObject } from "@/app/utils/format";
 import { getClientConfig } from "@/app/config/client";
 import { makeAzurePath } from "@/app/azure";
-import { useRAGStore } from "@/app/store/rag";
-import { useKGStore } from "@/app/store/kg";
-import { getKnowledgeGraphInfo, getOncoKBInfo, getVectorStoreInfo } from "@/app/utils/prodinfo";
 
 export interface OpenAIListModelResponse {
   object: string;
@@ -236,6 +234,10 @@ export class ChatGPTApi implements LLMApi {
         clearTimeout(requestTimeoutId);
 
         const resJson = await res.json();
+        if (resJson.code === ERROR_BIOSERVER_EXCEEDS_TOKEN_LIMIT && options.onFinish) {
+          options.onFinish(Locale.Chat.TokenLimit(resJson.limitation));
+          return;
+        }
         const message = this.extractMessage(resJson);
         options.onFinish(message, resJson.contexts);
       }

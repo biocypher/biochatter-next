@@ -74,7 +74,25 @@
       &:not(:last-child) {
         margin-right: 10px;
       }
-    }
+    }    
+  }
+  .sidebar-footer-bar {
+    display: flex;
+    margin-bottom: 20px;
+    flex-direction: column;
+
+    .sidebar-bar-buttons {
+      display: flex;
+      flex-direction: row;
+
+      .sidebar-bar-button {
+        flex-grow: 1;
+  
+        &:not(:last-child) {
+          margin-right: 10px;
+        }
+      }
+    } 
   }
 
   &:hover,
@@ -192,6 +210,13 @@
   overflow-x: hidden;
 }
 
+.sidebar-token-usage {
+  border: var(--border-in-light);
+  border-radius: 10px;
+  padding: 10px;
+  margin: 20px 0 0 0;
+}
+
 .chat-item {
   padding: 10px 14px;
   background-color: var(--white);
@@ -278,6 +303,23 @@
       &:not(:last-child) {
         margin-right: 0;
         margin-bottom: 10px;
+      }
+    }
+  }
+  .sidebar-footer-bar {
+    display: flex;
+    flex-direction: column;
+
+    .sidebar-bar-buttons {
+      display: flex;
+      flex-direction: column;
+
+      .sidebar-bar-button {
+  
+        &:not(:last-child) {
+          margin-right: 0px;
+          margin-bottom: 10px;
+        }
       }
     }
   }

@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.4.0](https://github.com/fengsh27/chatgse-next-sync/compare/v1.3.5...v1.4.0) (2025-01-06)
+
+
+### Features
+
+* display token usage ([#14](https://github.com/fengsh27/chatgse-next-sync/issues/14)) ([a9565a4](https://github.com/fengsh27/chatgse-next-sync/commit/a9565a449b852123728651a8bbe816e664ec9668))
+
 ### [1.3.5](https://github.com/biocypher/biochatter-next/compare/v1.3.4...v1.3.5) (2024-08-26)
 
 
